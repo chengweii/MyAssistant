@@ -1,4 +1,4 @@
-package weihua.myassistant;
+package weihua.myassistant.main;
 
 /**
  * Hello world!
