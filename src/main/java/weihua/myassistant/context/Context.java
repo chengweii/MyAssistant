@@ -28,7 +28,7 @@ public class Context {
 
 	public String getResponse(String request, RequestType requestType) {
 		changeTopic(request, requestType);
-		return assistant.getResponse(request, requestType, responseDataList);
+		return assistant.getResponse(request, requestType, responseDataList, responseHistory);
 	}
 
 	private void changeTopic(String request, RequestType requestType) {
