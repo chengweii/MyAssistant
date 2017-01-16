@@ -8,50 +8,46 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+import weihua.myassistant.context.Context;
+import weihua.myassistant.request.RequestType;
+import weihua.myassistant.response.MediaType;
+import weihua.myassistant.ui.CustomerWebChromeClient;
 import weihua.myassistant.ui.MediaIntent;
-import weihua.myassistant.ui.MediaIntentType;
-import weihua.myassistant.ui.MyWebChromeClient;
+import weihua.myassistant.util.AssistantDataLoadUtil;
+import weihua.myassistant.util.FileUtil;
 
 public class MainActivity extends Activity {
 	private WebView m_wv1;
-	private static String assistantRootPath = "/assistant/";
 	private static String viewFilePath = "index.html";
+	private Context assistantContext;
 
 	@JavascriptInterface
 	public String getResponse(String request, String requestType) {
+		return assistantContext.getResponse(request, RequestType.fromCode(requestType));
+	}
+
+	@JavascriptInterface
+	public String backHome() {
 		// TODO
 		String json = "";
 		return json;
 	}
 
 	@JavascriptInterface
-	public void showMedia(String request, String mediaType) {
-		Intent it = MediaIntent.getMediaIntent(request, MediaIntentType.fromCode(mediaType));
+	public void showMedia(String mediaLink, String mediaType) {
+		Intent it = MediaIntent.getMediaIntent(mediaLink, MediaType.fromCode(mediaType));
 		startActivity(it);
 	}
 
 	@JavascriptInterface
-	public String loadDataFile(String dataName) {
-		// TODO
-		String json = "";
-		return json;
-	}
-
-	@JavascriptInterface
-	public String backMenu() {
-		// TODO
-		String json = "";
-		return json;
+	public String loadDataFile(String topicName) {
+		return AssistantDataLoadUtil.generateResponse(topicName);
 	}
 
 	@JavascriptInterface
 	public void showMsg(String msg) {
 		Toast toast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT);
 		toast.show();
-	}
-
-	public static String getInnerAssistantFileSDCardPath() {
-		return Environment.getExternalStorageDirectory().getPath() + assistantRootPath;
 	}
 
 	public void initView() {
@@ -61,7 +57,7 @@ public class MainActivity extends Activity {
 		m_wv1.loadUrl("file:///android_asset/" + viewFilePath);
 		m_wv1.getSettings().setUseWideViewPort(true);
 		m_wv1.getSettings().setLoadWithOverviewMode(true);
-		m_wv1.setWebChromeClient(new MyWebChromeClient());
+		m_wv1.setWebChromeClient(new CustomerWebChromeClient());
 		m_wv1.setWebViewClient(new WebViewClient() {
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -90,6 +86,10 @@ public class MainActivity extends Activity {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+
+		assistantContext = new Context();
+
+		FileUtil.assistantRootPath = Environment.getExternalStorageDirectory().getPath() + "/assistant/";
 
 		initView();
 	}

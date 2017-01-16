@@ -1,5 +1,7 @@
 package weihua.myassistant.request;
 
-public class ChoiceRequest implements Request {
+import weihua.myassistant.response.BaseResponse;
+
+public class ChoiceRequest  extends BaseResponse {
 
 }

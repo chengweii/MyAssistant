@@ -7,11 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import android.os.Environment;
-
 public class FileUtil {
 
-	private static String assistantRootPath = "/assistant/";
+	public static String assistantRootPath = "src/main/source/assistant/";
 
 	/**
 	 * 写入文件内容
@@ -60,6 +58,6 @@ public class FileUtil {
 	 * @return
 	 */
 	public static String getInnerAssistantFileSDCardPath() {
-		return Environment.getExternalStorageDirectory().getPath() + assistantRootPath;
+		return assistantRootPath;
 	}
 }

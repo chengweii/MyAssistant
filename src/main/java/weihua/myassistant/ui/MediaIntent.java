@@ -4,6 +4,7 @@ import java.io.File;
 
 import android.content.Intent;
 import android.net.Uri;
+import weihua.myassistant.response.MediaType;
 import weihua.myassistant.util.FileUtil;
 
 public class MediaIntent {
@@ -11,32 +12,32 @@ public class MediaIntent {
 	/**
 	 * 获取媒体引用Intent
 	 * 
-	 * @param request
+	 * @param mediaLink
 	 *            目标名称
-	 * @param mediaIntentType
+	 * @param mediaType
 	 *            媒体类型
 	 * @return
 	 */
-	public static Intent getMediaIntent(String request, MediaIntentType mediaIntentType) {
+	public static Intent getMediaIntent(String mediaLink, MediaType mediaType) {
 		Intent it = new Intent(Intent.ACTION_VIEW);
-		if (mediaIntentType == MediaIntentType.IMAGE) {
-			request = FileUtil.getInnerAssistantFileSDCardPath() + request;
-			File file = new File(request);
+		if (mediaType == MediaType.IMAGE) {
+			mediaLink = FileUtil.getInnerAssistantFileSDCardPath() + mediaLink;
+			File file = new File(mediaLink);
 			it = new Intent(Intent.ACTION_VIEW);
 			it.setDataAndType(Uri.fromFile(file), "image/*");
-		} else if (mediaIntentType == MediaIntentType.VIDEO) {
-			request = FileUtil.getInnerAssistantFileSDCardPath() + request;
-			File file = new File(request);
+		} else if (mediaType == MediaType.VIDEO) {
+			mediaLink = FileUtil.getInnerAssistantFileSDCardPath() + mediaLink;
+			File file = new File(mediaLink);
 			it = new Intent(Intent.ACTION_VIEW);
 			it.setDataAndType(Uri.fromFile(file), "video/*");
-		} else if (mediaIntentType == MediaIntentType.AUDIO) {
-			request = FileUtil.getInnerAssistantFileSDCardPath() + request;
-			File file = new File(request);
+		} else if (mediaType == MediaType.AUDIO) {
+			mediaLink = FileUtil.getInnerAssistantFileSDCardPath() + mediaLink;
+			File file = new File(mediaLink);
 			it = new Intent(Intent.ACTION_VIEW);
 			it.setDataAndType(Uri.fromFile(file), "audio/*");
-		} else if (mediaIntentType == MediaIntentType.URL) {
+		} else if (mediaType == MediaType.URL) {
 			it = new Intent(Intent.ACTION_VIEW);
-			it.setData(Uri.parse(request));
+			it.setData(Uri.parse(mediaLink));
 		}
 		return it;
 	}

@@ -1,28 +1,28 @@
-package weihua.myassistant.ui;
+package weihua.myassistant.response;
 
-public enum MediaIntentType {
+public enum MediaType {
 
 	/**
 	 * 图片
 	 */
-	IMAGE("0", "图片"),
+	IMAGE("0", "image"),
 
 	/**
 	 * 视频
 	 */
-	VIDEO("1", "视频"),
+	VIDEO("1", "video"),
 
 	/**
 	 * 音频
 	 */
-	AUDIO("2", "音频"),
+	AUDIO("2", "audio"),
 
 	/**
 	 * 链接
 	 */
-	URL("3", "链接");
+	URL("3", "url");
 
-	private MediaIntentType(String code, String value) {
+	private MediaType(String code, String value) {
 		this.code = code;
 		this.value = value;
 	}
@@ -38,8 +38,8 @@ public enum MediaIntentType {
 		return value;
 	}
 
-	public static MediaIntentType fromCode(String code) {
-		for (MediaIntentType entity : MediaIntentType.values()) {
+	public static MediaType fromCode(String code) {
+		for (MediaType entity : MediaType.values()) {
 			if (entity.getCode() == code) {
 				return entity;
 			}

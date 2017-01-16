@@ -1,5 +1,7 @@
 package weihua.myassistant.request;
 
-public class TextRequest implements Request {
+import weihua.myassistant.response.BaseResponse;
+
+public class TextRequest  extends BaseResponse {
 
 }

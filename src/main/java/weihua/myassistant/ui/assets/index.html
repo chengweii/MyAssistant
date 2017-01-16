@@ -2,331 +2,51 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>vue</title>
-    <link rel="stylesheet" href="file:///android_asset/dist/style.css">
-    <style>
-         
-        p.welcomeMsg span.CURRENTSCHEDULE{
-        	background-color: #ab2d32;
-        	box-shadow: 0px 0px 3px 1px #ab2d32, 0 0 1px #ab2d32, 0 0 1px #ab2d32, 0 0 1px #ab2d32, 0 0 1px #ab2d32, 0 0 1px #ab2d32, 0 0 1px #ab2d32;
-        }
-        
-        p.welcomeMsg span.LIFECONSULTATION{
-        	background-color: #009886;
-        	box-shadow: 0px 0px 3px 1px #009886, 0 0 1px #009886, 0 0 1px #009886, 0 0 1px #009886, 0 0 1px #009886, 0 0 1px #009886, 0 0 1px #009886;
-        }
-        
-        p.welcomeMsg span.WORKGUIDANCE{
-        	background-color: #0c56af;
-        	box-shadow: 0px 0px 3px 1px #0c56af, 0 0 1px #0c56af, 0 0 1px #0c56af, 0 0 1px #0c56af, 0 0 1px #0c56af, 0 0 1px #0c56af, 0 0 1px #0c56af;
-        }
-        
-        p.event-p{
-        	text-left;
-        }
-        
-        span.event-span{
-        	display:inline-block;
-        }
-        
-        span.event-btn{
-            padding: 0px 2px 0px 2px;
-            margin:0px;
-            margin-right:120px;
-         }
-        
-        span.event-content{
-        	font-style: normal;
-        	font-weight: bold;
-        	color: #000000;
-        	display:block;
-        	font-size:13px;
-			line-height:1.8em;
-			text-align:left;
-        }
-        
-        span.event-dtstartMonthDay{
-        	color: #979898;
-        	font-style: italic;
-        	font-weight: bold;
-        	font-size:16px;
-        	font-family: Impact;
-        }
-        
-        span.event-dtstartWeekDay{
-        	color: #ffffff;
-        	font-size:12px;
-        	padding-left:3px;
-        	padding-right:3px;
-        	background-color: #cc3f44;
-        	border-radius: 3px;
-        }
-        
-        span.event-dtstartTime{
-        	font-size:11px;
-        	font-family: Impact;
-        	font-weight: bold;
-        	color: #2c2e2f;
-        }
-
-        #countDown .countDown{
-        	font-weight: bold;
-        	font-size:20px;
-        	color: #cc3f44;
-        }
-        
-        #countDown .countDown-day{
-        	font-weight: bold;
-        	font-size:25px;
-        	color: #cc3f44;
-        }
-    </style>
-
-    <script src="file:///android_asset/dist/jquery-1.11.1.min.js"></script>
-
-    <script language="javascript">
-    	var assist_header=window.mainActivity.getAssistHeader();
-    	
-    	var colors=['#2c2e2f','#68b828','#7c38bc','#f7aa47','#ff6264','#00b19d','#8dc63f','#40bbea','#0e62c7','#cc3f44','#ffba00'];
-    	
-    	function setTopicColor(item,index){
-    		var color=colors[index];
-    		if(color){
-    			$(item).css("background-color",color);
-    			$(item).css("box-shadow","0px 0px 2px 1px "+color+", 0 0 1px "+color+", 0 0 1px "+color+", 0 0 1px "+color+", 0 0 1px "+color+", 0 0 1px "+color+", 0 0 1px "+color+"");
-    		}
-    	}
-    
-        function showMsg(user,msg){
-            var class_value="self";
-            var img_value="file:///android_asset/dist/images/me.jpg";
-            if(user=='assist'){
-               class_value="";
-               img_value="file:///android_asset/dist/images/"+assist_header; 
-            }
-            var msg_li=$("#copy-li").clone();
-            msg_li.removeAttr("id");
-            var date=new Date();
-            var time_str=date.getHours()+":"+date.getMinutes();
-            var time_class="span-"+time_str.replace(":","");
-            if(class_value){
-                msg_li.find(".main").addClass(class_value);
-            }
-            msg_li.find(".avatar").attr("src",img_value);
-            if($("."+time_class).length == 0){
-                msg_li.find(".time span").attr("class",time_class).html(time_str);
-            }
-            msg_li.find(".text").html(parseLink(msg));
-            
-            bindViewLink(msg_li);
-            bindTypeClick(msg_li);
-            bindChoiceClick(msg_li);
-            
-            $("#m-message ul").append(msg_li);
-            
-            $.each(msg_li.find(".LIFECONSULTATION"),function(index,item){
-            	setTopicColor(item,index);
-            });
-            
-			msg_li.show();
-            
-            $(window).resize();
-            
-            $("#m-textarea").val("");
-        }
-
-        function scrollBottom(){
-            var m_message=$("#m-message");
-            m_message.stop().animate({scrollTop:m_message[0].scrollHeight},1000);
-        }
-        
-        function parseLink(msg){
-        	var reg=/#.*?#/;
-            var regAll=/#.*?#/g;
-        	var result=msg;
-        	var linkList=msg.match(regAll);
-            if(linkList){
-                $.each(linkList,function(index,item){
-                    var meta=item.substring(1,item.length-1);
-                    meta=eval("("+meta+")");
-                    var a="<a href='javascript:void(0)' class='"+meta.type+"-link' link='"+meta.link+"'>"+meta.text+"</a>";
-                    result=result.replace(reg,a);
-                });
-            }
-        	return result;
-        }
-        
-        function bindChoiceClick(msg_li){
-        	msg_li.find(".choice-item").click(function(){
-        		var data=window.mainActivity.getChoiceResponse($(this).attr('choiceValue'));
-                showMsg('assist',data);
-        	});
-        }
-        
-        function showCurrentSchedule(){
-        		var data=window.mainActivity.currentSchedule('1');  
-        		data=eval("("+data+")");
-        		var result="";
-        		$.each(data,function(index,item){
-        			var event_p=$("#copy-event").clone();
-        			event_p.removeAttr("id");
-        			event_p.find(".event-content").html(item.title);
-        			if(item.title.indexOf("[完成]")!=-1||item.title.indexOf("【完成】")!=-1||item.title.indexOf("［完成］")!=-1){
-        				event_p.find(".event-content").css("text-decoration","line-through");
-        				event_p.find(".event-content").css("color","#666");
-        			}
-        			event_p.find(".event-dtstartMonthDay").html(item.dtstartMonthDay);
-        			event_p.find(".event-dtstartWeekDay").html(item.dtstartWeekDay);
-        			event_p.find(".event-dtstartTime").html(item.dtstartTime);
-                    result=result+"<p class='event-p'>"+event_p.html()+"</p>";
-                });
-        		showMsg('assist',result);
-				$(".event-btn").click(function(){
-				    //confirm("呵呵");
-				    //alert("呵呵");
-				    //alert(prompt("呵呵",""));
-				});
-        }
-        
-        function bindTypeClick(msg_li){
-        	msg_li.find(".CURRENTSCHEDULE").click(function(){
-        		showCurrentSchedule();
-        	});
-        	msg_li.find(".LIFECONSULTATION").click(function(){
-        		var data=window.mainActivity.lifeConsultation($(this).attr('menuId'));  
-        		showMsg('assist',data);
-        		$("#btn_send").click(sendData);
-        	});
-        	msg_li.find(".WORKGUIDANCE").click(function(){
-        		var data=window.mainActivity.workGuidance($(this).attr('menuId'));  
-        		showMsg('assist',data);
-        	});
-        }
-        
-        function bindViewLink(msg_li){
-        	msg_li.find(".image-link").click(function(){
-        		window.mainActivity.showImage($(this).attr('link'));  
-        	});
-        	msg_li.find(".video-link").click(function(){
-        		window.mainActivity.showVideo($(this).attr('link'));  
-        	});
-        	msg_li.find(".music-link").click(function(){
-        		window.mainActivity.showMusic($(this).attr('link'));  
-        	});
-        	msg_li.find(".webpage-link").click(function(){
-        		window.mainActivity.showWebpage($(this).attr('link'));  
-        	});
-        }
-        
-        function welcome(){
-            var data=window.mainActivity.welcomeBack("1");
-            showMsg('assist',data);
-        }
-
-        function sendData(){
-            var input_content=$("#m-textarea").val();
-            if(!input_content){
-              window.mainActivity.showMsg("Please input your words!");  
-              return false;
-            }
-            $("#btn_send").unbind();
-            showMsg('me',input_content);
-            setTimeout(function(){
-                var data=window.mainActivity.getResponse(input_content);
-                showMsg('assist',data);
-                $("#btn_send").click(sendData);
-            },1100);
-        }
-        
-        function backHome(){
-        	$("#btn_send").unbind();
-        	var data=window.mainActivity.backMenu();
-        	showMsg('assist',data);
-        }
-        
-        function loadResponseFile(){
-        	var topicName=prompt("请输入主题文件名称(格式注意：有选项必须有回复，否则该选项就是终点)","");
-        	if(topicName){
-        		$("#btn_load").unbind();
-        		var data=window.mainActivity.loadResponseFile(topicName);
-        		alert(data);
-        	}else{
-        		window.mainActivity.showMsg("请输入主题文件名称!");  
-        	}
-        	$("#btn_load").click(loadResponseFile);
-        }
-
-        function showCountDown(){
-        	showMsg('assist',"<p id='countDown'><p>");
-        	var interval = 10; 
-        	var lpad=function(num, n) {
-                return (Array(n).join(0) + num).slice(-n);
-            }
-        	var countDown=function(year,month,day){
-        		var now = new Date(); 
-        		var endDate = new Date(year, month-1, day); 
-        		var leftTime = parseInt((endDate.getTime() - now.getTime())/1000);
-        		var day1=parseInt(leftTime/(60*60*24));
-        		var hour=parseInt(leftTime/(60*60)%24);
-        		var minute=parseInt(leftTime/60%60);
-        		var second=parseInt(leftTime%60);
-        		var msecond=parseInt((endDate.getTime()-now.getTime()/100)%100);
-        		$("#countDown").html("<span class='countDown-day'>"+day1+"</span><span>天</span><span class='countDown'>"+hour+"</span><span>小时</span><span class='countDown'>"+minute
-        				+"</span><span>分钟</span><span class='countDown'>"+lpad(second,2)+"</span><span>秒</span><span class='countDown'>"+lpad(msecond,2)+"</span>");
-        	}
-        	setInterval(function(){countDown(2017,3,1);}, interval);
-        }
-
-        $(document).ready(function(){
-            showCountDown();
-            welcome();
-            $(window).resize(function(){
-            	scrollBottom();
-            });
-            $("#btn_send").click(sendData);
-            $("#btn_back").click(backHome);
-            $("#btn_load").click(loadResponseFile);
-        });
-        
-    </script>
-
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Assistant</title>
+<link rel="stylesheet" href="dist/index.css">
+	<style></style>
+	<script src="dist/jquery-1.11.1.min.js"></script>
+	<script src="dist/index.js"></script>
 </head>
 
 <body>
 
-    <div id="chat">
-        <div class="main">
-            <div class="m-message" id="m-message">
-                <ul>
-                </ul>
-            </div>
-            <!--v-component-->
-            <div class="m-text">
-                <textarea id="m-textarea" placeholder="Input your words"></textarea>
-                <a href="javascript:void(0)" class="btn btn_load" id="btn_load" >LOAD</a>
-                <a href="javascript:void(0)" class="btn btn_back" id="btn_back" >BACK</a>
-                <a href="javascript:void(0)" class="btn btn_send" id="btn_send" >SEND</a>
-            </div>
-            <!--v-component-->
-        </div>
-    </div>
+	<div id="chat">
+		<div class="main">
 
-    <li id="copy-li" style="display:none;">
-        <p class="time"><span></span></p>
-        <div class="main"><img class="avatar" width="30" height="30" src="">
-            <div class="text"></div>
-        </div>
-    </li>
-    
-    <p id="copy-event" style="display:none;">
-    	<span class="event-span event-content"></span>
-    	<span class="event-btn" ></span>
-    	<span class="event-span event-dtstartMonthDay"></span>
-    	<span class="event-span event-dtstartWeekDay"></span>
-    	<span class="event-span event-dtstartTime"></span>
-    </p>
+			<!--v-message-container-->
+			<div class="m-message" id="m-message">
+				<ul>
+				</ul>
+			</div>
+			<!--v-message-container-->
+
+			<!--v-component-->
+			<div class="m-input">
+				<textarea id="m-textarea" placeholder="Input your words"></textarea>
+				<a href="javascript:void(0)" class="btn btn_load" id="btn_load">LOAD</a>
+				<a href="javascript:void(0)" class="btn btn_back" id="btn_back">BACK</a>
+				<a href="javascript:void(0)" class="btn btn_send" id="btn_send">SEND</a>
+			</div>
+			<!--v-component-->
+
+		</div>
+	</div>
+
+	<!--v-msg-template-->
+	<li id="copy-li" style="display: none;">
+		<p class="m-time">
+			<span></span>
+		</p>
+		<div class="m-body">
+			<img class="m-header" width="30" height="30" src="" />
+			<div class="m-content"></div>
+		</div>
+	</li>
+	<!--v-msg-template-->
+
 </body>
 
 </html>

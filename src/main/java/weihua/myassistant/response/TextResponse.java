@@ -1,5 +1,5 @@
 package weihua.myassistant.response;
 
-public class TextResponse implements Response {
+public class TextResponse  extends BaseResponse {
 
 }

@@ -1,5 +1,5 @@
 package weihua.myassistant.response;
 
-public class VideoResponse implements Response {
+public class VideoResponse  extends BaseResponse {
 
 }

@@ -20,7 +20,7 @@ import android.widget.EditText;
  */
 
 // ****************************************************************************
-public class MyWebChromeClient extends WebChromeClient {
+public class CustomerWebChromeClient extends WebChromeClient {
 	@Override
 	public void onCloseWindow(WebView window) {
 		super.onCloseWindow(window);
