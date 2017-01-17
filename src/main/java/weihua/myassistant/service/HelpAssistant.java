@@ -7,6 +7,7 @@ import weihua.myassistant.context.Context.ResponseHistory;
 import weihua.myassistant.data.ResponseData;
 import weihua.myassistant.data.ResponseData.Response;
 import weihua.myassistant.request.RequestType;
+import weihua.myassistant.response.CommonResponse;
 
 /**
  * 帮助、咨询助手服务
@@ -20,7 +21,12 @@ public class HelpAssistant implements Assistant {
 	public String getResponse(String request, RequestType requestType, List<ResponseData> responseDataList,
 			ResponseHistory responseHistory) {
 		Response response = findResponseData(request, requestType, responseDataList, responseHistory);
-		return null;
+		if (response != null) {
+			CommonResponse commonResponse = new CommonResponse(true);
+			return commonResponse.getResponseData(getRandomContent(response.content));
+		} else {
+			return null;
+		}
 	}
 
 	private Response findResponseData(String request, RequestType requestType, List<ResponseData> responseDataList,
@@ -60,6 +66,15 @@ public class HelpAssistant implements Assistant {
 		}
 
 		return response;
+	}
+
+	private String getRandomContent(List<String> content) {
+		String msg = "No content could show.";
+		if (content != null && content.size() > 0) {
+			int index = (int) (Math.random() * content.size());
+			msg = content.get(index);
+		}
+		return msg;
 	}
 
 	private List<Response> getResponseList(List<Response> responseList, String responseId) {

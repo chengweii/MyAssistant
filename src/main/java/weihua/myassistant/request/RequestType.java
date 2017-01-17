@@ -30,7 +30,7 @@ public enum RequestType {
 
 	public static RequestType fromCode(String code) {
 		for (RequestType entity : RequestType.values()) {
-			if (entity.getCode() == code) {
+			if (entity.getCode().equals(code)) {
 				return entity;
 			}
 		}

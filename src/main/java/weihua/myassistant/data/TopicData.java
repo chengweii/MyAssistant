@@ -3,8 +3,8 @@ package weihua.myassistant.data;
 import java.util.List;
 
 public class TopicData implements Data {
-	public List<String> welcomeMsg;
-	public List<String> errorMsg;
+	public String welcomeMsg;
+	public String errorMsg;
 	public String listTopicMsg;
 	public List<Topic> topic;
 

@@ -39,7 +39,7 @@ public enum TopicType {
 
 	public static TopicType fromCode(String code) {
 		for (TopicType entity : TopicType.values()) {
-			if (entity.getCode() == code) {
+			if (entity.getCode().equals(code)) {
 				return entity;
 			}
 		}

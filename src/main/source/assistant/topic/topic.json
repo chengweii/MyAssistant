@@ -1,34 +1,30 @@
 {
-  "welcomeMsg": [
-    "#timeHello#,#userName#,What can I do for you with the following:"
-  ],
-  "errorMsg": [
-    "Sorry,I can only provide the above help."
-  ],
+  "welcomeMsg": "#timeHello#,#userName#,What can I do for you with the following:",
+  "errorMsg": "Sorry,I can only provide the above help.",
   "listTopicMsg": "About <span class='parentTopic'>#keyword#</span>,I can provide the above help now:",
   "topic": [
     {
       "topicId": "1",
-      "topicType": "",
+      "topicType": "Help",
       "topicText": "自我探索",
       "topicName": "",
       "children": [
         {
           "topicId": "2",
-          "topicType": "",
+          "topicType": "Help",
           "topicText": "读书（思想）",
           "topicName": "",
           "children": []
         },
         {
           "topicId": "3",
-          "topicType": "",
+          "topicType": "Help",
           "topicText": "瑜伽（心灵）",
           "topicName": "",
           "children": [
             {
               "topicId": "4",
-              "topicType": "",
+              "topicType": "Help",
               "topicText": "放下执念",
               "topicName": "toLetGoOfTheEgo",
               "children": []
@@ -37,20 +33,20 @@
         },
         {
           "topicId": "5",
-          "topicType": "",
+          "topicType": "Help",
           "topicText": "太极（身体）",
           "topicName": "",
           "children": []
         },
         {
           "topicId": "6",
-          "topicType": "",
+          "topicType": "Help",
           "topicText": "生活（情绪）",
           "topicName": "",
           "children": [
             {
               "topicId": "7",
-              "topicType": "",
+              "topicType": "Help",
               "topicText": "克服紧张",
               "topicName": "overcomeTheTension",
               "children": []
@@ -59,13 +55,13 @@
         },
         {
           "topicId": "8",
-          "topicType": "",
+          "topicType": "Help",
           "topicText": "作息（潜意识、习惯）",
           "topicName": "",
           "children": [
             {
               "topicId": "9",
-              "topicType": "",
+              "topicType": "Help",
               "topicText": "规律作息",
               "topicName": "ruleWorkAndRest",
               "children": []
@@ -76,20 +72,20 @@
     },
     {
       "topicId": "10",
-      "topicType": "",
+      "topicType": "Help",
       "topicText": "事业耕耘",
       "topicName": "",
       "children": [
         {
           "topicId": "11",
-          "topicType": "",
+          "topicType": "Help",
           "topicText": "方案规划",
           "topicName": "",
           "children": []
         },
         {
           "topicId": "12",
-          "topicType": "",
+          "topicType": "Help",
           "topicText": "技术储备",
           "topicName": "",
           "children": []
@@ -98,55 +94,55 @@
     },
     {
       "topicId": "13",
-      "topicType": "",
+      "topicType": "Help",
       "topicText": "生活琐事",
       "topicName": "",
       "children": [
         {
           "topicId": "14",
-          "topicType": "",
+          "topicType": "Help",
           "topicText": "烧菜",
           "topicName": "",
           "children": []
         },
         {
           "topicId": "15",
-          "topicType": "",
+          "topicType": "Help",
           "topicText": "购物",
           "topicName": "",
           "children": []
         },
         {
           "topicId": "16",
-          "topicType": "",
+          "topicType": "Help",
           "topicText": "点餐",
           "topicName": "",
           "children": []
         },
         {
           "topicId": "17",
-          "topicType": "",
+          "topicType": "Help",
           "topicText": "装扮",
           "topicName": "",
           "children": []
         },
         {
           "topicId": "18",
-          "topicType": "",
+          "topicType": "Help",
           "topicText": "理财",
           "topicName": "",
           "children": []
         },
         {
           "topicId": "19",
-          "topicType": "",
+          "topicType": "Help",
           "topicText": "旅游",
           "topicName": "",
           "children": []
         },
         {
           "topicId": "20",
-          "topicType": "",
+          "topicType": "Help",
           "topicText": "送礼",
           "topicName": "",
           "children": []
@@ -155,27 +151,27 @@
     },
     {
       "topicId": "21",
-      "topicType": "",
+      "topicType": "Help",
       "topicText": "工作琐事",
       "topicName": "",
       "children": [
         {
           "topicId": "22",
-          "topicType": "",
+          "topicType": "Help",
           "topicText": "演讲面试",
           "topicName": "",
           "children": []
         },
         {
           "topicId": "23",
-          "topicType": "",
+          "topicType": "Help",
           "topicText": "工作流程",
           "topicName": "",
           "children": []
         },
         {
           "topicId": "24",
-          "topicType": "",
+          "topicType": "Help",
           "topicText": "实施案例",
           "topicName": "",
           "children": []
@@ -184,19 +180,19 @@
     },
     {
       "topicId": "25",
-      "topicType": "",
+      "topicType": "Help",
       "topicText": "经验参考",
       "topicName": "",
       "children": [
         {
           "topicId": "26",
-          "topicType": "",
+          "topicType": "Help",
           "topicText": "决断经验",
           "topicName": "",
           "children": [
             {
               "topicId": "27",
-              "topicType": "",
+              "topicType": "Help",
               "topicText": "两难抉择",
               "topicName": "whichChoice",
               "children": []
@@ -205,41 +201,41 @@
         },
         {
           "topicId": "28",
-          "topicType": "",
+          "topicType": "Help",
           "topicText": "处人经验",
           "topicName": "",
           "children": [
             {
               "topicId": "29",
-              "topicType": "",
+              "topicType": "Help",
               "topicText": "如何与人相处",
               "topicName": "",
               "children": []
             },
             {
               "topicId": "30",
-              "topicType": "",
+              "topicType": "Help",
               "topicText": "如何给人留个好印象",
               "topicName": "",
               "children": []
             },
             {
               "topicId": "31",
-              "topicType": "",
+              "topicType": "Help",
               "topicText": "如何取得别人的信任",
               "topicName": "",
               "children": []
             },
             {
               "topicId": "32",
-              "topicType": "",
+              "topicType": "Help",
               "topicText": "如何应对别人的不敬",
               "topicName": "howToDealWithDisrespect",
               "children": []
             },
             {
               "topicId": "33",
-              "topicType": "",
+              "topicType": "Help",
               "topicText": "如何处理婆媳关系",
               "topicName": "howToDealWithRelationshipOfMotherAndWife",
               "children": []
@@ -248,27 +244,27 @@
         },
         {
           "topicId": "34",
-          "topicType": "",
+          "topicType": "Help",
           "topicText": "处事经验",
           "topicName": "",
           "children": [
             {
               "topicId": "35",
-              "topicType": "",
+              "topicType": "Help",
               "topicText": "如何分析可行性",
               "topicName": "",
               "children": []
             },
             {
               "topicId": "36",
-              "topicType": "",
+              "topicType": "Help",
               "topicText": "如何着手做事",
               "topicName": "howToBeginToDoSomething",
               "children": []
             },
             {
               "topicId": "37",
-              "topicType": "",
+              "topicType": "Help",
               "topicText": "如何规避风险",
               "topicName": "",
               "children": []

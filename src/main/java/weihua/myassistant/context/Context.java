@@ -28,28 +28,39 @@ public class Context {
 	}
 
 	public String getResponse(String request, RequestType requestType) {
+		String responseContent = null;
 		if (responseHistory.lastTopicName == null) {
 			if (requestType == RequestType.CHOICE) {
 				// response the choice topic to user
 				Topic topic = changeTopic(request, requestType);
 				// update the topic in context failed,response the topic to user
 				if (responseHistory.lastTopicName == null) {
-					TopicResponse response = new TopicResponse();
-					String content = response.getContent(topic.children, topic.topicName, topicData);
-					return response.getResponseData(content);
+					TopicResponse topicResponse = new TopicResponse();
+					String content = topicResponse.getContent(topic.children, topic.topicName, topicData);
+					return topicResponse.getResponseData(content);
 				} else {
 					// update the topic in context success,response to user
-					return assistant.getResponse(request, requestType, responseDataList, responseHistory);
+					responseContent = assistant.getResponse(request, requestType, responseDataList, responseHistory);
+					// no response will back home
+					if (responseContent == null) {
+						responseContent = backHome();
+					}
+					return responseContent;
 				}
 			} else {
 				// response the search topics to user
 				List<Topic> topicList = SearchTopic.searchTopicDataByWord(request, topicData);
-				TopicResponse response = new TopicResponse();
-				String content = response.getContent(topicList, request, topicData);
-				return response.getResponseData(content);
+				TopicResponse topicResponse = new TopicResponse();
+				String content = topicResponse.getContent(topicList, request, topicData);
+				return topicResponse.getResponseData(content);
 			}
 		} else {
-			return assistant.getResponse(request, requestType, responseDataList, responseHistory);
+			responseContent = assistant.getResponse(request, requestType, responseDataList, responseHistory);
+			// no response will back home
+			if (responseContent == null) {
+				responseContent = backHome();
+			}
+			return responseContent;
 		}
 	}
 
@@ -68,7 +79,7 @@ public class Context {
 			responseHistory.lastTopicName = topic.topicName;
 			// instance topic's assistant by topic type
 			try {
-				assistant = (Assistant) TopicType.valueOf(topic.topicType).getClz().newInstance();
+				assistant = (Assistant) TopicType.fromCode(topic.topicType).getClz().newInstance();
 			} catch (InstantiationException e) {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {

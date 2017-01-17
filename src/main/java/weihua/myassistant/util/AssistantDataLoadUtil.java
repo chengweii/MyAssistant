@@ -25,7 +25,7 @@ public class AssistantDataLoadUtil {
 		TopicData topicData = null;
 		String topicPath = FileUtil.getInnerAssistantFileSDCardPath() + "topic/topic.json";
 		String topicJsonData = FileUtil.getFileContent(topicPath);
-		java.lang.reflect.Type type = new TypeToken<List<TopicData>>() {
+		java.lang.reflect.Type type = new TypeToken<TopicData>() {
 		}.getType();
 		try {
 			topicData = GsonUtil.gson.fromJson(topicJsonData, type);
@@ -37,7 +37,7 @@ public class AssistantDataLoadUtil {
 
 	public static List<ResponseData> loadTopicData(String topicName, String currentTopic) {
 		List<ResponseData> responseDataList = new ArrayList<ResponseData>();
-		if (!currentTopic.equals(topicName)) {
+		if (!topicName.equals(currentTopic)) {
 			String responsePath = FileUtil.getInnerAssistantFileSDCardPath() + "response/" + topicName + ".json";
 			String responseJsonData = FileUtil.getFileContent(responsePath);
 			java.lang.reflect.Type type = new TypeToken<List<ResponseData>>() {
@@ -146,12 +146,8 @@ public class AssistantDataLoadUtil {
 		Count count = new Count();
 		TopicData topicData = new TopicData();
 		topicData.listTopicMsg = "About <span class='parentTopic'>#keyword#</span>,I can provide the above help now:";
-		List<String> welcomeMsg = new ArrayList<String>();
-		welcomeMsg.add("#timeHello#,#userName#,What can I do for you with the following:");
-		topicData.welcomeMsg = welcomeMsg;
-		List<String> errorMsg = new ArrayList<String>();
-		errorMsg.add("Sorry,I can only provide the above help.");
-		topicData.errorMsg = errorMsg;
+		topicData.welcomeMsg = "#timeHello#,#userName#,What can I do for you with the following:";
+		topicData.errorMsg = "Sorry,I can only provide the above help.";
 		topicData.topic = getTopic(dataJson.root.children, count);
 
 		return topicData;

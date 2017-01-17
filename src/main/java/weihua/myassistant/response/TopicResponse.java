@@ -1,5 +1,7 @@
 package weihua.myassistant.response;
 
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import weihua.myassistant.common.Constants;
@@ -12,12 +14,11 @@ public class TopicResponse implements Response {
 
 	@Override
 	public String getResponseData(String content) {
-		String response = "";
 		if (nextHandler != null) {
-			response = nextHandler.getResponseData(content);
+			content = nextHandler.getResponseData(content);
 		}
 
-		return response;
+		return content;
 	}
 
 	@Override
@@ -36,11 +37,23 @@ public class TopicResponse implements Response {
 	}
 
 	public String getContent(List<Topic> children, String topicName, TopicData topicData) {
-		StringBuilder sb = new StringBuilder(topicData.listTopicMsg.replace(Constants.KEYWORD_SPACE, topicName));
+		String narrationContent;
+		if (topicName != null && !"".equals(topicName)) {
+			narrationContent = topicData.listTopicMsg.replace(Constants.KEYWORD_SPACE, topicName);
+		} else {
+			Date date = new Date();
+			GregorianCalendar cal = new GregorianCalendar();
+			cal.setTime(date);
+			narrationContent = topicData.welcomeMsg.replace(Constants.TIMEHELLO,
+					cal.get(GregorianCalendar.AM_PM) == 0 ? "Good morning" : "Good afternoon");
+			narrationContent = narrationContent.replace(Constants.USERNAME, Constants.MASTER);
+		}
+
+		StringBuilder sb = new StringBuilder(narrationContent);
 		sb.append("<p>");
 		for (Topic child : children) {
 			sb.append("<span class='choice-item' ");
-			sb.append("' choiceValue='");
+			sb.append(" choiceValue='");
 			sb.append(child.topicId);
 			sb.append("'>");
 			sb.append(child.topicText);

@@ -40,7 +40,7 @@ public enum MediaType {
 
 	public static MediaType fromCode(String code) {
 		for (MediaType entity : MediaType.values()) {
-			if (entity.getCode() == code) {
+			if (entity.getCode().equals(code)) {
 				return entity;
 			}
 		}
