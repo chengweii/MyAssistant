@@ -1,6 +1,7 @@
 package weihua.myassistant.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import weihua.myassistant.context.Context.ResponseHistory;
@@ -8,6 +9,7 @@ import weihua.myassistant.data.ResponseData;
 import weihua.myassistant.data.ResponseData.Response;
 import weihua.myassistant.request.RequestType;
 import weihua.myassistant.response.CommonResponse;
+import weihua.myassistant.util.StringUtil;
 
 /**
  * 帮助、咨询助手服务
@@ -22,8 +24,14 @@ public class HelpAssistant implements Assistant {
 			ResponseHistory responseHistory) {
 		Response response = findResponseData(request, requestType, responseDataList, responseHistory);
 		if (response != null) {
+			responseHistory.lastResponseId = response.id;
+			responseHistory.lastRequestType = requestType;
+			responseHistory.lastResponseContent = StringUtil.getRandomContent(response.content);
+			responseHistory.lastResponseTime = new Date();
+
 			CommonResponse commonResponse = new CommonResponse(true);
-			return commonResponse.getResponseData(getRandomContent(response.content));
+			String responseContent = commonResponse.getContent(responseDataList, response);
+			return commonResponse.getResponseData(responseContent);
 		} else {
 			return null;
 		}
@@ -38,12 +46,7 @@ public class HelpAssistant implements Assistant {
 			List<Response> responseList = getResponseList(responseData.responses, responseHistory.lastResponseId);
 
 			if (responseList.size() == 1) {
-				for (Response entity : responseData.responses) {
-					if (entity.responseId.equals(responseHistory.lastResponseId)) {
-						response = entity;
-						break;
-					}
-				}
+				response = responseList.get(0);
 			} else if (responseList.size() > 1) {
 				if (requestType == RequestType.TEXT) {
 					response = new Response();
@@ -68,16 +71,10 @@ public class HelpAssistant implements Assistant {
 		return response;
 	}
 
-	private String getRandomContent(List<String> content) {
-		String msg = "No content could show.";
-		if (content != null && content.size() > 0) {
-			int index = (int) (Math.random() * content.size());
-			msg = content.get(index);
-		}
-		return msg;
-	}
-
 	private List<Response> getResponseList(List<Response> responseList, String responseId) {
+		if (responseId == null) {
+			responseId = "";
+		}
 		List<Response> list = new ArrayList<Response>();
 		for (Response entity : responseList) {
 			if (entity.responseId.equals(responseId)) {

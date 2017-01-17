@@ -1,5 +1,16 @@
 package weihua.myassistant.response;
 
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import weihua.myassistant.common.Constants;
+import weihua.myassistant.data.ResponseData;
+import weihua.myassistant.data.TopicData;
+import weihua.myassistant.data.ResponseData.Response;
+import weihua.myassistant.data.TopicData.Topic;
+import weihua.myassistant.util.StringUtil;
+
 public class CommonResponse extends BaseResponse {
 
 	public CommonResponse(boolean initHandlers) {
@@ -28,6 +39,31 @@ public class CommonResponse extends BaseResponse {
 		videoResponse.setNextHandler(linkResponse);
 
 		setNextHandler(imageResponse);
+	}
+
+	public String getContent(List<ResponseData> responseDataList, Response response) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("<p>");
+		sb.append(StringUtil.getRandomContent(response.content));
+		sb.append("</p>");
+
+		if (responseDataList != null && responseDataList.size() > 0) {
+			ResponseData responseData = responseDataList.get(0);
+			sb.append("<p>");
+			for (Response child : responseData.responses) {
+				if (response.id.equals(child.responseId)) {
+					sb.append("<span class='choice-item' ");
+					sb.append(" choiceValue='");
+					sb.append(child.condition);
+					sb.append("'>");
+					sb.append(StringUtil.getRandomContent(child.content));
+					sb.append("</span>");
+				}
+			}
+			sb.append("</p>");
+		}
+
+		return sb.toString();
 	}
 
 	public static void main(String[] args) {
