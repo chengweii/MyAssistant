@@ -16,7 +16,6 @@ import weihua.myassistant.data.TopicType;
 import weihua.myassistant.util.AssistantDataJson.Node;
 
 public class AssistantDataLoadUtil {
-	private static Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
 
 	public static void main(String[] args) {
 		generateResponse("whichChoice");
@@ -29,7 +28,7 @@ public class AssistantDataLoadUtil {
 		java.lang.reflect.Type type = new TypeToken<List<TopicData>>() {
 		}.getType();
 		try {
-			topicData = gson.fromJson(topicJsonData, type);
+			topicData = GsonUtil.gson.fromJson(topicJsonData, type);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -37,14 +36,14 @@ public class AssistantDataLoadUtil {
 	}
 
 	public static List<ResponseData> loadTopicData(String topicName, String currentTopic) {
-		List<ResponseData> responseDataList=new ArrayList<ResponseData>();
+		List<ResponseData> responseDataList = new ArrayList<ResponseData>();
 		if (!currentTopic.equals(topicName)) {
 			String responsePath = FileUtil.getInnerAssistantFileSDCardPath() + "response/" + topicName + ".json";
 			String responseJsonData = FileUtil.getFileContent(responsePath);
 			java.lang.reflect.Type type = new TypeToken<List<ResponseData>>() {
 			}.getType();
 			try {
-				responseDataList = gson.fromJson(responseJsonData, type);
+				responseDataList = GsonUtil.gson.fromJson(responseJsonData, type);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -72,11 +71,11 @@ public class AssistantDataLoadUtil {
 		java.lang.reflect.Type type = new TypeToken<AssistantDataJson>() {
 		}.getType();
 		try {
-			AssistantDataJson dataJson = gson.fromJson(responseJsonData, type);
+			AssistantDataJson dataJson = GsonUtil.gson.fromJson(responseJsonData, type);
 			ResponseData responseData = dataJsonToResponseData(dataJson);
 			responseData.topicId = "1";
 			responseData.topicName = topicName;
-			responseJsonString = gson.toJson(responseData);
+			responseJsonString = GsonUtil.gson.toJson(responseData);
 			responseJsonString = responseJsonString.replaceAll("null", "\"\"");
 			responseJsonString = "[" + responseJsonString + "]";
 			FileUtil.writeFileContent(responseJsonString, jsonPath);
@@ -129,9 +128,9 @@ public class AssistantDataLoadUtil {
 		java.lang.reflect.Type type = new TypeToken<AssistantDataJson>() {
 		}.getType();
 		try {
-			AssistantDataJson dataJson = gson.fromJson(assistJsonData, type);
+			AssistantDataJson dataJson = GsonUtil.gson.fromJson(assistJsonData, type);
 			TopicData assistJson = dataJsonToTopicData(dataJson);
-			assistJsonString = gson.toJson(assistJson);
+			assistJsonString = GsonUtil.gson.toJson(assistJson);
 			assistJsonString = assistJsonString.replaceAll("\\\\u003c", "<").replaceAll("\\\\u003e", ">");
 			assistJsonString = assistJsonString.replaceAll("\\\\u0027", "'").replaceAll("\\\\u003d", "=");
 			assistJsonString = assistJsonString.replaceAll("null", "\"\"");
@@ -146,7 +145,7 @@ public class AssistantDataLoadUtil {
 	private static TopicData dataJsonToTopicData(AssistantDataJson dataJson) {
 		Count count = new Count();
 		TopicData topicData = new TopicData();
-		topicData.listTopicMsg = "About <span class='parentTopic'>#menuText#</span>,I can provide the above help now:";
+		topicData.listTopicMsg = "About <span class='parentTopic'>#keyword#</span>,I can provide the above help now:";
 		List<String> welcomeMsg = new ArrayList<String>();
 		welcomeMsg.add("#timeHello#,#userName#,What can I do for you with the following:");
 		topicData.welcomeMsg = welcomeMsg;

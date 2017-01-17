@@ -35,7 +35,7 @@ public class Context {
 				// update the topic in context failed,response the topic to user
 				if (responseHistory.lastTopicName == null) {
 					TopicResponse response = new TopicResponse();
-					String content = response.getContent(topic.children, topic.topicName);
+					String content = response.getContent(topic.children, topic.topicName, topicData);
 					return response.getResponseData(content);
 				} else {
 					// update the topic in context success,response to user
@@ -45,7 +45,7 @@ public class Context {
 				// response the search topics to user
 				List<Topic> topicList = SearchTopic.searchTopicDataByWord(request, topicData);
 				TopicResponse response = new TopicResponse();
-				String content = response.getContent(topicList, request);
+				String content = response.getContent(topicList, request, topicData);
 				return response.getResponseData(content);
 			}
 		} else {

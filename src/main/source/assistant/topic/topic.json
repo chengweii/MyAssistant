@@ -5,7 +5,7 @@
   "errorMsg": [
     "Sorry,I can only provide the above help."
   ],
-  "listTopicMsg": "About <span class='parentTopic'>#menuText#</span>,I can provide the above help now:",
+  "listTopicMsg": "About <span class='parentTopic'>#keyword#</span>,I can provide the above help now:",
   "topic": [
     {
       "topicId": "1",
