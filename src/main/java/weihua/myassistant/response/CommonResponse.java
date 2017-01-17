@@ -1,5 +1,6 @@
 package weihua.myassistant.response;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -49,9 +50,17 @@ public class CommonResponse extends BaseResponse {
 
 		if (responseDataList != null && responseDataList.size() > 0) {
 			ResponseData responseData = responseDataList.get(0);
-			sb.append("<p>");
+
+			List<Response> choiceList = new ArrayList<Response>();
 			for (Response child : responseData.responses) {
 				if (response.id.equals(child.responseId)) {
+					choiceList.add(child);
+				}
+			}
+
+			if (choiceList.size() > 1) {
+				sb.append("<p>");
+				for (Response child : choiceList) {
 					sb.append("<span class='choice-item' ");
 					sb.append(" choiceValue='");
 					sb.append(child.condition);
@@ -59,8 +68,9 @@ public class CommonResponse extends BaseResponse {
 					sb.append(StringUtil.getRandomContent(child.content));
 					sb.append("</span>");
 				}
+				sb.append("</p>");
 			}
-			sb.append("</p>");
+
 		}
 
 		return sb.toString();

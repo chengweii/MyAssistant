@@ -63,6 +63,8 @@ public class HelpAssistant implements Assistant {
 					responseList = getResponseList(responseData.responses, response.id);
 					if (responseList.size() > 0) {
 						response = responseList.get(0);
+					} else {
+						response = null;
 					}
 				}
 			}
