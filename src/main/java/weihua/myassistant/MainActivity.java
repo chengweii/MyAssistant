@@ -51,7 +51,7 @@ public class MainActivity extends Activity {
 	public void initView() {
 		m_wv1 = (WebView) findViewById(R.id.wv1);
 		m_wv1.getSettings().setJavaScriptEnabled(true);
-		m_wv1.addJavascriptInterface(this, "JavascriptInterface");
+		m_wv1.addJavascriptInterface(this, "mainActivity");
 		m_wv1.loadUrl("file:///android_asset/" + viewFilePath);
 		m_wv1.getSettings().setUseWideViewPort(true);
 		m_wv1.getSettings().setLoadWithOverviewMode(true);

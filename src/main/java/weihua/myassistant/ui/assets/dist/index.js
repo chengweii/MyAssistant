@@ -1,6 +1,6 @@
 function initTestInterface() {
-	if (!window.JavascriptInterface) {
-		window.JavascriptInterface = {
+	if (!window.mainActivity) {
+		window.mainActivity = {
 			backHome : function() {
 				return "backHome";
 			},
@@ -46,7 +46,7 @@ function init() {
 		}
 	};
 
-	initTestInterface();
+	//initTestInterface();
 
 	function initAssistantHeader() {
 		var headers = [ "alisa.png", "alice.png", "jenny.png" ];
@@ -64,7 +64,7 @@ function init() {
 
 	assistant.backHome = function() {
 		$("#" + assistant.refs.containerId + " ul").html("");
-		var data = JavascriptInterface.backHome();
+		var data = mainActivity.backHome();
 		assistant.showMsg(assistant.refs.assistantUserName, data);
 	}
 
@@ -76,10 +76,10 @@ function init() {
 			return;
 		}
 		if (topicFileName) {
-			var result = JavascriptInterface.loadDataFile(topicFileName);
-			JavascriptInterface.showMsg(result);
+			var result = mainActivity.loadDataFile(topicFileName);
+			mainActivity.showMsg(result);
 		} else {
-			JavascriptInterface.showMsg("Please input topic file name!");
+			mainActivity.showMsg("Please input topic file name!");
 		}
 		$("#" + assistant.refs.btnLoadId).unbind().click(assistant.loadDataFile);
 	}
@@ -89,7 +89,7 @@ function init() {
 				function() {
 					var request = $(this).attr(
 							assistant.refs.choiceItemValueName);
-					var data = JavascriptInterface.getResponse(request,
+					var data = mainActivity.getResponse(request,
 							assistant.requestType.choice);
 					assistant.showMsg(assistant.refs.assistantUserName, data);
 				});
@@ -99,7 +99,7 @@ function init() {
 		msg_li.find("." + assistant.refs.mediaLinkClass).click(function() {
 			var mediaLink = $(this).attr(assistant.refs.mediaLinkValueName);
 			var mediaType = $(this).attr(assistant.refs.mediaTypeValueName);
-			JavascriptInterface.showMedia(mediaLink, mediaType);
+			mainActivity.showMedia(mediaLink, mediaType);
 		});
 	}
 
@@ -141,24 +141,19 @@ function init() {
 	assistant.sendData = function() {
 		var input_content = $("#" + assistant.refs.contentInputId).val();
 		if (!input_content) {
-			JavascriptInterface.showMsg("Please input your words!");
+			mainActivity.showMsg("Please input your words!");
 			return false;
 		}
 		$("#" + assistant.refs.btnSendId).unbind();
 		assistant.showMsg(assistant.refs.meUserName, input_content);
 		setTimeout(function() {
-			var data = JavascriptInterface.getResponse(input_content,
+			var data = mainActivity.getResponse(input_content,
 					assistant.requestType.text);
 			assistant.showMsg(assistant.refs.assistantUserName, data);
 			$("#" + assistant.refs.btnSendId).click(assistant.sendData);
 		}, 1100);
 	}
 
-	assistant.welcome = function() {
-		var data = JavascriptInterface.getResponse("",
-				assistant.requestType.text);
-		assistant.showMsg(assistant.refs.assistantUserName, data);
-	}
 }
 
 $(document).ready(function() {
@@ -172,5 +167,5 @@ $(document).ready(function() {
 	$("#" + assistant.refs.btnBackId).click(assistant.backHome);
 	$("#" + assistant.refs.btnLoadId).click(assistant.loadDataFile);
 
-	assistant.welcome();
+	assistant.backHome();
 });
