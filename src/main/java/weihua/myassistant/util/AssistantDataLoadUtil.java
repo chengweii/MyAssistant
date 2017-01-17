@@ -36,8 +36,9 @@ public class AssistantDataLoadUtil {
 		return topicData;
 	}
 
-	public static void loadTopicData(String topicName, String currentTopic, List<ResponseData> responseDataList) {
-		if (!currentTopic.equals(topicName) && responseDataList == null) {
+	public static List<ResponseData> loadTopicData(String topicName, String currentTopic) {
+		List<ResponseData> responseDataList=new ArrayList<ResponseData>();
+		if (!currentTopic.equals(topicName)) {
 			String responsePath = FileUtil.getInnerAssistantFileSDCardPath() + "response/" + topicName + ".json";
 			String responseJsonData = FileUtil.getFileContent(responsePath);
 			java.lang.reflect.Type type = new TypeToken<List<ResponseData>>() {
@@ -48,6 +49,7 @@ public class AssistantDataLoadUtil {
 				e.printStackTrace();
 			}
 		}
+		return responseDataList;
 	}
 
 	public static String generateResponse(String topicName) {

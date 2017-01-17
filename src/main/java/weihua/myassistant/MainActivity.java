@@ -28,9 +28,7 @@ public class MainActivity extends Activity {
 
 	@JavascriptInterface
 	public String backHome() {
-		// TODO
-		String json = "";
-		return json;
+		return assistantContext.backHome();
 	}
 
 	@JavascriptInterface
