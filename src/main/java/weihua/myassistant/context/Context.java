@@ -38,7 +38,7 @@ public class Context {
 				// update the topic in context failed,response the topic to user
 				if (responseHistory.lastTopicName == null) {
 					TopicResponse topicResponse = new TopicResponse();
-					String content = topicResponse.getContent(topic.children, topic.topicName, topicData);
+					String content = topicResponse.getContent(topic.children, topic.topicText, topicData);
 					return topicResponse.getResponseData(content);
 				} else {
 					// update the topic in context success,response to user
