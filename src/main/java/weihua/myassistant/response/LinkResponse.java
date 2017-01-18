@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 import weihua.myassistant.util.GsonUtil;
 
-public class LinkResponse  extends BaseResponse {
+public class LinkResponse extends BaseResponse {
 
 	@Override
 	String handleResponse(String content) {
@@ -16,10 +16,12 @@ public class LinkResponse  extends BaseResponse {
 		Map<String, String> map;
 		while (matcher.find()) {
 			link = matcher.group();
-			if (link.matches("#.*?(type\\s*\\:\\s*\\'url\\').*?#")) {
+			if (link.matches("#.*?(type\\s*\\:\\s*\\'" + MediaType.URL.getValue() + "\\').*?#")) {
 				map = GsonUtil.getMapFromJson(link.replace("#", ""));
-				content = content.replace(link, "<a href='javascript:void(0)' class='" + map.get("type")
-						+ "-link' link='" + map.get("link") + "'>" + map.get("text") + "</a>");
+				content = content.replace(link,
+						"<a href='javascript:void(0)' class='media-link " + map.get("type") + "-link' mediaLink='"
+								+ map.get("link") + "' mediaType='" + MediaType.URL.getCode() + "'>" + map.get("text")
+								+ "</a>");
 			}
 		}
 		return content;

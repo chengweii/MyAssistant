@@ -16,10 +16,12 @@ public class MusicResponse extends BaseResponse {
 		Map<String, String> map;
 		while (matcher.find()) {
 			link = matcher.group();
-			if (link.matches("#.*?(type\\s*\\:\\s*\\'audio\\').*?#")) {
+			if (link.matches("#.*?(type\\s*\\:\\s*\\'" + MediaType.AUDIO.getValue() + "\\').*?#")) {
 				map = GsonUtil.getMapFromJson(link.replace("#", ""));
-				content = content.replace(link, "<a href='javascript:void(0)' class='" + map.get("type")
-						+ "-link' link='" + map.get("link") + "'>" + map.get("text") + "</a>");
+				content = content.replace(link,
+						"<a href='javascript:void(0)' class='media-link " + map.get("type") + "-link' mediaLink='"
+								+ map.get("link") + "' mediaType='" + MediaType.AUDIO.getCode() + "'>"
+								+ map.get("text") + "</a>");
 			}
 		}
 		return content;
