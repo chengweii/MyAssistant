@@ -78,6 +78,6 @@ public class CommonResponse extends BaseResponse {
 
 	public static void main(String[] args) {
 		System.out.println(new CommonResponse(true).getResponseData(
-				"测试#{type:'image',link:'test1.jpg',text:'image'}#测试#{type:'audio',link:'test2.mp3',text:'audio'}#测试#{type:'video',link:'test.mp4',text:'video'}#测试"));
+				"测试#{type:'image',link:'test1.jpg',text:'image'}#测试#{type:'audio',link:'test2.mp3',text:'audio'}#测试#{type:'video',link:'test.mp4',text:'video'}#测试{type:'url',link:'www.baidu.com',text:'url'}#测试"));
 	}
 }
