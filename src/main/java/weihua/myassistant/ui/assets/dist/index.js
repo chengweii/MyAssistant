@@ -2,7 +2,7 @@ function initTestInterface() {
 	if (!window.mainActivity) {
 		window.mainActivity = {
 			backHome : function() {
-				return "backHome";
+				return "Good afternoon,Master,What can I do for you with the following:<p><span class='choice-item'  choiceValue='1'>choice1</span><span class='choice-item'  choiceValue='10'>choice2</span><span class='choice-item'  choiceValue='13'>choice3</span><span class='choice-item'  choiceValue='21'>choice4</span><span class='choice-item'  choiceValue='25'>choice5</span></p>";
 			},
 			loadDataFile : function(topicFileName) {
 				return "loadDataFile:" + topicFileName;
@@ -46,7 +46,7 @@ function init() {
 		}
 	};
 
-	//initTestInterface();
+	initTestInterface();
 
 	function initAssistantHeader() {
 		var headers = [ "alisa.png", "alice.png", "jenny.png" ];

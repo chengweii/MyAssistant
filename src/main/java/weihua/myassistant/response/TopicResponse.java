@@ -38,8 +38,25 @@ public class TopicResponse implements Response {
 
 	public String getContent(List<Topic> children, String topicName, TopicData topicData) {
 		String narrationContent;
+		StringBuilder sb = new StringBuilder();
 		if (topicName != null && !"".equals(topicName)) {
 			narrationContent = topicData.listTopicMsg.replace(Constants.KEYWORD_SPACE, topicName);
+
+			if (children != null && children.size() > 0) {
+				sb.append(narrationContent);
+				sb.append("<p>");
+				for (Topic child : children) {
+					sb.append("<span class='choice-item' ");
+					sb.append(" choiceValue='");
+					sb.append(child.topicId);
+					sb.append("'>");
+					sb.append(child.topicText);
+					sb.append("</span>");
+				}
+				sb.append("</p>");
+			} else {
+				sb.append(Constants.NOTOPICMSG.replace(Constants.KEYWORD_SPACE, topicName));
+			}
 		} else {
 			Date date = new Date();
 			GregorianCalendar cal = new GregorianCalendar();
@@ -47,19 +64,32 @@ public class TopicResponse implements Response {
 			narrationContent = topicData.welcomeMsg.replace(Constants.TIMEHELLO,
 					cal.get(GregorianCalendar.AM_PM) == 0 ? "Good morning" : "Good afternoon");
 			narrationContent = narrationContent.replace(Constants.USERNAME, Constants.MASTER);
+
+			if (children != null && children.size() > 0) {
+				sb.append(narrationContent);
+				sb.append("<p>");
+				int i = 0;
+				for (Topic child : children) {
+					sb.append("<span class='choice-item' ");
+					sb.append(" choiceValue='");
+					sb.append(child.topicId);
+					sb.append("' style='");
+					if (i < Constants.COLORSARRAY.length) {
+						sb.append(Constants.MAINTOPICSTYLE.replace(Constants.KEYWORD_SPACE, Constants.COLORSARRAY[i]));
+					} else {
+						sb.append(Constants.MAINTOPICSTYLE.replace(Constants.KEYWORD_SPACE, Constants.COLORSARRAY[0]));
+					}
+					sb.append("'>");
+					sb.append(child.topicText);
+					sb.append("</span>");
+					i++;
+				}
+				sb.append("</p>");
+			} else {
+				sb.append(Constants.NOTOPICMSG.replace(Constants.KEYWORD_SPACE, topicName));
+			}
 		}
 
-		StringBuilder sb = new StringBuilder(narrationContent);
-		sb.append("<p>");
-		for (Topic child : children) {
-			sb.append("<span class='choice-item' ");
-			sb.append(" choiceValue='");
-			sb.append(child.topicId);
-			sb.append("'>");
-			sb.append(child.topicText);
-			sb.append("</span>");
-		}
-		sb.append("</p>");
 		return sb.toString();
 	}
 }

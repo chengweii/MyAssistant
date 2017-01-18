@@ -79,10 +79,11 @@ ul {
 	line-height: 1.6;
 	font-size: 9pt;
 	text-align: left;
+	font-weight: bold;
 	word-break: break-all;
 	background-color: #fafafa;
 	border-radius: 4px;
-	letter-spacing: 1px;
+	font-family: "微软雅黑";
 }
 
 .m-message .m-content a {
