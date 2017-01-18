@@ -76,6 +76,7 @@ public class AssistantDataLoadUtil {
 			responseData.topicId = "1";
 			responseData.topicName = topicName;
 			responseJsonString = GsonUtil.gson.toJson(responseData);
+			responseJsonString = getNormalText(responseJsonString);
 			responseJsonString = responseJsonString.replaceAll("null", "\"\"");
 			responseJsonString = "[" + responseJsonString + "]";
 			FileUtil.writeFileContent(responseJsonString, jsonPath);
@@ -131,8 +132,7 @@ public class AssistantDataLoadUtil {
 			AssistantDataJson dataJson = GsonUtil.gson.fromJson(assistJsonData, type);
 			TopicData assistJson = dataJsonToTopicData(dataJson);
 			assistJsonString = GsonUtil.gson.toJson(assistJson);
-			assistJsonString = assistJsonString.replaceAll("\\\\u003c", "<").replaceAll("\\\\u003e", ">");
-			assistJsonString = assistJsonString.replaceAll("\\\\u0027", "'").replaceAll("\\\\u003d", "=");
+			assistJsonString = getNormalText(assistJsonString);
 			assistJsonString = assistJsonString.replaceAll("null", "\"\"");
 			FileUtil.writeFileContent(assistJsonString, jsonPath);
 		} catch (Exception e) {
@@ -177,6 +177,12 @@ public class AssistantDataLoadUtil {
 			index++;
 		}
 		return result;
+	}
+
+	public static String getNormalText(String content) {
+		content = content.replaceAll("\\\\u003c", "<").replaceAll("\\\\u003e", ">");
+		content = content.replaceAll("\\\\u0027", "'").replaceAll("\\\\u003d", "=");
+		return content;
 	}
 
 	static class Count {

@@ -25,7 +25,7 @@ public class CommonResponse extends BaseResponse {
 		return content;
 	}
 
-	public void initHandlers() {
+	private void initHandlers() {
 		TextResponse textResponse = new TextResponse();
 		ImageResponse imageResponse = new ImageResponse();
 		textResponse.setNextHandler(imageResponse);

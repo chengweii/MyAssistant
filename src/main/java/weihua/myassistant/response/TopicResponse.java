@@ -12,6 +12,12 @@ public class TopicResponse implements Response {
 
 	private Response nextHandler;
 
+	public TopicResponse(boolean initHandlers) {
+		if (initHandlers) {
+			initHandlers();
+		}
+	}
+
 	@Override
 	public String getResponseData(String content) {
 		if (nextHandler != null) {
@@ -31,7 +37,7 @@ public class TopicResponse implements Response {
 		return nextHandler;
 	}
 
-	public void initHandlers() {
+	private void initHandlers() {
 		CommonResponse commonResponse = new CommonResponse(true);
 		nextHandler = commonResponse;
 	}
