@@ -23,8 +23,10 @@ public class Context {
 
 	private List<ResponseData> responseDataList = null;
 
-	static {
-		topicData = AssistantDataLoadUtil.loadAllTopicData();
+	public Context() {
+		if (topicData == null) {
+			topicData = AssistantDataLoadUtil.loadAllTopicData();
+		}
 	}
 
 	public String getResponse(String request, RequestType requestType) {

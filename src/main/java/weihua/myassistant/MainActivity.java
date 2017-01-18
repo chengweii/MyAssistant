@@ -14,6 +14,7 @@ import weihua.myassistant.response.MediaType;
 import weihua.myassistant.ui.CustomerWebChromeClient;
 import weihua.myassistant.ui.MediaIntent;
 import weihua.myassistant.util.AssistantDataLoadUtil;
+import weihua.myassistant.util.ExceptionUtil;
 import weihua.myassistant.util.FileUtil;
 
 public class MainActivity extends Activity {
@@ -23,12 +24,24 @@ public class MainActivity extends Activity {
 
 	@JavascriptInterface
 	public String getResponse(String request, String requestType) {
-		return assistantContext.getResponse(request, RequestType.fromCode(requestType));
+		String msg = "";
+		try {
+			msg = assistantContext.getResponse(request, RequestType.fromCode(requestType));
+		} catch (Exception e) {
+			msg = ExceptionUtil.getStackTrace(e);
+		}
+		return msg;
 	}
 
 	@JavascriptInterface
 	public String backHome() {
-		return assistantContext.backHome();
+		String msg = "";
+		try {
+			msg = assistantContext.backHome();
+		} catch (Exception e) {
+			msg = ExceptionUtil.getStackTrace(e);
+		}
+		return msg;
 	}
 
 	@JavascriptInterface
@@ -39,7 +52,13 @@ public class MainActivity extends Activity {
 
 	@JavascriptInterface
 	public String loadDataFile(String topicName) {
-		return AssistantDataLoadUtil.generateResponse(topicName);
+		String msg = "";
+		try {
+			msg = AssistantDataLoadUtil.generateResponse(topicName);
+		} catch (Exception e) {
+			msg = ExceptionUtil.getStackTrace(e);
+		}
+		return msg;
 	}
 
 	@JavascriptInterface
@@ -85,9 +104,9 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		assistantContext = new Context();
-
 		FileUtil.assistantRootPath = Environment.getExternalStorageDirectory().getPath() + "/assistant/";
+
+		assistantContext = new Context();
 
 		initView();
 	}
