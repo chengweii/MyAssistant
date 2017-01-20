@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import weihua.myassistant.context.Context;
 import weihua.myassistant.context.Context.ResponseHistory;
 import weihua.myassistant.data.ResponseData;
 import weihua.myassistant.data.ResponseData.Response;
@@ -20,17 +21,16 @@ import weihua.myassistant.util.StringUtil;
 public class HelpAssistant implements Assistant {
 
 	@Override
-	public String getResponse(String request, RequestType requestType, List<ResponseData> responseDataList,
-			ResponseHistory responseHistory) {
-		Response response = findResponseData(request, requestType, responseDataList, responseHistory);
+	public String getResponse(String request, RequestType requestType, Context context) {
+		Response response = findResponseData(request, requestType, context.responseDataList, context.responseHistory);
 		if (response != null) {
-			responseHistory.lastResponseId = response.id;
-			responseHistory.lastRequestType = requestType;
-			responseHistory.lastResponseContent = StringUtil.getRandomContent(response.content);
-			responseHistory.lastResponseTime = new Date();
+			context.responseHistory.lastResponseId = response.id;
+			context.responseHistory.lastRequestType = requestType;
+			context.responseHistory.lastResponseContent = StringUtil.getRandomContent(response.content);
+			context.responseHistory.lastResponseTime = new Date();
 
 			CommonResponse commonResponse = new CommonResponse(true);
-			String responseContent = commonResponse.getContent(responseDataList, response);
+			String responseContent = commonResponse.getContent(context.responseDataList, response);
 			return commonResponse.getResponseData(responseContent);
 		} else {
 			return null;

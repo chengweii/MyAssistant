@@ -17,11 +17,11 @@ public class Context {
 
 	private Assistant assistant = null;
 
-	private ResponseHistory responseHistory = new ResponseHistory();
+	public ResponseHistory responseHistory = new ResponseHistory();
 
-	private static TopicData topicData = null;
+	public static TopicData topicData = null;
 
-	private List<ResponseData> responseDataList = null;
+	public List<ResponseData> responseDataList = null;
 
 	public Context() {
 		if (topicData == null) {
@@ -42,7 +42,7 @@ public class Context {
 					return topicResponse.getResponseData(content);
 				} else {
 					// update the topic in context success,response to user
-					responseContent = assistant.getResponse(request, requestType, responseDataList, responseHistory);
+					responseContent = assistant.getResponse(request, requestType, this);
 					// no response will back home
 					if (responseContent == null) {
 						responseContent = backHome();
@@ -57,7 +57,7 @@ public class Context {
 				return topicResponse.getResponseData(content);
 			}
 		} else {
-			responseContent = assistant.getResponse(request, requestType, responseDataList, responseHistory);
+			responseContent = assistant.getResponse(request, requestType, this);
 			// no response will back home
 			if (responseContent == null) {
 				responseContent = backHome();
