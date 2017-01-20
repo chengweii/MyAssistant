@@ -43,10 +43,11 @@ function init() {
 		requestType : {
 			text : 0,
 			choice : 1
-		}
+		},
+		responseHandlers : []
 	};
 
-	initTestInterface();
+	//initTestInterface();
 
 	function initAssistantHeader() {
 		var headers = [ "alisa.png", "alice.png", "jenny.png" ];
@@ -81,7 +82,8 @@ function init() {
 		} else {
 			mainActivity.showMsg("Please input topic file name!");
 		}
-		$("#" + assistant.refs.btnLoadId).unbind().click(assistant.loadDataFile);
+		$("#" + assistant.refs.btnLoadId).unbind()
+				.click(assistant.loadDataFile);
 	}
 
 	assistant.bindChoiceEvent = function(msg_li) {
@@ -128,6 +130,10 @@ function init() {
 
 		assistant.bindChoiceEvent(msg_li);
 		assistant.bindMediaEvent(msg_li);
+		
+		for(var index in assistant.responseHandlers){
+			assistant.responseHandlers[index](msg_li);
+		}
 
 		$("#" + assistant.refs.containerId + " ul").append(msg_li);
 
@@ -156,8 +162,9 @@ function init() {
 
 }
 
+init();
+
 $(document).ready(function() {
-	init();
 
 	$(window).resize(function() {
 		assistant.scrollBottom();

@@ -12,7 +12,7 @@ public class App {
 		Context assistantContext = new Context();
 		System.out.println(assistantContext.backHome());
 		System.out.println(assistantContext.getResponse("婆媳", RequestType.TEXT));
-		System.out.println(assistantContext.getResponse("33", RequestType.CHOICE));
+		System.out.println(assistantContext.getResponse("14", RequestType.CHOICE));
 		System.out.println(assistantContext.getResponse("27", RequestType.CHOICE));
 		System.out.println(assistantContext.getResponse("2", RequestType.CHOICE));
 		System.out.println(assistantContext.getResponse("2", RequestType.TEXT));

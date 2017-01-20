@@ -1,0 +1,11 @@
+.countDown-container .countDown {
+	font-weight: bold;
+	font-size: 20px;
+	color: #cc3f44;
+}
+
+.countDown-container .countDown-day {
+	font-weight: bold;
+	font-size: 25px;
+	color: #cc3f44;
+}
