@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -96,6 +98,33 @@ public class MainActivity extends Activity {
 			System.exit(0);
 			android.os.Process.killProcess(android.os.Process.myPid());
 		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem menuItem) {
+		if (menuItem.isCheckable()) {
+			menuItem.setChecked(true);
+		}
+		switch (menuItem.getItemId()) {
+		case R.id.action_loadresponse:
+			showMsg("action_loadresponse");
+			break;
+		case R.id.action_edittopic:
+			showMsg("action_edittopic");
+			break;
+		case R.id.action_aboutme:
+			showMsg("action_aboutme");
+			break;
+		default:
+			break;
+		}
+		return true;
 	}
 
 	@Override
