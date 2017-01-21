@@ -30,14 +30,7 @@ public class SelfExploreAssistant implements Assistant {
 
 	@Override
 	public String getResponse(String request, RequestType requestType, Context context) {
-		SelfExploreRequest selfExploreRequest = null;
-		Type type = new TypeToken<SelfExploreRequest>() {
-		}.getType();
-		try {
-			selfExploreRequest = GsonUtil.gson.fromJson(request, type);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		SelfExploreRequest selfExploreRequest = GsonUtil.gson.fromJson(request, new TypeToken<SelfExploreRequest>() {}.getType());
 		me = new Me(selfExploreRequest.getBodyState(), selfExploreRequest.getMindState());
 		Reaction reaction = me.getResponse(selfExploreRequest.getOuterSign());
 		return reaction.toString();
