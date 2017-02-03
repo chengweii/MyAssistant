@@ -2,6 +2,7 @@ package weihua.myassistant;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
@@ -67,6 +68,17 @@ public class MainActivity extends Activity {
 	public void showMsg(String msg) {
 		Toast toast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT);
 		toast.show();
+	}
+
+	@JavascriptInterface
+	public void startAppByPackageName(String packageName) {
+		// open wikiHow
+		// packageName = "com.wikihow.wikihowapp";
+		// app package name can get from .apk file by apkhelper.exe
+		PackageManager packageManager = getPackageManager();
+		Intent intent = new Intent();
+		intent = packageManager.getLaunchIntentForPackage(packageName);
+		startActivity(intent);
 	}
 
 	public void initView() {
