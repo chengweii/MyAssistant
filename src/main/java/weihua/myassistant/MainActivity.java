@@ -16,12 +16,13 @@ import weihua.myassistant.request.RequestType;
 import weihua.myassistant.response.MediaType;
 import weihua.myassistant.ui.CustomerWebChromeClient;
 import weihua.myassistant.ui.MediaIntent;
+import weihua.myassistant.ui.MediaIntent.MusicPlaySource;
 import weihua.myassistant.util.AssistantDataLoadUtil;
 import weihua.myassistant.util.ExceptionUtil;
 import weihua.myassistant.util.FileUtil;
 
 public class MainActivity extends Activity {
-	private WebView m_wv1;
+	private WebView webView;
 	private static String viewFilePath = "index.html";
 	private Context assistantContext;
 
@@ -34,6 +35,17 @@ public class MainActivity extends Activity {
 			msg = ExceptionUtil.getStackTrace(e);
 		}
 		return msg;
+	}
+
+	/**
+	 * @param musicPlaySource
+	 * @param mediaLink
+	 *            local_demo:/test.mp3;
+	 *            web_demo:http://42.81.26.18/mp3.9ku.com/m4a/637791.m4a
+	 */
+	@JavascriptInterface
+	public void playMusic(String musicPlaySource, String mediaLink) {
+		MediaIntent.playMusic(getApplicationContext(), MusicPlaySource.fromCode(musicPlaySource), mediaLink);
 	}
 
 	@JavascriptInterface
@@ -70,11 +82,14 @@ public class MainActivity extends Activity {
 		toast.show();
 	}
 
+	/**
+	 * app package name can get from .apk file by apkhelper.exe
+	 * 
+	 * @param packageName
+	 *            open wikiHow demo:com.wikihow.wikihowapp
+	 */
 	@JavascriptInterface
 	public void startAppByPackageName(String packageName) {
-		// open wikiHow
-		// packageName = "com.wikihow.wikihowapp";
-		// app package name can get from .apk file by apkhelper.exe
 		PackageManager packageManager = getPackageManager();
 		Intent intent = new Intent();
 		intent = packageManager.getLaunchIntentForPackage(packageName);
@@ -82,14 +97,14 @@ public class MainActivity extends Activity {
 	}
 
 	public void initView() {
-		m_wv1 = (WebView) findViewById(R.id.wv1);
-		m_wv1.getSettings().setJavaScriptEnabled(true);
-		m_wv1.addJavascriptInterface(this, "mainActivity");
-		m_wv1.loadUrl("file:///android_asset/" + viewFilePath);
-		m_wv1.getSettings().setUseWideViewPort(true);
-		m_wv1.getSettings().setLoadWithOverviewMode(true);
-		m_wv1.setWebChromeClient(new CustomerWebChromeClient());
-		m_wv1.setWebViewClient(new WebViewClient() {
+		webView = (WebView) findViewById(R.id.wv1);
+		webView.getSettings().setJavaScriptEnabled(true);
+		webView.addJavascriptInterface(this, "mainActivity");
+		webView.loadUrl("file:///android_asset/" + viewFilePath);
+		webView.getSettings().setUseWideViewPort(true);
+		webView.getSettings().setLoadWithOverviewMode(true);
+		webView.setWebChromeClient(new CustomerWebChromeClient());
+		webView.setWebViewClient(new WebViewClient() {
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				view.loadUrl(url);

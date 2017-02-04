@@ -2,12 +2,16 @@ package weihua.myassistant.ui;
 
 import java.io.File;
 
+import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import weihua.myassistant.response.MediaType;
 import weihua.myassistant.util.FileUtil;
 
 public class MediaIntent {
+
+	private static MediaPlayer mediaPlayer;
 
 	/**
 	 * 获取媒体引用Intent
@@ -40,6 +44,51 @@ public class MediaIntent {
 			it.setData(Uri.parse(mediaLink));
 		}
 		return it;
+	}
+
+	public static void playMusic(Context context, MusicPlaySource musicPlaySource, String mediaLink) {
+		if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+			mediaPlayer.stop();
+		}
+
+		if (musicPlaySource == MusicPlaySource.LOCAL) {
+			mediaLink = FileUtil.getInnerAssistantFileSDCardPath() + mediaLink;
+		}
+
+		mediaPlayer = MediaPlayer.create(context, Uri.parse(mediaLink));
+		mediaPlayer.start();
+	}
+
+	public static enum MusicPlaySource {
+
+		LOCAL("0", "本地"),
+
+		WEB("1", "网络");
+
+		private MusicPlaySource(String code, String value) {
+			this.code = code;
+			this.value = value;
+		}
+
+		private String code;
+		private String value;
+
+		public String getCode() {
+			return code;
+		}
+
+		public String getValue() {
+			return value;
+		}
+
+		public static MusicPlaySource fromCode(String code) {
+			for (MusicPlaySource entity : MusicPlaySource.values()) {
+				if (entity.getCode().equals(code)) {
+					return entity;
+				}
+			}
+			return null;
+		}
 	}
 
 }
