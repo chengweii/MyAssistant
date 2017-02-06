@@ -9,7 +9,7 @@ import weihua.myassistant.util.GsonUtil;
 public class MusicResponse extends BaseResponse {
 
 	@Override
-	String handleResponse(String content) {
+	String handleResponse(String content) throws Exception {
 		Pattern pattern = Pattern.compile("#.*?#");
 		Matcher matcher = pattern.matcher(content);
 		String link;

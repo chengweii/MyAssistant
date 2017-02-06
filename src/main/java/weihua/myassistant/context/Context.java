@@ -29,7 +29,7 @@ public class Context {
 		}
 	}
 
-	public String getResponse(String request, RequestType requestType) {
+	public String getResponse(String request, RequestType requestType) throws Exception {
 		String responseContent = null;
 		if (responseHistory.lastTopicName == null) {
 			if (requestType == RequestType.CHOICE) {
@@ -66,7 +66,7 @@ public class Context {
 		}
 	}
 
-	public String backHome() {
+	public String backHome() throws Exception {
 		responseHistory = new ResponseHistory();
 		return getResponse("", RequestType.TEXT);
 	}

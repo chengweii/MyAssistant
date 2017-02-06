@@ -1,7 +1,5 @@
 package weihua.myassistant.service.me.entity;
 
-import weihua.myassistant.util.IEnum;
-
 public enum BodyStateType implements IEnum{
 
 	FINE("1", "良好"),

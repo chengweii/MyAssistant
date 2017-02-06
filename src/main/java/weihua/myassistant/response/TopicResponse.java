@@ -19,7 +19,7 @@ public class TopicResponse implements Response {
 	}
 
 	@Override
-	public String getResponseData(String content) {
+	public String getResponseData(String content) throws Exception {
 		if (nextHandler != null) {
 			content = nextHandler.getResponseData(content);
 		}

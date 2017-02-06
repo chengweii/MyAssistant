@@ -1,7 +1,6 @@
 package weihua.myassistant.util;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.Gson;
@@ -15,16 +14,20 @@ public class GsonUtil {
 		gson = gsonBuilder.setPrettyPrinting().serializeNulls().create();
 	}
 
-	public static Map<String, String> getMapFromJson(String json) {
-		Map<String, String> map = new HashMap<String, String>();
+	public static Map<String, String> getMapFromJson(String json) throws Exception {
 		Type type = new TypeToken<Map<String, String>>() {
 		}.getType();
-		try {
-			map = GsonUtil.gson.fromJson(json, type);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Map<String, String> map = GsonUtil.gson.fromJson(json, type);
 		return map;
+	}
+
+	public static <T> T getEntityFromJson(String json, TypeToken<?> typeToken) throws Exception {
+		T data = GsonUtil.gson.fromJson(json, typeToken.getType());
+		return data;
+	}
+
+	public static String toJson(Object src) throws Exception {
+		return GsonUtil.gson.toJson(src);
 	}
 
 	public static void main(String[] args) {

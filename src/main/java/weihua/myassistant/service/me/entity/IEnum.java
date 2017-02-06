@@ -1,4 +1,4 @@
-package weihua.myassistant.util;
+package weihua.myassistant.service.me.entity;
 
 public interface IEnum {
 	public String getCode();

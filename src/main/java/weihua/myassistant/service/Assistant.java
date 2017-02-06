@@ -10,5 +10,5 @@ import weihua.myassistant.request.RequestType;
  *
  */
 public interface Assistant {
-	public String getResponse(String request, RequestType requestType, Context context);
+	public String getResponse(String request, RequestType requestType, Context context) throws Exception;
 }

@@ -8,7 +8,7 @@ import weihua.myassistant.request.RequestType;
  *
  */
 public class App {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		Context assistantContext = new Context();
 		System.out.println(assistantContext.backHome());
 		System.out.println(assistantContext.getResponse("婆媳", RequestType.TEXT));

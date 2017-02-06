@@ -1,15 +1,10 @@
 package weihua.myassistant.response;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
-import weihua.myassistant.common.Constants;
 import weihua.myassistant.data.ResponseData;
-import weihua.myassistant.data.TopicData;
 import weihua.myassistant.data.ResponseData.Response;
-import weihua.myassistant.data.TopicData.Topic;
 import weihua.myassistant.util.StringUtil;
 
 public class CommonResponse extends BaseResponse {
@@ -76,7 +71,7 @@ public class CommonResponse extends BaseResponse {
 		return sb.toString();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		System.out.println(new CommonResponse(true).getResponseData(
 				"测试#{type:'image',link:'test1.jpg',text:'image'}#测试#{type:'audio',link:'test2.mp3',text:'audio'}#测试#{type:'video',link:'test.mp4',text:'video'}#测试{type:'url',link:'www.baidu.com',text:'url'}#测试"));
 	}

@@ -1,134 +1,134 @@
 [{
+  "topicId": "1",
+  "topicName": "whichChoice",
   "responses": [
     {
+      "id": "1",
+      "responseId": "",
       "condition": "",
       "content": [
         "关于两难抉择，其实有三个选择：两个抉择中的任意选一个，还有就是放弃不选"
-      ],
-      "id": "1",
-      "responseId": ""
+      ]
     },
     {
+      "id": "2",
+      "responseId": "1",
       "condition": "1",
       "content": [
         "不选［放弃其实是另一种收获（时间精力的节省、后果风险的避免），如果没有必选的理由］"
-      ],
-      "id": "2",
-      "responseId": "1"
+      ]
     },
     {
+      "id": "3",
+      "responseId": "1",
       "condition": "2",
       "content": [
         "必须要选一个"
-      ],
-      "id": "3",
-      "responseId": "1"
+      ]
     },
     {
+      "id": "4",
+      "responseId": "3",
       "condition": "",
       "content": [
         "好吧，既然必须要选一个，那我们就分析描述一下两个抉择各自的优缺点吧？"
-      ],
-      "id": "4",
-      "responseId": "3"
+      ]
     },
     {
+      "id": "5",
+      "responseId": "4",
       "condition": "",
       "content": [
         "分析完各自的优劣势，我想你心中的天平肯定有所倾斜了吧？"
-      ],
-      "id": "5",
-      "responseId": "4"
+      ]
     },
     {
+      "id": "6",
+      "responseId": "5",
       "condition": "1",
       "content": [
         "是的，我已经有了答案"
-      ],
-      "id": "6",
-      "responseId": "5"
+      ]
     },
     {
+      "id": "7",
+      "responseId": "6",
       "condition": "",
       "content": [
         "呵呵，其实很多时候答案都隐藏在细致的分析之后，我相信您以后完全可以自己通过这种方法快速做决定。最后提醒一下，三思而后定，定必行，拖则生变，变则乱，别给自己找麻烦。"
-      ],
-      "id": "7",
-      "responseId": "6"
+      ]
     },
     {
+      "id": "8",
+      "responseId": "5",
       "condition": "2",
       "content": [
         "可能有所倾斜，但我还是无法做出选择"
-      ],
-      "id": "8",
-      "responseId": "5"
+      ]
     },
     {
+      "id": "9",
+      "responseId": "8",
       "condition": "",
       "content": [
         "还是无法作出选择？好吧，那咱们聊一下你无法作出选择的原因："
-      ],
-      "id": "9",
-      "responseId": "8"
+      ]
     },
     {
+      "id": "10",
+      "responseId": "9",
       "condition": "1",
       "content": [
         "两个都想选"
-      ],
-      "id": "10",
-      "responseId": "9"
+      ]
     },
     {
+      "id": "11",
+      "responseId": "10",
       "condition": "",
       "content": [
         "呃，这好像是个单选题，除非您能自己创造出第三个包含以上两个选择的答案"
-      ],
-      "id": "11",
-      "responseId": "10"
+      ]
     },
     {
+      "id": "12",
+      "responseId": "11",
       "condition": "1",
       "content": [
         "我可以"
-      ],
-      "id": "12",
-      "responseId": "11"
+      ]
     },
     {
+      "id": "13",
+      "responseId": "12",
       "condition": "",
       "content": [
         "很好，通过智慧与努力避开选择也不失为一种高明的手段"
-      ],
-      "id": "13",
-      "responseId": "12"
+      ]
     },
     {
+      "id": "14",
+      "responseId": "11",
       "condition": "2",
       "content": [
         "好像不行"
-      ],
-      "id": "14",
-      "responseId": "11"
+      ]
     },
     {
+      "id": "15",
+      "responseId": "14",
       "condition": "",
       "content": [
         "那您老老实实选一个吧"
-      ],
-      "id": "15",
-      "responseId": "14"
+      ]
     },
     {
+      "id": "16",
+      "responseId": "9",
       "condition": "2",
       "content": [
         "可能有选择恐惧症，真的不知道选哪一个"
-      ],
-      "id": "16",
-      "responseId": "9"
+      ]
     }
-  ],
-  "topicId": "1",
-  "topicName": "whichChoice"
+  ]
 }]

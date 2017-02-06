@@ -21,7 +21,7 @@ import weihua.myassistant.util.StringUtil;
 public class HelpAssistant implements Assistant {
 
 	@Override
-	public String getResponse(String request, RequestType requestType, Context context) {
+	public String getResponse(String request, RequestType requestType, Context context) throws Exception {
 		Response response = findResponseData(request, requestType, context.responseDataList, context.responseHistory);
 		if (response != null) {
 			context.responseHistory.lastResponseId = response.id;

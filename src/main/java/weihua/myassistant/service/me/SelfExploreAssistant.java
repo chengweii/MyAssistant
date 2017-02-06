@@ -1,19 +1,10 @@
 package weihua.myassistant.service.me;
 
-import java.lang.reflect.Type;
-import java.util.Map;
-
 import com.google.gson.reflect.TypeToken;
 
 import weihua.myassistant.context.Context;
 import weihua.myassistant.request.RequestType;
 import weihua.myassistant.service.Assistant;
-import weihua.myassistant.service.me.entity.BodyState;
-import weihua.myassistant.service.me.entity.BodyStateType;
-import weihua.myassistant.service.me.entity.MindState;
-import weihua.myassistant.service.me.entity.MindStateType;
-import weihua.myassistant.service.me.entity.OuterSign;
-import weihua.myassistant.service.me.entity.OuterSignType;
 import weihua.myassistant.service.me.entity.Reaction;
 import weihua.myassistant.service.me.entity.SelfExploreRequest;
 import weihua.myassistant.util.GsonUtil;
