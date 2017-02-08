@@ -87,6 +87,7 @@ function init() {
 	}
 
 	assistant.bindChoiceEvent = function(msg_li) {
+		$("." + assistant.refs.choiceItemClass).unbind();
 		msg_li.find("." + assistant.refs.choiceItemClass).click(
 				function() {
 					var request = $(this).attr(
