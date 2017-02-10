@@ -46,7 +46,7 @@ public class MediaIntent {
 		return it;
 	}
 
-	public static void playMusic(Context context, MusicPlaySource musicPlaySource, String mediaLink) {
+	public static MediaPlayer playMusic(Context context, MusicPlaySource musicPlaySource, String mediaLink) {
 		if (mediaPlayer != null && mediaPlayer.isPlaying()) {
 			mediaPlayer.stop();
 		}
@@ -57,6 +57,8 @@ public class MediaIntent {
 
 		mediaPlayer = MediaPlayer.create(context, Uri.parse(mediaLink));
 		mediaPlayer.start();
+
+		return mediaPlayer;
 	}
 
 	public static enum MusicPlaySource {

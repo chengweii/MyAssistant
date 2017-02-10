@@ -1,12 +1,20 @@
 package weihua.myassistant;
 
+import java.util.Calendar;
+
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -17,6 +25,8 @@ import weihua.myassistant.response.MediaType;
 import weihua.myassistant.ui.CustomerWebChromeClient;
 import weihua.myassistant.ui.MediaIntent;
 import weihua.myassistant.ui.MediaIntent.MusicPlaySource;
+import weihua.myassistant.ui.alarm.AlarmReceiver;
+import weihua.myassistant.ui.util.ServiceUtil;
 import weihua.myassistant.util.AssistantDataLoadUtil;
 import weihua.myassistant.util.ExceptionUtil;
 import weihua.myassistant.util.FileUtil;
@@ -31,10 +41,26 @@ public class MainActivity extends Activity {
 		String msg = "";
 		try {
 			msg = assistantContext.getResponse(request, RequestType.fromCode(requestType));
+			showNotification(msg, request, msg);
+			alarmShow();
 		} catch (Exception e) {
 			msg = ExceptionUtil.getStackTrace(e);
 		}
 		return msg;
+	}
+	
+	private void alarmShow(){
+		// 进行闹铃注册
+		Intent intent = new Intent(MainActivity.this, AlarmReceiver.class);
+		PendingIntent sender = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
+
+		// 过10s 执行这个闹铃
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(System.currentTimeMillis());
+		calendar.add(Calendar.SECOND, 10);
+
+		AlarmManager manager = (AlarmManager)getSystemService(ALARM_SERVICE);
+		manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
 	}
 
 	/**
@@ -80,6 +106,40 @@ public class MainActivity extends Activity {
 	public void showMsg(String msg) {
 		Toast toast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT);
 		toast.show();
+	}
+
+	private static final int NO_1 = 0x1;
+
+	public void showNotification(String ticker, String title, String text) {
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
+		NotificationManager notificationManager = (NotificationManager) getSystemService(
+				android.content.Context.NOTIFICATION_SERVICE);
+		Notification.Builder builder = new Notification.Builder(this);
+		builder.setSmallIcon(R.drawable.ic_launcher);
+		builder.setLargeIcon(BitmapFactory.decodeResource(this.getResources(), R.drawable.ic_launcher));
+		builder.setTicker(ticker);
+		builder.setContentTitle(title);
+		builder.setContentText(text);
+		builder.setWhen(System.currentTimeMillis());
+		builder.setDefaults(Notification.DEFAULT_ALL);
+		Notification notification = builder.build();
+		notificationManager.notify(NO_1, notification);
+
+		//Intent intent = new Intent();
+		//intent.setClass(getApplicationContext(), NotificationActivity.class);
+		// intent.putExtra(); // 需要时 传入相应的参数
+		//intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+		//startActivity(intent);
+	}
+
+	public void showRichNotification(String ticker, String title, String text) {
+
 	}
 
 	/**
@@ -158,6 +218,10 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
+
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+				| WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
 		setContentView(R.layout.main);
 
 		FileUtil.assistantRootPath = Environment.getExternalStorageDirectory().getPath() + "/assistant/";
@@ -165,6 +229,7 @@ public class MainActivity extends Activity {
 		assistantContext = new Context();
 
 		initView();
+
 	}
 
 }
