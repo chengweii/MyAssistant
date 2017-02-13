@@ -13,6 +13,7 @@ public class DateUtil {
 
 	public static long getTimeFromTime(int hour, int minute, int second) {
 		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(System.currentTimeMillis());
 		calendar.set(Calendar.HOUR_OF_DAY, hour);
 		calendar.set(Calendar.MINUTE, minute);
 		calendar.set(Calendar.SECOND, second);

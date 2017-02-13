@@ -4,40 +4,36 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
+import weihua.myassistant.ui.alarm.AlarmReceiver;
+import weihua.myassistant.ui.common.Constans;
 
 public class AlarmUtil {
 
-	public static void startAlarmOnce(Context context, Class<?> cls, String serviceCls, int alarmReceiverId,
-			long triggerAtMillis, String extraInfo) {
-		Intent intent = new Intent(context, cls);
-		intent.putExtra("extraInfo", extraInfo);
-		intent.putExtra("serviceCls", serviceCls);
+	public static void startAlarmOnce(Context context, int alarmReceiverId, long triggerAtMillis, String extraInfo,
+			boolean isAgain) {
+		Intent intent = new Intent(context, AlarmReceiver.class);
+		intent.putExtra(Constans.ALARM_EXTRA_INFO, extraInfo);
 		PendingIntent sender = PendingIntent.getBroadcast(context, alarmReceiverId, intent, 0);
 		AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-			manager.setWindow(AlarmManager.RTC_WAKEUP, triggerAtMillis, 0, sender);
+		if (isAgain) {
+			manager.cancel(sender);
+			manager.set(AlarmManager.RTC, triggerAtMillis, sender);
 		} else {
-			manager.set(AlarmManager.RTC_WAKEUP, triggerAtMillis, sender);
+			manager.setWindow(AlarmManager.RTC, triggerAtMillis, 0, sender);
 		}
 	}
 
-	public static void startAlarmRepeating(Context context, Class<?> cls, String serviceCls, int alarmReceiverId,
-			long triggerAtMillis, long intervalMillis, String extraInfo) {
-		Intent intent = new Intent(context, cls);
-		intent.putExtra("extraInfo", extraInfo);
-		intent.putExtra("serviceCls", serviceCls);
+	public static void startAlarmRepeating(Context context, int alarmReceiverId, long triggerAtMillis,
+			long intervalMillis, String extraInfo) {
+		Intent intent = new Intent(context, AlarmReceiver.class);
+		intent.putExtra(Constans.ALARM_EXTRA_INFO, extraInfo);
 		PendingIntent sender = PendingIntent.getBroadcast(context, alarmReceiverId, intent, 0);
 		AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-			manager.setWindow(AlarmManager.RTC_WAKEUP, triggerAtMillis, 0, sender);
-		} else {
-			manager.setRepeating(AlarmManager.RTC_WAKEUP, triggerAtMillis, intervalMillis, sender);
-		}
+		manager.setRepeating(AlarmManager.RTC_WAKEUP, triggerAtMillis, intervalMillis, sender);
 	}
 
-	public static void stopAlarm(Context context, Class<?> cls) {
-		Intent intent = new Intent(context, cls);
+	public static void stopAlarm(Context context) {
+		Intent intent = new Intent(context, AlarmReceiver.class);
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 		AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		manager.cancel(pendingIntent);

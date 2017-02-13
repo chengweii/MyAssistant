@@ -21,10 +21,6 @@ import weihua.myassistant.ui.MediaIntent;
 import weihua.myassistant.ui.MediaIntent.MusicPlaySource;
 import weihua.myassistant.ui.alarm.AlarmReceiver;
 import weihua.myassistant.ui.alarm.AlarmService;
-import weihua.myassistant.ui.alarm.HolidayAlarmReceiver;
-import weihua.myassistant.ui.alarm.HolidayAlarmService;
-import weihua.myassistant.ui.alarm.WetherAlarmReceiver;
-import weihua.myassistant.ui.alarm.WetherAlarmService;
 import weihua.myassistant.ui.common.Constans;
 import weihua.myassistant.ui.util.AlarmUtil;
 import weihua.myassistant.util.AssistantDataLoadUtil;
@@ -50,16 +46,14 @@ public class MainActivity extends Activity {
 	}
 
 	private void alarmShow() {
-		AlarmUtil.startAlarmRepeating(this, AlarmReceiver.class, AlarmService.class.getName(),
-				Constans.HOLIDAY_ALARM_SERVICE_ID, DateUtil.getTimeFromCurrent(10), 6000,
-				"http://172.16.0.199/IXC7321d40d247713b278c1bc035a77324c/hot/2010/08-26/370453.mp3");
-		AlarmUtil.startAlarmRepeating(this, AlarmReceiver.class, AlarmService.class.getName(),
-				Constans.WETHER_ALARM_SERVICE_ID, DateUtil.getTimeFromCurrent(80), 6000,
-				"http://42.81.26.18/mp3.9ku.com/m4a/637791.m4a");
+		AlarmUtil.startAlarmOnce(this, Constans.HOLIDAY_ALARM_ID, DateUtil.getTimeFromCurrent(10),
+				String.valueOf(Constans.HOLIDAY_ALARM_ID), false);
+		AlarmUtil.startAlarmOnce(this, Constans.WETHER_ALARM_ID, DateUtil.getTimeFromCurrent(25),
+				String.valueOf(Constans.WETHER_ALARM_ID), false);
 	}
 
 	private void alarmCancel() {
-		AlarmUtil.stopAlarm(this, AlarmReceiver.class);
+		AlarmUtil.stopAlarm(this);
 	}
 
 	/**
