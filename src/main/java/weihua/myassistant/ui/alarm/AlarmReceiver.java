@@ -10,9 +10,6 @@ public class AlarmReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		String serviceCls = intent.getStringExtra("serviceCls");
 		String extraInfo = intent.getStringExtra("extraInfo");
-		if (ServiceUtil.isServiceRunning(context, serviceCls)) {
-			ServiceUtil.stopService(context, serviceCls);
-		}
 		ServiceUtil.startService(context, serviceCls, extraInfo);
 	}
 }

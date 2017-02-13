@@ -10,12 +10,12 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		
+
 		<receiver android:name="weihua.myassistant.ui.alarm.AlarmReceiver"
 			android:process=":remote"></receiver>
-			
-		<service android:name="weihua.myassistant.ui.alarm.WetherAlarmService"></service>
-		
+
+		<service android:name="weihua.myassistant.ui.alarm.AlarmService"></service>
+
 	</application>
 
 	<uses-permission android:name="android.permission.INTERNET" />
