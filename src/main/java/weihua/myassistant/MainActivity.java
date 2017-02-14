@@ -1,7 +1,6 @@
 package weihua.myassistant;
 
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -19,8 +18,6 @@ import weihua.myassistant.response.MediaType;
 import weihua.myassistant.ui.CustomerWebChromeClient;
 import weihua.myassistant.ui.MediaIntent;
 import weihua.myassistant.ui.MediaIntent.MusicPlaySource;
-import weihua.myassistant.ui.alarm.AlarmReceiver;
-import weihua.myassistant.ui.alarm.AlarmService;
 import weihua.myassistant.ui.common.Constans;
 import weihua.myassistant.ui.util.AlarmUtil;
 import weihua.myassistant.util.AssistantDataLoadUtil;
@@ -38,7 +35,6 @@ public class MainActivity extends Activity {
 		String msg = "";
 		try {
 			msg = assistantContext.getResponse(request, RequestType.fromCode(requestType));
-			alarmCancel();
 		} catch (Exception e) {
 			msg = ExceptionUtil.getStackTrace(e);
 		}
@@ -46,14 +42,15 @@ public class MainActivity extends Activity {
 	}
 
 	private void alarmShow() {
-		AlarmUtil.startAlarmOnce(this, Constans.HOLIDAY_ALARM_ID, DateUtil.getTimeFromCurrent(10),
-				String.valueOf(Constans.HOLIDAY_ALARM_ID), false);
-		AlarmUtil.startAlarmOnce(this, Constans.WETHER_ALARM_ID, DateUtil.getTimeFromCurrent(25),
-				String.valueOf(Constans.WETHER_ALARM_ID), false);
+		AlarmUtil.startAlarmRepeating(this, Constans.HOLIDAY_ALARM_ID, DateUtil.getTimeFromCurrent(10), 30000,
+				String.valueOf(Constans.HOLIDAY_ALARM_ID));
+		AlarmUtil.startAlarmRepeating(this, Constans.WETHER_ALARM_ID, DateUtil.getTimeFromCurrent(45), 90000,
+				String.valueOf(Constans.WETHER_ALARM_ID));
 	}
 
 	private void alarmCancel() {
-		AlarmUtil.stopAlarm(this);
+		AlarmUtil.stopAlarm(this, Constans.HOLIDAY_ALARM_ID);
+		AlarmUtil.stopAlarm(this, Constans.WETHER_ALARM_ID);
 	}
 
 	/**
@@ -72,7 +69,6 @@ public class MainActivity extends Activity {
 		String msg = "";
 		try {
 			msg = assistantContext.backHome();
-			alarmShow();
 		} catch (Exception e) {
 			msg = ExceptionUtil.getStackTrace(e);
 		}
@@ -160,10 +156,12 @@ public class MainActivity extends Activity {
 		}
 		switch (menuItem.getItemId()) {
 		case R.id.action_loadresponse:
-			showMsg("action_loadresponse");
+			alarmShow();
+			showMsg("service started");
 			break;
 		case R.id.action_edittopic:
-			showMsg("action_edittopic");
+			alarmCancel();
+			showMsg("service canceled");
 			break;
 		case R.id.action_aboutme:
 			showMsg("action_aboutme");
@@ -175,9 +173,19 @@ public class MainActivity extends Activity {
 	}
 
 	@Override
+	protected void onNewIntent(Intent newIntent) {
+		super.onNewIntent(newIntent);
+		String serviceName = newIntent.getStringExtra("serviceName");
+		showMsg(serviceName);
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
+
+		String serviceName = getIntent().getStringExtra("serviceName");
+		showMsg(serviceName);
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
 				| WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

@@ -32,9 +32,9 @@ public class AlarmUtil {
 		manager.setRepeating(AlarmManager.RTC_WAKEUP, triggerAtMillis, intervalMillis, sender);
 	}
 
-	public static void stopAlarm(Context context) {
+	public static void stopAlarm(Context context, int alarmReceiverId) {
 		Intent intent = new Intent(context, AlarmReceiver.class);
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, alarmReceiverId, intent, 0);
 		AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		manager.cancel(pendingIntent);
 	}

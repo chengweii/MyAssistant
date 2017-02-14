@@ -1,32 +1,40 @@
 package weihua.myassistant.ui.alarm;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Environment;
 import android.os.IBinder;
+import weihua.myassistant.MainActivity;
 import weihua.myassistant.R;
-import weihua.myassistant.ui.MediaIntent;
-import weihua.myassistant.ui.MediaIntent.MusicPlaySource;
 import weihua.myassistant.ui.common.Constans;
-import weihua.myassistant.ui.util.AlarmUtil;
-import weihua.myassistant.util.DateUtil;
+import weihua.myassistant.util.FileUtil;
 
 public class AlarmService extends Service {
 
-	protected MediaPlayer mediaPlayer;
+	private MediaPlayer mediaPlayer;
+
+	private boolean isRunning = false;
+
+	private Queue<String> serviceQueue = new LinkedList<String>();
 
 	private static Map<String, String> servicesMap = new HashMap<String, String>();
 
 	static {
-		servicesMap.put(String.valueOf(Constans.HOLIDAY_ALARM_ID),
-				"http://172.16.0.199/IXC7321d40d247713b278c1bc035a77324c/hot/2010/08-26/370453.mp3");
-		servicesMap.put(String.valueOf(Constans.WETHER_ALARM_ID), "http://42.81.26.18/mp3.9ku.com/m4a/637791.m4a");
+		FileUtil.assistantRootPath = Environment.getExternalStorageDirectory().getPath() + "/assistant/";
+		servicesMap.put(String.valueOf(Constans.HOLIDAY_ALARM_ID), "test1.mp3");
+		servicesMap.put(String.valueOf(Constans.WETHER_ALARM_ID), "test2.mp3");
 	}
 
 	@Override
@@ -37,12 +45,38 @@ public class AlarmService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		String extraInfo = intent.getStringExtra(Constans.ALARM_EXTRA_INFO);
-		setForegroundService("明天是情人节，请记得买礼物和问候。", "明天是情人节，请记得买礼物和问候。", servicesMap.get(extraInfo));
-		mediaPlayer = MediaIntent.playMusic(this, MusicPlaySource.WEB, servicesMap.get(extraInfo));
+		serviceQueue.offer(extraInfo);
+
+		if (!isRunning) {
+			isRunning = true;
+			setForegroundService("Hello! I am assistant.", "Hello! I am assistant.", "What can I do for you?");
+		}
+
+		if (mediaPlayer == null || !mediaPlayer.isPlaying()) {
+			excuteService(this);
+		}
+
 		return 0;
 	}
 
-	protected void setForegroundService(String ticker, String title, String text) {
+	private void excuteService(Context context) {
+		if (serviceQueue.size() > 0) {
+			String serviceId = serviceQueue.poll();
+			showNotification("Tomorow is your day", "Current service size：" + serviceQueue.size(),
+					servicesMap.get(serviceId), Constans.ALARM_SERVICE_ID, null);
+			playMusic(context, MusicPlaySource.LOCAL, servicesMap.get(serviceId));
+
+			showNotification(servicesMap.get(serviceId), servicesMap.get(serviceId), servicesMap.get(serviceId),
+					Integer.parseInt(serviceId), MainActivity.class);
+		}
+	}
+
+	private void setForegroundService(String ticker, String title, String text) {
+		Notification notification = showNotification(ticker, title, text, Constans.ALARM_SERVICE_ID, null);
+		startForeground(Constans.ALARM_SERVICE_ID, notification);
+	}
+
+	private Notification showNotification(String ticker, String title, String text, int notificationId, Class<?> cls) {
 		NotificationManager notificationManager = (NotificationManager) this
 				.getSystemService(android.content.Context.NOTIFICATION_SERVICE);
 		Notification.Builder builder = new Notification.Builder(this);
@@ -54,13 +88,76 @@ public class AlarmService extends Service {
 		builder.setWhen(System.currentTimeMillis());
 		builder.setDefaults(Notification.DEFAULT_ALL);
 		Notification notification = builder.build();
-		notificationManager.notify(Constans.ALARM_SERVICE_ID, notification);
-
-		startForeground(Constans.ALARM_SERVICE_ID, notification);
+		if (cls != null) {
+			Intent intent = new Intent(this, cls);
+			intent.putExtra("serviceName", text);
+			intent.setAction(Intent.ACTION_MAIN);
+	        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+			PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+			notification.contentIntent = pIntent;
+		}
+		notificationManager.notify(notificationId, notification);
+		return notification;
 	}
 
 	@Override
 	public IBinder onBind(Intent intent) {
 		throw new UnsupportedOperationException("Not yet implemented");
+	}
+
+	private MediaPlayer playMusic(final Context context, MusicPlaySource musicPlaySource, String mediaLink) {
+		if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+			// mediaPlayer.stop();
+			return mediaPlayer;
+		}
+
+		if (musicPlaySource == MusicPlaySource.LOCAL) {
+			mediaLink = FileUtil.getInnerAssistantFileSDCardPath() + mediaLink;
+		}
+
+		mediaPlayer = MediaPlayer.create(context, Uri.parse(mediaLink));
+
+		mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+			@Override
+			public void onCompletion(MediaPlayer arg0) {
+				excuteService(context);
+			}
+		});
+
+		mediaPlayer.start();
+
+		return mediaPlayer;
+	}
+
+	private static enum MusicPlaySource {
+
+		LOCAL("0", "本地"),
+
+		WEB("1", "网络");
+
+		private MusicPlaySource(String code, String value) {
+			this.code = code;
+			this.value = value;
+		}
+
+		private String code;
+		private String value;
+
+		public String getCode() {
+			return code;
+		}
+
+		public String getValue() {
+			return value;
+		}
+
+		public static MusicPlaySource fromCode(String code) {
+			for (MusicPlaySource entity : MusicPlaySource.values()) {
+				if (entity.getCode().equals(code)) {
+					return entity;
+				}
+			}
+			return null;
+		}
 	}
 }
