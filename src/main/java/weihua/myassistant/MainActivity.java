@@ -138,8 +138,8 @@ public class MainActivity extends Activity {
 			exitTime = System.currentTimeMillis();
 		} else {
 			finish();
-			System.exit(0);
-			android.os.Process.killProcess(android.os.Process.myPid());
+			//System.exit(0);
+			//android.os.Process.killProcess(android.os.Process.myPid());
 		}
 	}
 
