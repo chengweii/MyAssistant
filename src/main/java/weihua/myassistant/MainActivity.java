@@ -13,6 +13,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 import weihua.myassistant.context.Context;
+import weihua.myassistant.context.TopicDataLoadUtil;
 import weihua.myassistant.request.RequestType;
 import weihua.myassistant.response.MediaType;
 import weihua.myassistant.service.HelpAssistant;
@@ -138,8 +139,8 @@ public class MainActivity extends Activity {
 			exitTime = System.currentTimeMillis();
 		} else {
 			finish();
-			//System.exit(0);
-			//android.os.Process.killProcess(android.os.Process.myPid());
+			// System.exit(0);
+			// android.os.Process.killProcess(android.os.Process.myPid());
 		}
 	}
 
@@ -154,20 +155,25 @@ public class MainActivity extends Activity {
 		if (menuItem.isCheckable()) {
 			menuItem.setChecked(true);
 		}
-		switch (menuItem.getItemId()) {
-		case R.id.action_loadresponse:
-			alarmShow();
-			showMsg("service started");
-			break;
-		case R.id.action_edittopic:
-			alarmCancel();
-			showMsg("service canceled");
-			break;
-		case R.id.action_aboutme:
-			showMsg("action_aboutme");
-			break;
-		default:
-			break;
+		try {
+			switch (menuItem.getItemId()) {
+			case R.id.action_loadresponse:
+				alarmShow();
+				showMsg("service started");
+				break;
+			case R.id.action_edittopic:
+				alarmCancel();
+				showMsg("service canceled");
+				break;
+			case R.id.action_aboutme:
+				TopicDataLoadUtil.loadAllTopicDataFromWeb();
+				showMsg("topic refreshed");
+				break;
+			default:
+				break;
+			}
+		} catch (Exception e) {
+			showMsg(ExceptionUtil.getStackTrace(e));
 		}
 		return true;
 	}
@@ -176,7 +182,6 @@ public class MainActivity extends Activity {
 	protected void onNewIntent(Intent newIntent) {
 		super.onNewIntent(newIntent);
 		String serviceName = newIntent.getStringExtra("serviceName");
-		showMsg(serviceName);
 	}
 
 	@Override
@@ -185,7 +190,6 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		String serviceName = getIntent().getStringExtra("serviceName");
-		showMsg(serviceName);
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
 				| WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -194,7 +198,11 @@ public class MainActivity extends Activity {
 
 		FileUtil.assistantRootPath = Environment.getExternalStorageDirectory().getPath() + "/assistant/";
 
-		assistantContext = new Context();
+		try {
+			assistantContext = new Context();
+		} catch (Exception e) {
+			showMsg(ExceptionUtil.getStackTrace(e));
+		}
 
 		initView();
 

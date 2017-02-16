@@ -2,11 +2,11 @@
 
 	<item android:id="@+id/action_loadresponse"
 		android:orderInCategory="1" android:showAsAction="never"
-		android:title="loadresponse" />
+		android:title="startService" />
 
 	<item android:id="@+id/action_edittopic" android:orderInCategory="2"
-		android:showAsAction="never" android:title="edittopic" />
+		android:showAsAction="never" android:title="stopService" />
 
 	<item android:id="@+id/action_aboutme" android:orderInCategory="3"
-		android:showAsAction="never" android:title="aboutme" />
+		android:showAsAction="never" android:title="refreshTopic" />
 </menu> 

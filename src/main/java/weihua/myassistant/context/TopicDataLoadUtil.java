@@ -1,5 +1,6 @@
 package weihua.myassistant.context;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,38 +19,34 @@ import weihua.myassistant.util.GsonUtil;
 
 public class TopicDataLoadUtil {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		loadAllTopicDataFromWeb();
 	}
 
-	public static TopicData loadAllTopicDataFromWeb() {
-		TopicData topicData = null;
-		try {
-			topicData = getTopicDataFromJianshu();
-			if (topicData == null) {
-				topicData = loadAllTopicDataFromLocal();
+	public static void loadAllTopicDataFromWeb() throws Exception {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Context.topicData = getTopicDataFromJianshu();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return topicData;
+		}).start();
 	}
 
-	private static TopicData loadAllTopicDataFromLocal() {
+	public static TopicData loadAllTopicDataFromLocal() throws Exception {
 		TopicData topicData = null;
 		String topicPath = FileUtil.getInnerAssistantFileSDCardPath() + "topic/topic.json";
 		String topicJsonData = FileUtil.getFileContent(topicPath);
 		java.lang.reflect.Type type = new TypeToken<TopicData>() {
 		}.getType();
-		try {
-			topicData = GsonUtil.gson.fromJson(topicJsonData, type);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		topicData = GsonUtil.gson.fromJson(topicJsonData, type);
 		return topicData;
 	}
 
-	private static TopicData getTopicDataFromJianshu() {
+	private static TopicData getTopicDataFromJianshu() throws Exception {
 		TopicData topicData = new TopicData();
 		topicData.listTopicMsg = "About <span class='parentTopic'>#keyword#</span>,I can provide the above help now:";
 		topicData.welcomeMsg = "#timeHello#,#userName#,What can I do for you with the following:";
@@ -57,24 +54,18 @@ public class TopicDataLoadUtil {
 
 		String topicPath = FileUtil.getInnerAssistantFileSDCardPath() + "topic/topic.json";
 
-		try {
-			Document doc = Jsoup.connect("http://www.jianshu.com/p/d93d4a44fd6b").get();
-			Elements showContent = doc.getElementsByAttributeValue("class", "show-content");
-			Element rootUl = showContent.get(0).getElementsByTag("ul").get(1);
-			Elements liList = rootUl.children();
-			List<Topic> children = new ArrayList<Topic>();
-			Count topicId = new Count();
-			getChildrenTopic(children, liList, topicId);
-			topicData.topic = children;
+		Document doc = Jsoup.connect("http://www.jianshu.com/p/d93d4a44fd6b").get();
+		Elements showContent = doc.getElementsByAttributeValue("class", "show-content");
+		Element rootUl = showContent.get(0).getElementsByTag("ul").get(1);
+		Elements liList = rootUl.children();
+		List<Topic> children = new ArrayList<Topic>();
+		Count topicId = new Count();
+		getChildrenTopic(children, liList, topicId);
+		topicData.topic = children;
 
-			String assistJsonString = GsonUtil.gson.toJson(topicData);
-			assistJsonString = getNormalText(assistJsonString);
-			FileUtil.writeFileContent(assistJsonString, topicPath);
-
-		} catch (Exception e) {
-			topicData = null;
-			e.printStackTrace();
-		}
+		String assistJsonString = GsonUtil.gson.toJson(topicData);
+		assistJsonString = getNormalText(assistJsonString);
+		FileUtil.writeFileContent(assistJsonString, topicPath);
 
 		return topicData;
 	}

@@ -20,9 +20,9 @@ public class Context {
 
 	public static TopicData topicData = null;
 
-	public Context() {
+	public Context() throws Exception {
 		if (topicData == null) {
-			topicData = TopicDataLoadUtil.loadAllTopicDataFromWeb();
+			topicData = TopicDataLoadUtil.loadAllTopicDataFromLocal();
 		}
 	}
 

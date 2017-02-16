@@ -20,7 +20,7 @@ public class WikiAssistant implements Assistant {
 				&& requestType == RequestType.CHOICE && context.responseHistory.lastTopic.topicId.equals(request)) {
 			StringBuilder responseContent = new StringBuilder();
 			responseContent.append("Please click on this link to obtain the details:");
-			responseContent.append("#{type:'link',link:'");
+			responseContent.append("#{type:'url',link:'");
 			responseContent.append(context.responseHistory.lastTopic.topicLink);
 			responseContent.append("',text:'");
 			responseContent.append(context.responseHistory.lastTopic.topicText);
