@@ -2,6 +2,7 @@ package weihua.myassistant.service;
 
 import weihua.myassistant.context.Context;
 import weihua.myassistant.request.RequestType;
+import weihua.myassistant.response.Response;
 
 /**
  * 助手服务
@@ -10,5 +11,5 @@ import weihua.myassistant.request.RequestType;
  *
  */
 public interface Assistant {
-	public String getResponse(String request, RequestType requestType, Context context) throws Exception;
+	public Response getResponse(String request, RequestType requestType, Context context) throws Exception;
 }

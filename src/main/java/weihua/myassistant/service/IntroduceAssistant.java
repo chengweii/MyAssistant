@@ -2,6 +2,7 @@ package weihua.myassistant.service;
 
 import weihua.myassistant.context.Context;
 import weihua.myassistant.request.RequestType;
+import weihua.myassistant.response.Response;
 
 /**
  * 介绍助手服务
@@ -12,7 +13,7 @@ import weihua.myassistant.request.RequestType;
 public class IntroduceAssistant implements Assistant {
 
 	@Override
-	public String getResponse(String request, RequestType requestType, Context context) {
+	public Response getResponse(String request, RequestType requestType, Context context) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}

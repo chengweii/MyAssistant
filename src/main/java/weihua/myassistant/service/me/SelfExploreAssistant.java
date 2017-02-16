@@ -4,6 +4,8 @@ import com.google.gson.reflect.TypeToken;
 
 import weihua.myassistant.context.Context;
 import weihua.myassistant.request.RequestType;
+import weihua.myassistant.response.CommonResponse;
+import weihua.myassistant.response.Response;
 import weihua.myassistant.service.Assistant;
 import weihua.myassistant.service.me.entity.Reaction;
 import weihua.myassistant.service.me.entity.SelfExploreRequest;
@@ -20,15 +22,18 @@ public class SelfExploreAssistant implements Assistant {
 	private Me me;
 
 	@Override
-	public String getResponse(String request, RequestType requestType, Context context) {
-		SelfExploreRequest selfExploreRequest = GsonUtil.gson.fromJson(request, new TypeToken<SelfExploreRequest>() {}.getType());
+	public Response getResponse(String request, RequestType requestType, Context context) throws Exception {
+		SelfExploreRequest selfExploreRequest = GsonUtil.gson.fromJson(request, new TypeToken<SelfExploreRequest>() {
+		}.getType());
 		me = new Me(selfExploreRequest.getBodyState(), selfExploreRequest.getMindState());
 		Reaction reaction = me.getResponse(selfExploreRequest.getOuterSign());
-		return reaction.toString();
+		CommonResponse commonResponse = new CommonResponse(true);
+		commonResponse.setResponseData(reaction.toString());
+		return commonResponse;
 	}
 
-	public static void main(String[] args) {
-		String response = new SelfExploreAssistant().getResponse(
+	public static void main(String[] args) throws Exception {
+		Response response = new SelfExploreAssistant().getResponse(
 				"{  \"bodyState\": {    \"bodyStateType\": \"1\",    \"content\": \"\"  },  \"mindState\": {    \"mindStateType\": \"1\",    \"content\": \"\"  },  \"outerSign\": {    \"outerSignType\": \"2\",    \"content\": \"\"  }}",
 				RequestType.TEXT, null);
 		/*
@@ -44,7 +49,7 @@ public class SelfExploreAssistant implements Assistant {
 		 * selfExploreRequest.outerSign.content = "";
 		 * System.out.print(GsonUtil.gson.toJson(selfExploreRequest));
 		 */
-		System.out.print(response);
+		System.out.print(response.getResponseData());
 	}
 
 }

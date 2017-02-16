@@ -10,13 +10,21 @@ import weihua.myassistant.request.RequestType;
 public class App {
 	public static void main(String[] args) throws Exception {
 		Context assistantContext = new Context();
+		System.out.println("-----------------");
 		System.out.println(assistantContext.backHome());
+		System.out.println("-----------------");
 		System.out.println(assistantContext.getResponse("婆媳", RequestType.TEXT));
+		System.out.println("-----------------");
 		System.out.println(assistantContext.getResponse("14", RequestType.CHOICE));
+		System.out.println("-----------------");
 		System.out.println(assistantContext.getResponse("27", RequestType.CHOICE));
+		System.out.println("-----------------");
 		System.out.println(assistantContext.getResponse("2", RequestType.CHOICE));
+		System.out.println("-----------------");
 		System.out.println(assistantContext.getResponse("2", RequestType.TEXT));
+		System.out.println("-----------------");
 		System.out.println(assistantContext.getResponse("1", RequestType.CHOICE));
+		System.out.println("-----------------");
 		System.out.println(assistantContext.getResponse("", RequestType.TEXT));
 	}
 }

@@ -3,6 +3,7 @@ package weihua.myassistant.data;
 import weihua.myassistant.service.HelpAssistant;
 import weihua.myassistant.service.IntroduceAssistant;
 import weihua.myassistant.service.ScheduleAssistant;
+import weihua.myassistant.service.WikiAssistant;
 
 public enum TopicType {
 
@@ -15,6 +16,11 @@ public enum TopicType {
 	 * 介绍类
 	 */
 	INTRODUCE("Introduce", IntroduceAssistant.class),
+	
+	/**
+	 * 知识类
+	 */
+	WIKI("Wiki", WikiAssistant.class),
 
 	/**
 	 * 日程类

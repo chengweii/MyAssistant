@@ -4,12 +4,20 @@ public abstract class BaseResponse implements Response {
 
 	private Response nextHandler;
 
+	private String content;
+
 	abstract String handleResponse(String content) throws Exception;
 
 	@Override
-	public String getResponseData(String content) throws Exception {
+	public void setResponseData(String content) throws Exception {
+		this.content = content;
+	}
+
+	@Override
+	public String getResponseData() throws Exception {
 		if (nextHandler != null) {
-			content = nextHandler.getResponseData(content);
+			nextHandler.setResponseData(content);
+			content = nextHandler.getResponseData();
 		}
 
 		return handleResponse(content);

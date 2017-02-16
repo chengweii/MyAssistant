@@ -1,13 +1,6 @@
 package weihua.myassistant.response;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import weihua.myassistant.data.ResponseData;
-import weihua.myassistant.data.ResponseData.Response;
-import weihua.myassistant.util.StringUtil;
-
-public class CommonResponse extends BaseResponse {
+public class CommonResponse extends BaseResponse implements Response{
 
 	public CommonResponse(boolean initHandlers) {
 		if (initHandlers) {
@@ -37,42 +30,10 @@ public class CommonResponse extends BaseResponse {
 		setNextHandler(imageResponse);
 	}
 
-	public String getContent(List<ResponseData> responseDataList, Response response) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("<p>");
-		sb.append(StringUtil.getRandomContent(response.content));
-		sb.append("</p>");
-
-		if (responseDataList != null && responseDataList.size() > 0) {
-			ResponseData responseData = responseDataList.get(0);
-
-			List<Response> choiceList = new ArrayList<Response>();
-			for (Response child : responseData.responses) {
-				if (response.id.equals(child.responseId)) {
-					choiceList.add(child);
-				}
-			}
-
-			if (choiceList.size() > 1) {
-				sb.append("<p>");
-				for (Response child : choiceList) {
-					sb.append("<span class='choice-item' ");
-					sb.append(" choiceValue='");
-					sb.append(child.condition);
-					sb.append("'>");
-					sb.append(StringUtil.getRandomContent(child.content));
-					sb.append("</span>");
-				}
-				sb.append("</p>");
-			}
-
-		}
-
-		return sb.toString();
-	}
-
 	public static void main(String[] args) throws Exception {
-		System.out.println(new CommonResponse(true).getResponseData(
-				"测试#{type:'image',link:'test1.jpg',text:'image'}#测试#{type:'audio',link:'test2.mp3',text:'audio'}#测试#{type:'video',link:'test.mp4',text:'video'}#测试{type:'url',link:'www.baidu.com',text:'url'}#测试"));
+		Response response = new CommonResponse(true);
+		response.setResponseData(
+				"测试#{type:'image',link:'test1.jpg',text:'image'}#测试#{type:'audio',link:'test2.mp3',text:'audio'}#测试#{type:'video',link:'test.mp4',text:'video'}#测试{type:'url',link:'www.baidu.com',text:'url'}#测试");
+		System.out.println(response.getResponseData());
 	}
 }

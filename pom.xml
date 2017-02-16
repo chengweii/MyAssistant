@@ -58,5 +58,13 @@
 		</dependency>
 		<!-- log end -->
 
+		<!-- jsoup begin -->
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.10.2</version>
+		</dependency>
+		<!-- jsoup end -->
+
 	</dependencies>
 </project>

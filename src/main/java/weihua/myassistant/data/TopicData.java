@@ -12,6 +12,7 @@ public class TopicData implements Data {
 		public String topicId;
 		public String topicType;
 		public String topicText;
+		public String topicLink;
 		public String topicName;
 		public List<Topic> children;
 	}

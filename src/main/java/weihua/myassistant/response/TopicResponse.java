@@ -12,6 +12,8 @@ public class TopicResponse implements Response {
 
 	private Response nextHandler;
 
+	private String content;
+
 	public TopicResponse(boolean initHandlers) {
 		if (initHandlers) {
 			initHandlers();
@@ -19,9 +21,15 @@ public class TopicResponse implements Response {
 	}
 
 	@Override
-	public String getResponseData(String content) throws Exception {
+	public void setResponseData(String content) throws Exception {
+		this.content = content;
+	}
+
+	@Override
+	public String getResponseData() throws Exception {
 		if (nextHandler != null) {
-			content = nextHandler.getResponseData(content);
+			nextHandler.setResponseData(content);
+			content = nextHandler.getResponseData();
 		}
 
 		return content;
@@ -42,7 +50,7 @@ public class TopicResponse implements Response {
 		nextHandler = commonResponse;
 	}
 
-	public String getContent(List<Topic> children, String topicName, TopicData topicData) {
+	public static String getContent(List<Topic> children, String topicName, TopicData topicData) {
 		String narrationContent;
 		StringBuilder sb = new StringBuilder();
 		if (topicName != null && !"".equals(topicName)) {
@@ -98,4 +106,5 @@ public class TopicResponse implements Response {
 
 		return sb.toString();
 	}
+
 }

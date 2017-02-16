@@ -15,12 +15,12 @@ import android.widget.Toast;
 import weihua.myassistant.context.Context;
 import weihua.myassistant.request.RequestType;
 import weihua.myassistant.response.MediaType;
+import weihua.myassistant.service.HelpAssistant;
 import weihua.myassistant.ui.CustomerWebChromeClient;
 import weihua.myassistant.ui.MediaIntent;
 import weihua.myassistant.ui.MediaIntent.MusicPlaySource;
 import weihua.myassistant.ui.common.Constans;
 import weihua.myassistant.ui.util.AlarmUtil;
-import weihua.myassistant.util.AssistantDataLoadUtil;
 import weihua.myassistant.util.DateUtil;
 import weihua.myassistant.util.ExceptionUtil;
 import weihua.myassistant.util.FileUtil;
@@ -85,7 +85,7 @@ public class MainActivity extends Activity {
 	public String loadDataFile(String topicName) {
 		String msg = "";
 		try {
-			msg = AssistantDataLoadUtil.generateResponse(topicName);
+			msg = HelpAssistant.generateResponse(topicName);
 		} catch (Exception e) {
 			msg = ExceptionUtil.getStackTrace(e);
 		}

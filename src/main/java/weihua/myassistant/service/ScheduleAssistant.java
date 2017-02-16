@@ -8,9 +8,9 @@ import com.google.gson.reflect.TypeToken;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Response;
 import weihua.myassistant.context.Context;
 import weihua.myassistant.request.RequestType;
+import weihua.myassistant.response.Response;
 import weihua.myassistant.util.GsonUtil;
 import weihua.myassistant.util.RetrofitUtil;
 
@@ -23,7 +23,7 @@ import weihua.myassistant.util.RetrofitUtil;
 public class ScheduleAssistant implements Assistant {
 
 	@Override
-	public String getResponse(String request, RequestType requestType, Context context) {
+	public Response getResponse(String request, RequestType requestType, Context context) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -40,23 +40,23 @@ public class ScheduleAssistant implements Assistant {
 				"https://dida365.com/api/v2/user/signon?wc=true&remember=true",
 				RetrofitUtil.getJsonRequestBody(loginInfo), "");
 
-		Response<ResponseBody> loginResponse = loginResult.execute();
+		retrofit2.Response<ResponseBody> loginResponse = loginResult.execute();
 		String loginContent = loginResponse.body().string();
 		Map<String, String> map = GsonUtil.getMapFromJson(loginContent);
 
 		Call<ResponseBody> taskResult = RetrofitUtil.retrofitService.get("https://dida365.com/api/v2/project/all/tasks",
 				"t=" + map.get("token"));
 
-		Response<ResponseBody> taskResponse = taskResult.execute();
+		retrofit2.Response<ResponseBody> taskResponse = taskResult.execute();
 		String taskContent = taskResponse.body().string();
 		List<Task> taskList = GsonUtil.<ArrayList<Task>> getEntityFromJson(taskContent,
 				new TypeToken<ArrayList<Task>>() {
 				});
-		
+
 		for (Task t : taskList) {
 			System.out.println(t.title);
 		}
-		
+
 		return taskList;
 	}
 

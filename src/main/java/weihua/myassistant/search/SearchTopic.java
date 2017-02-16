@@ -20,7 +20,8 @@ public class SearchTopic implements Search {
 				result.topicId = topic.topicId;
 				result.topicText = topic.topicText;
 				result.topicName = topic.topicName;
-				result.topicType=topic.topicType;
+				result.topicLink = topic.topicLink;
+				result.topicType = topic.topicType;
 				result.children = topic.children;
 				break;
 			} else {
