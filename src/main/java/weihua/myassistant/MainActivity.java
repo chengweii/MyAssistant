@@ -20,9 +20,11 @@ import weihua.myassistant.service.HelpAssistant;
 import weihua.myassistant.ui.CustomerWebChromeClient;
 import weihua.myassistant.ui.MediaIntent;
 import weihua.myassistant.ui.MediaIntent.MusicPlaySource;
+import weihua.myassistant.ui.alarm.AlarmService;
 import weihua.myassistant.ui.common.Constans;
 import weihua.myassistant.ui.util.AlarmUtil;
 import weihua.myassistant.ui.util.Log4JUtil;
+import weihua.myassistant.ui.util.ServiceUtil;
 import weihua.myassistant.util.DateUtil;
 import weihua.myassistant.util.ExceptionUtil;
 import weihua.myassistant.util.FileUtil;
@@ -44,15 +46,16 @@ public class MainActivity extends Activity {
 	}
 
 	private void alarmShow() {
-		AlarmUtil.startAlarmRepeating(this, Constans.HOLIDAY_ALARM_ID, DateUtil.getTimeFromCurrent(10), 30000,
-				String.valueOf(Constans.HOLIDAY_ALARM_ID));
-		AlarmUtil.startAlarmRepeating(this, Constans.WETHER_ALARM_ID, DateUtil.getTimeFromCurrent(45), 90000,
-				String.valueOf(Constans.WETHER_ALARM_ID));
+		ServiceUtil.startService(this, AlarmService.class, null);
+		//AlarmUtil.startAlarmRepeating(this, Constans.HOLIDAY_ALARM_ID, DateUtil.getTimeFromCurrent(10), 30000,String.valueOf(Constans.HOLIDAY_ALARM_ID));
+		AlarmUtil.startAlarmRepeating(this, Constans.WETHER_ALARM_ID, DateUtil.getTimeFromCurrent(45),40000,
+				String.valueOf(Constans.ALARM_SERVICE_ID));
 	}
 
 	private void alarmCancel() {
-		AlarmUtil.stopAlarm(this, Constans.HOLIDAY_ALARM_ID);
+		//AlarmUtil.stopAlarm(this, Constans.HOLIDAY_ALARM_ID);
 		AlarmUtil.stopAlarm(this, Constans.WETHER_ALARM_ID);
+		ServiceUtil.stopService(this, AlarmService.class);
 	}
 
 	/**

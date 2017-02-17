@@ -50,11 +50,14 @@ public class AlarmService extends Service {
 
 		if (!isRunning) {
 			isRunning = true;
-			setForegroundService("Hello! I am assistant.", "Hello! I am assistant.", "What can I do for you?");
+			setForegroundService("Hello! I am your assistant.", "Hello! I am your assistant.",
+					"What can I do for you?");
 		}
 
-		if (mediaPlayer == null || !mediaPlayer.isPlaying()) {
-			excuteService(this);
+		if (extraInfo != null && !"".equals(extraInfo)) {
+			if (mediaPlayer == null || !mediaPlayer.isPlaying()) {
+				excuteService(this);
+			}
 		}
 
 		return 0;

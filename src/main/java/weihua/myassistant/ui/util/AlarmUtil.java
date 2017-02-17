@@ -17,9 +17,9 @@ public class AlarmUtil {
 		AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		if (isAgain) {
 			manager.cancel(sender);
-			manager.set(AlarmManager.RTC, triggerAtMillis, sender);
+			manager.set(AlarmManager.RTC_WAKEUP, triggerAtMillis, sender);
 		} else {
-			manager.setWindow(AlarmManager.RTC, triggerAtMillis, 0, sender);
+			manager.setWindow(AlarmManager.RTC_WAKEUP, triggerAtMillis, 0, sender);
 		}
 	}
 
