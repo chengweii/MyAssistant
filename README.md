@@ -26,3 +26,8 @@ Personal assistant.It could help us in our life and work.
 ```
 <countdown value='2017,3,1'>
 ```
+
+### wikihow采集链接脚本
+```javascript
+var s=""; $.each($("#bodycontents .image_map span"),function(index,item){s+="    * ["+$(item).text()+"](https://zh.wikihow.com/"+$(item).text()+")\n";});console.dir(s);
+```
