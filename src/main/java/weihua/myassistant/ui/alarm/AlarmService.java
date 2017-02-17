@@ -32,7 +32,8 @@ public class AlarmService extends Service {
 	private static Map<String, String> servicesMap = new HashMap<String, String>();
 
 	static {
-		FileUtil.assistantRootPath = Environment.getExternalStorageDirectory().getPath() + "/assistant/";
+		FileUtil.assistantRootPath = Environment.getExternalStorageDirectory().getPath() + "/"
+				+ Constans.ASSISTANT_ROOT_PATH_NAME + "/";
 		servicesMap.put(String.valueOf(Constans.HOLIDAY_ALARM_ID), "test1.mp3");
 		servicesMap.put(String.valueOf(Constans.WETHER_ALARM_ID), "test2.mp3");
 	}
@@ -92,7 +93,7 @@ public class AlarmService extends Service {
 			Intent intent = new Intent(this, cls);
 			intent.putExtra("serviceName", text);
 			intent.setAction(Intent.ACTION_MAIN);
-	        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+			intent.addCategory(Intent.CATEGORY_LAUNCHER);
 			PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 			notification.contentIntent = pIntent;
 		}

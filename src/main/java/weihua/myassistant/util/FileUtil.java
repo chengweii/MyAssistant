@@ -7,9 +7,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import weihua.myassistant.ui.common.Constans;
+
 public class FileUtil {
 
-	public static String assistantRootPath = "src/main/source/assistant/";
+	public static String assistantRootPath = "src/main/source/" + Constans.ASSISTANT_ROOT_PATH_NAME + "/";
 
 	/**
 	 * 写入文件内容

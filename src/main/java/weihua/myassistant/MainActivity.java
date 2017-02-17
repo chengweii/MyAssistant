@@ -197,7 +197,8 @@ public class MainActivity extends Activity {
 
 		setContentView(R.layout.main);
 
-		FileUtil.assistantRootPath = Environment.getExternalStorageDirectory().getPath() + "/assistant/";
+		FileUtil.assistantRootPath = Environment.getExternalStorageDirectory().getPath() + "/"
+				+ Constans.ASSISTANT_ROOT_PATH_NAME + "/";
 
 		Log4JUtil.configure();
 
