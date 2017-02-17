@@ -28,7 +28,7 @@ public class TopicDataLoadUtil {
 			@Override
 			public void run() {
 				try {
-					Context.topicData = getTopicDataFromJianshu();
+					Context.topicData = getTopicDataFromGitHup();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -46,7 +46,7 @@ public class TopicDataLoadUtil {
 		return topicData;
 	}
 
-	private static TopicData getTopicDataFromJianshu() throws Exception {
+	private static TopicData getTopicDataFromGitHup() throws Exception {
 		TopicData topicData = new TopicData();
 		topicData.listTopicMsg = "About <span class='parentTopic'>#keyword#</span>,I can provide the above help now:";
 		topicData.welcomeMsg = "#timeHello#,#userName#,What can I do for you with the following:";
@@ -54,8 +54,8 @@ public class TopicDataLoadUtil {
 
 		String topicPath = FileUtil.getInnerAssistantFileSDCardPath() + "topic/topic.json";
 
-		Document doc = Jsoup.connect("http://www.jianshu.com/p/d93d4a44fd6b").get();
-		Elements showContent = doc.getElementsByAttributeValue("class", "show-content");
+		Document doc = Jsoup.connect("https://github.com/chengweii/myassistant/blob/develop/src/main/source/assistant/topic/topic.md").get();
+		Elements showContent = doc.getElementsByAttributeValue("class", "markdown-body entry-content");
 		Element rootUl = showContent.get(0).getElementsByTag("ul").get(1);
 		Elements liList = rootUl.children();
 		List<Topic> children = new ArrayList<Topic>();
