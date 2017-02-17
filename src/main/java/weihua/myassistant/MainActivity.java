@@ -22,6 +22,7 @@ import weihua.myassistant.ui.MediaIntent;
 import weihua.myassistant.ui.MediaIntent.MusicPlaySource;
 import weihua.myassistant.ui.common.Constans;
 import weihua.myassistant.ui.util.AlarmUtil;
+import weihua.myassistant.ui.util.Log4JUtil;
 import weihua.myassistant.util.DateUtil;
 import weihua.myassistant.util.ExceptionUtil;
 import weihua.myassistant.util.FileUtil;
@@ -197,6 +198,8 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.main);
 
 		FileUtil.assistantRootPath = Environment.getExternalStorageDirectory().getPath() + "/assistant/";
+
+		Log4JUtil.configure();
 
 		try {
 			assistantContext = new Context();

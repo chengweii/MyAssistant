@@ -1,9 +1,11 @@
 package weihua.myassistant.context;
 
-import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.helpers.Loader;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -14,10 +16,13 @@ import com.google.gson.reflect.TypeToken;
 import weihua.myassistant.data.TopicData;
 import weihua.myassistant.data.TopicData.Topic;
 import weihua.myassistant.data.TopicType;
+import weihua.myassistant.util.ExceptionUtil;
 import weihua.myassistant.util.FileUtil;
 import weihua.myassistant.util.GsonUtil;
 
 public class TopicDataLoadUtil {
+
+	private static Logger loger = Logger.getLogger(TopicDataLoadUtil.class);
 
 	public static void main(String[] args) throws Exception {
 		loadAllTopicDataFromWeb();
@@ -29,8 +34,9 @@ public class TopicDataLoadUtil {
 			public void run() {
 				try {
 					Context.topicData = getTopicDataFromGitHup();
+					loger.info("Topic data refresh success.");
 				} catch (Exception e) {
-					e.printStackTrace();
+					loger.error("Topic data refresh failed:"+ExceptionUtil.getStackTrace(e));
 				}
 			}
 		}).start();
@@ -54,7 +60,10 @@ public class TopicDataLoadUtil {
 
 		String topicPath = FileUtil.getInnerAssistantFileSDCardPath() + "topic/topic.json";
 
-		Document doc = Jsoup.connect("https://github.com/chengweii/myassistant/blob/develop/src/main/source/assistant/topic/topic.md").get();
+		Document doc = Jsoup
+				.connect(
+						"https://github.com/chengweii/myassistant/blob/develop/src/main/source/assistant/topic/topic.md")
+				.get();
 		Elements showContent = doc.getElementsByAttributeValue("class", "markdown-body entry-content");
 		Element rootUl = showContent.get(0).getElementsByTag("ul").get(1);
 		Elements liList = rootUl.children();

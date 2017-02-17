@@ -24,6 +24,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="E:/workspace/android/android.jar"/>
-	<classpathentry kind="lib" path="E:/workspace/android/support-v4-r7.jar"/>
+	<classpathentry kind="lib" path="E:/workspace/android/android-logging-log4j-1.0.3.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
