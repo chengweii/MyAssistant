@@ -46,10 +46,9 @@ public class MainActivity extends Activity {
 	}
 
 	private void alarmShow() {
-		ServiceUtil.startService(this, AlarmService.class, null);
 		//AlarmUtil.startAlarmRepeating(this, Constans.HOLIDAY_ALARM_ID, DateUtil.getTimeFromCurrent(10), 30000,String.valueOf(Constans.HOLIDAY_ALARM_ID));
 		AlarmUtil.startAlarmRepeating(this, Constans.WETHER_ALARM_ID, DateUtil.getTimeFromCurrent(45),40000,
-				String.valueOf(Constans.ALARM_SERVICE_ID));
+				String.valueOf(Constans.WETHER_ALARM_ID));
 	}
 
 	private void alarmCancel() {
