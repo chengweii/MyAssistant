@@ -32,7 +32,7 @@ public class HelpAssistant implements Assistant {
 	@Override
 	public Response getResponse(String request, RequestType requestType, Context context) throws Exception {
 		if (context.responseHistory.lastTopic.topicType.equals(TopicType.HELP.getCode())) {
-			loadTopicData(context.responseHistory.lastTopic.topicName);
+			responseDataList = loadTopicData(context.responseHistory.lastTopic.topicName);
 			ResponseData.Response response = findResponseData(request, requestType, context.responseHistory);
 			if (response != null) {
 				context.responseHistory.lastResponseId = response.id;

@@ -18,13 +18,14 @@ import weihua.myassistant.request.RequestType;
 import weihua.myassistant.response.MediaType;
 import weihua.myassistant.service.HelpAssistant;
 import weihua.myassistant.ui.CustomerWebChromeClient;
-import weihua.myassistant.ui.MediaIntent;
-import weihua.myassistant.ui.MediaIntent.MusicPlaySource;
 import weihua.myassistant.ui.alarm.AlarmService;
 import weihua.myassistant.ui.common.Constans;
 import weihua.myassistant.ui.util.AlarmUtil;
 import weihua.myassistant.ui.util.Log4JUtil;
+import weihua.myassistant.ui.util.MediaUtil;
+import weihua.myassistant.ui.util.NotificationUtil;
 import weihua.myassistant.ui.util.ServiceUtil;
+import weihua.myassistant.ui.util.MediaUtil.MusicPlaySource;
 import weihua.myassistant.util.DateUtil;
 import weihua.myassistant.util.ExceptionUtil;
 import weihua.myassistant.util.FileUtil;
@@ -38,23 +39,14 @@ public class MainActivity extends Activity {
 	public String getResponse(String request, String requestType) {
 		String msg = "";
 		try {
+			NotificationUtil.showNotification(this, "333", "33", "3333",
+					"http://upload-images.jianshu.io/upload_images/2986704-1fec5aea04c3ef03.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240",
+					888, null);
 			msg = assistantContext.getResponse(request, RequestType.fromCode(requestType));
 		} catch (Exception e) {
 			msg = ExceptionUtil.getStackTrace(e);
 		}
 		return msg;
-	}
-
-	private void alarmShow() {
-		//AlarmUtil.startAlarmRepeating(this, Constans.HOLIDAY_ALARM_ID, DateUtil.getTimeFromCurrent(10), 30000,String.valueOf(Constans.HOLIDAY_ALARM_ID));
-		AlarmUtil.startAlarmRepeating(this, Constans.WETHER_ALARM_ID, DateUtil.getTimeFromCurrent(45),40000,
-				String.valueOf(Constans.WETHER_ALARM_ID));
-	}
-
-	private void alarmCancel() {
-		//AlarmUtil.stopAlarm(this, Constans.HOLIDAY_ALARM_ID);
-		AlarmUtil.stopAlarm(this, Constans.WETHER_ALARM_ID);
-		ServiceUtil.stopService(this, AlarmService.class);
 	}
 
 	/**
@@ -65,7 +57,7 @@ public class MainActivity extends Activity {
 	 */
 	@JavascriptInterface
 	public void playMusic(String musicPlaySource, String mediaLink) {
-		MediaIntent.playMusic(getApplicationContext(), MusicPlaySource.fromCode(musicPlaySource), mediaLink);
+		MediaUtil.playMusic(getApplicationContext(), MusicPlaySource.fromCode(musicPlaySource), mediaLink, true, null);
 	}
 
 	@JavascriptInterface
@@ -81,7 +73,7 @@ public class MainActivity extends Activity {
 
 	@JavascriptInterface
 	public void showMedia(String mediaLink, String mediaType) {
-		Intent it = MediaIntent.getMediaIntent(mediaLink, MediaType.fromCode(mediaType));
+		Intent it = MediaUtil.getMediaIntent(mediaLink, MediaType.fromCode(mediaType));
 		startActivity(it);
 	}
 
@@ -179,6 +171,20 @@ public class MainActivity extends Activity {
 			showMsg(ExceptionUtil.getStackTrace(e));
 		}
 		return true;
+	}
+	
+	private void alarmShow() {
+		// AlarmUtil.startAlarmRepeating(this, Constans.HOLIDAY_ALARM_ID,
+		// DateUtil.getTimeFromCurrent(10),
+		// 30000,String.valueOf(Constans.HOLIDAY_ALARM_ID));
+		AlarmUtil.startAlarmRepeating(this, Constans.WETHER_ALARM_ID, DateUtil.getTimeFromCurrent(45), 40000,
+				String.valueOf(Constans.WETHER_ALARM_ID));
+	}
+
+	private void alarmCancel() {
+		// AlarmUtil.stopAlarm(this, Constans.HOLIDAY_ALARM_ID);
+		AlarmUtil.stopAlarm(this, Constans.WETHER_ALARM_ID);
+		ServiceUtil.stopService(this, AlarmService.class);
 	}
 
 	@Override

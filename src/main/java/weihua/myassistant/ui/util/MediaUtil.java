@@ -1,15 +1,16 @@
-package weihua.myassistant.ui;
+package weihua.myassistant.ui.util;
 
 import java.io.File;
 
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import weihua.myassistant.response.MediaType;
 import weihua.myassistant.util.FileUtil;
 
-public class MediaIntent {
+public class MediaUtil {
 
 	private static MediaPlayer mediaPlayer;
 
@@ -46,9 +47,14 @@ public class MediaIntent {
 		return it;
 	}
 
-	public static MediaPlayer playMusic(Context context, MusicPlaySource musicPlaySource, String mediaLink) {
+	public static MediaPlayer playMusic(Context context, MusicPlaySource musicPlaySource, String mediaLink,
+			boolean isReset, OnCompletionListener onCompletionListener) {
 		if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-			mediaPlayer.stop();
+			if (isReset) {
+				mediaPlayer.stop();
+			} else {
+				return mediaPlayer;
+			}
 		}
 
 		if (musicPlaySource == MusicPlaySource.LOCAL) {
@@ -56,6 +62,11 @@ public class MediaIntent {
 		}
 
 		mediaPlayer = MediaPlayer.create(context, Uri.parse(mediaLink));
+
+		if (onCompletionListener != null) {
+			mediaPlayer.setOnCompletionListener(onCompletionListener);
+		}
+
 		mediaPlayer.start();
 
 		return mediaPlayer;
