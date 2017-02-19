@@ -6,13 +6,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import weihua.myassistant.R;
 
 public class NotificationUtil {
 
 	public static Notification showNotification(Context context, String ticker, String title, String text,
-			String iconUrl, int notificationId, Intent intent) throws Exception {
+			String subText, String contentInfo, String iconUrl, int notificationId, Intent intent) throws Exception {
 		NotificationManager notificationManager = (NotificationManager) context
 				.getSystemService(android.content.Context.NOTIFICATION_SERVICE);
 		Notification.Builder builder = new Notification.Builder(context);
@@ -25,6 +24,8 @@ public class NotificationUtil {
 		builder.setTicker(ticker);
 		builder.setContentTitle(title);
 		builder.setContentText(text);
+		builder.setSubText(subText);
+		builder.setContentInfo(contentInfo);
 		builder.setWhen(System.currentTimeMillis());
 		builder.setDefaults(Notification.DEFAULT_ALL);
 		Notification notification = builder.build();

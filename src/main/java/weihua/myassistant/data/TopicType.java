@@ -1,5 +1,6 @@
 package weihua.myassistant.data;
 
+import weihua.myassistant.service.DailyDietAssistant;
 import weihua.myassistant.service.HelpAssistant;
 import weihua.myassistant.service.IntroduceAssistant;
 import weihua.myassistant.service.ScheduleAssistant;
@@ -8,22 +9,27 @@ import weihua.myassistant.service.WikiAssistant;
 public enum TopicType {
 
 	/**
-	 * 帮助、咨询类
+	 * 帮助、咨询助手
 	 */
 	HELP("Help", HelpAssistant.class),
 
 	/**
-	 * 介绍类
+	 * 介绍助手
 	 */
 	INTRODUCE("Introduce", IntroduceAssistant.class),
 	
 	/**
-	 * 知识类
+	 * 知识助手
 	 */
 	WIKI("Wiki", WikiAssistant.class),
+	
+	/**
+	 * 日常饮食助手
+	 */
+	DAILYDIET("DailyDiet", DailyDietAssistant.class),
 
 	/**
-	 * 日程类
+	 * 日程助手
 	 */
 	SCHEDULE("Schedule", ScheduleAssistant.class);
 

@@ -9,6 +9,7 @@ import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import weihua.myassistant.ui.common.Constans;
 
 /**
  * <pre>
@@ -98,7 +99,7 @@ public class ServiceUtil {
 	 */
 	public static void startService(Context context, Class<?> cls, String extraInfo) {
 		Intent intent = new Intent(context, cls);
-		intent.putExtra("extraInfo", extraInfo);
+		intent.putExtra(Constans.ALARM_EXTRA_INFO, extraInfo);
 		context.startService(intent);
 	}
 

@@ -7,6 +7,8 @@ import java.util.Queue;
 
 import org.apache.log4j.Logger;
 
+import com.google.gson.reflect.TypeToken;
+
 import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
@@ -14,12 +16,19 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Environment;
 import android.os.IBinder;
+import weihua.myassistant.data.AlarmData;
+import weihua.myassistant.data.TopicType;
+import weihua.myassistant.response.Response;
+import weihua.myassistant.service.Assistant;
 import weihua.myassistant.ui.common.Constans;
+import weihua.myassistant.ui.util.Log4JUtil;
 import weihua.myassistant.ui.util.MediaUtil;
 import weihua.myassistant.ui.util.MediaUtil.MusicPlaySource;
 import weihua.myassistant.ui.util.NotificationUtil;
+import weihua.myassistant.util.DateUtil;
 import weihua.myassistant.util.ExceptionUtil;
 import weihua.myassistant.util.FileUtil;
+import weihua.myassistant.util.GsonUtil;
 
 public class AlarmService extends Service {
 
@@ -31,13 +40,13 @@ public class AlarmService extends Service {
 
 	private Queue<String> serviceQueue = new LinkedList<String>();
 
-	private static Map<String, String> servicesMap = new HashMap<String, String>();
+	private static Map<String, Class<?>> servicesMap = new HashMap<String, Class<?>>();
 
 	static {
 		FileUtil.assistantRootPath = Environment.getExternalStorageDirectory().getPath() + "/"
 				+ Constans.ASSISTANT_ROOT_PATH_NAME + "/";
-		servicesMap.put(String.valueOf(Constans.HOLIDAY_ALARM_ID), "test1.mp3");
-		servicesMap.put(String.valueOf(Constans.WETHER_ALARM_ID), "test2.mp3");
+		Log4JUtil.configure();
+		servicesMap.put(String.valueOf(Constans.DAILYDIET_ALARM_ID), TopicType.DAILYDIET.getClz());
 	}
 
 	@Override
@@ -49,11 +58,12 @@ public class AlarmService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		String extraInfo = intent.getStringExtra(Constans.ALARM_EXTRA_INFO);
 		serviceQueue.offer(extraInfo);
+		loger.info("Current serviceId:" + intent.getExtras());
 		try {
 			if (!isRunning) {
 				isRunning = true;
-				setForegroundService("Hello! I am your assistant.", "Hello! I am your assistant.",
-						"What can I do for you?");
+				setForegroundService("Master,I am at your service.^_^", "Master,I am at your service.^_^",
+						"Please keep me here with you.⊙﹏⊙ ");
 			}
 
 			if (extraInfo != null && !"".equals(extraInfo)) {
@@ -69,31 +79,50 @@ public class AlarmService extends Service {
 
 	private void excuteService(final Context context) throws Exception {
 		if (serviceQueue.size() > 0) {
-			String serviceId = serviceQueue.poll();
+			final String serviceId = serviceQueue.poll();
 
-			NotificationUtil.showNotification(context, "Tomorow is your day",
-					"Current service size：" + serviceQueue.size(), String.valueOf(Constans.ALARM_SERVICE_ID), null,
-					Integer.parseInt(serviceId), null);
+			final Class<?> serviceClass = servicesMap.get(serviceId);
+			if (serviceClass != null) {
 
-			mediaPlayer = MediaUtil.playMusic(context, MusicPlaySource.LOCAL, servicesMap.get(serviceId), false,
-					new MediaPlayer.OnCompletionListener() {
-						@Override
-						public void onCompletion(MediaPlayer arg0) {
-							try {
-								excuteService(context);
-							} catch (Exception e) {
-								loger.info(ExceptionUtil.getStackTrace(e));
-							}
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							Assistant serviceAssistant = (Assistant) serviceClass.newInstance();
+							Response response = serviceAssistant.getResponse(null, null, null);
+							String content = response.getResponseData();
+
+							AlarmData data = GsonUtil.getEntityFromJson(content, new TypeToken<AlarmData>() {
+							});
+
+							mediaPlayer = MediaUtil.playMusic(context, MusicPlaySource.LOCAL, data.musicLink, false,
+									new MediaPlayer.OnCompletionListener() {
+										@Override
+										public void onCompletion(MediaPlayer arg0) {
+											try {
+												excuteService(context);
+											} catch (Exception e) {
+												loger.info(ExceptionUtil.getStackTrace(e));
+											}
+										}
+									});
+
+							NotificationUtil.showNotification(context, data.ticker, data.title, data.text, data.subText,
+									DateUtil.getTimeString(), data.iconLink, Integer.parseInt(serviceId), null);
+
+						} catch (Exception e) {
+							loger.error("ExcuteService ShowNotification failed:" + ExceptionUtil.getStackTrace(e));
 						}
-					});
+					}
+				}).start();
 
-			NotificationUtil.showNotification(this, servicesMap.get(serviceId), servicesMap.get(serviceId),
-					servicesMap.get(serviceId), null, Integer.parseInt(serviceId), null);
+			}
+
 		}
 	}
 
 	private void setForegroundService(String ticker, String title, String text) throws Exception {
-		Notification notification = NotificationUtil.showNotification(this, ticker, title, text, null,
+		Notification notification = NotificationUtil.showNotification(this, ticker, title, text, null, null, null,
 				Constans.ALARM_SERVICE_ID, null);
 		startForeground(Constans.ALARM_SERVICE_ID, notification);
 	}

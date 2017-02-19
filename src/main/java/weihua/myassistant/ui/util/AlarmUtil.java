@@ -24,8 +24,9 @@ public class AlarmUtil {
 	}
 
 	public static void startAlarmRepeating(Context context, int alarmReceiverId, long triggerAtMillis,
-			long intervalMillis, String extraInfo) {
+			long intervalMillis, String action, String extraInfo) {
 		Intent intent = new Intent(context, AlarmReceiver.class);
+		intent.setAction(action);
 		intent.putExtra(Constans.ALARM_EXTRA_INFO, extraInfo);
 		PendingIntent sender = PendingIntent.getBroadcast(context, alarmReceiverId, intent, 0);
 		AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

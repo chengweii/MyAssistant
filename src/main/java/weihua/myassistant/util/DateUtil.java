@@ -1,6 +1,9 @@
 package weihua.myassistant.util;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class DateUtil {
 
@@ -18,5 +21,11 @@ public class DateUtil {
 		calendar.set(Calendar.MINUTE, minute);
 		calendar.set(Calendar.SECOND, second);
 		return calendar.getTimeInMillis();
+	}
+
+	public static String getTimeString() {
+		Date date = new Date(System.currentTimeMillis());
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+		return dateFormat.format(date);
 	}
 }
