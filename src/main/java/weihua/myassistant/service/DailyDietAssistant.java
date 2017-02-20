@@ -38,21 +38,22 @@ public class DailyDietAssistant implements Assistant {
 	private static List<SpecialDate> specialDateList = null;
 
 	static {
-		String json = FileUtil.getFileContent(specialDatePath);
 		try {
 			if (FileUtil.isFileExists(specialDatePath)) {
+				String json = FileUtil.getFileContent(specialDatePath);
 				specialDateList = GsonUtil.getEntityFromJson(json, new TypeToken<List<SpecialDate>>() {
 				});
 			} else {
-				Call<ResponseBody> result = RetrofitUtil.retrofitService
-						.get("https://dida365.com/api/v2/user/signon?wc=true&remember=true", "");
+				Call<ResponseBody> result = RetrofitUtil.retrofitService.get(
+						"https://raw.githubusercontent.com/chengweii/myassistant/develop/src/main/source/assistant/specialdate/specialdate.json",
+						"");
 
 				retrofit2.Response<ResponseBody> response = result.execute();
-				json = response.body().string();
+				String json = response.body().string();
 				specialDateList = GsonUtil.getEntityFromJson(json, new TypeToken<List<SpecialDate>>() {
 				});
+				FileUtil.writeFileContent(json, specialDatePath);
 			}
-
 		} catch (Exception e) {
 			loger.info(ExceptionUtil.getStackTrace(e));
 		}
@@ -68,6 +69,7 @@ public class DailyDietAssistant implements Assistant {
 
 	public static void main(String[] args) throws Exception {
 		AlarmData alarmData = getCurrentDiet();
+		loger.info(alarmData);
 	}
 
 	private static AlarmData getCurrentDiet() throws Exception {
@@ -149,7 +151,7 @@ public class DailyDietAssistant implements Assistant {
 			return MealType.BREAKFAST;
 		} else if (hour >= 11 && hour < 12) {
 			return MealType.LUNCH;
-		} else if (hour >= 17 && hour < 20) {
+		} else if (hour >= 17 && hour < 21) {
 			return MealType.DINNER;
 		}
 		return null;
