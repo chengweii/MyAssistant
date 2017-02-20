@@ -108,7 +108,7 @@ public class AlarmService extends Service {
 									});
 
 							NotificationUtil.showNotification(context, data.ticker, data.title, data.text, data.subText,
-									DateUtil.getTimeString(), data.iconLink, Integer.parseInt(serviceId), null);
+									DateUtil.getCurrentTimeString(), data.iconLink, Integer.parseInt(serviceId), null);
 
 						} catch (Exception e) {
 							loger.error("ExcuteService ShowNotification failed:" + ExceptionUtil.getStackTrace(e));

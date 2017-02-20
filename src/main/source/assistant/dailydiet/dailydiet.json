@@ -1,0 +1,69 @@
+[
+  {
+    "dateType": "工作日",
+    "breakfast": [
+      {
+        "mealName": "燕麦豆浆",
+        "imageLink": "http://upload-images.jianshu.io/upload_images/2986704-56424ec781375ab7.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240",
+        "features": "营养，充饥，附带减肥效果",
+        "tips": "请您一定记得吃早餐，拜托了",
+        "tutorialLink": "http://www.jianshu.com/p/7fb9dfe42c53"
+      }
+    ],
+    "lunch": [
+      {
+        "mealName": "米饭配菜",
+        "imageLink": "http://upload-images.jianshu.io/upload_images/2986704-1fec5aea04c3ef03.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240",
+        "features": null,
+        "tips": null,
+        "tutorialLink": null
+      }
+    ],
+    "dinner": [
+      {
+        "mealName": "米饭配菜",
+        "imageLink": "http://upload-images.jianshu.io/upload_images/2986704-1fec5aea04c3ef03.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240",
+        "features": null,
+        "tips": null,
+        "tutorialLink": null
+      }
+    ]
+  },
+  {
+    "dateType": "周末",
+    "breakfast": [
+      {
+        "mealName": "燕麦豆浆",
+        "imageLink": "http://upload-images.jianshu.io/upload_images/2986704-56424ec781375ab7.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240",
+        "features": "营养，充饥，附带减肥效果",
+        "tips": "请您一定记得吃早餐，拜托了",
+        "tutorialLink": "http://www.jianshu.com/p/7fb9dfe42c53"
+      },
+      {
+        "mealName": "燕麦豆浆",
+        "imageLink": "http://upload-images.jianshu.io/upload_images/2986704-56424ec781375ab7.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240",
+        "features": "营养，充饥，附带减肥效果",
+        "tips": "请您一定记得吃早餐，拜托了",
+        "tutorialLink": "http://www.jianshu.com/p/7fb9dfe42c53"
+      }
+    ],
+    "lunch": [
+      {
+        "mealName": "米饭配菜",
+        "imageLink": "http://upload-images.jianshu.io/upload_images/2986704-1fec5aea04c3ef03.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240",
+        "features": null,
+        "tips": null,
+        "tutorialLink": null
+      }
+    ],
+    "dinner": [
+      {
+        "mealName": "米饭配菜",
+        "imageLink": "http://upload-images.jianshu.io/upload_images/2986704-1fec5aea04c3ef03.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240",
+        "features": null,
+        "tips": null,
+        "tutorialLink": null
+      }
+    ]
+  }
+]

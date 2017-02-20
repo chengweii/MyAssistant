@@ -23,9 +23,15 @@ public class DateUtil {
 		return calendar.getTimeInMillis();
 	}
 
-	public static String getTimeString() {
+	public static String getCurrentTimeString() {
 		Date date = new Date(System.currentTimeMillis());
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+		return dateFormat.format(date);
+	}
+	
+	public static String getCurrentDateString() {
+		Date date = new Date(System.currentTimeMillis());
+		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 		return dateFormat.format(date);
 	}
 }

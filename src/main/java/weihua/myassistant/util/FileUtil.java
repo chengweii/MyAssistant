@@ -55,6 +55,16 @@ public class FileUtil {
 	}
 
 	/**
+	 * 检查文件是否存在
+	 * 
+	 * @param filePath
+	 */
+	public static boolean isFileExists(String filePath) {
+		File file = new File(filePath);
+		return file.exists();
+	}
+
+	/**
 	 * 获取资源文件根目录
 	 * 
 	 * @return

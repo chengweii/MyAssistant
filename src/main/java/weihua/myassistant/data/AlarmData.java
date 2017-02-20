@@ -7,4 +7,5 @@ public class AlarmData implements Data {
 	public String ticker;
 	public String iconLink;
 	public String musicLink;
+	public String intentAction;
 }
