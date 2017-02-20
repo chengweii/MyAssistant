@@ -14,12 +14,6 @@ import weihua.myassistant.response.Response;
 import weihua.myassistant.util.GsonUtil;
 import weihua.myassistant.util.RetrofitUtil;
 
-/**
- * 日程助手服务
- * 
- * @author chengwei2
- * 
- */
 public class ScheduleAssistant implements Assistant {
 
 	@Override

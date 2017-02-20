@@ -6,12 +6,6 @@ import weihua.myassistant.request.RequestType;
 import weihua.myassistant.response.CommonResponse;
 import weihua.myassistant.response.Response;
 
-/**
- * 知识助手服务
- * 
- * @author chengwei2
- * 
- */
 public class WikiAssistant implements Assistant {
 
 	@Override
