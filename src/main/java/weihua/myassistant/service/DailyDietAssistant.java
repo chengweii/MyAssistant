@@ -147,11 +147,11 @@ public class DailyDietAssistant implements Assistant {
 	private static MealType timeMatching() {
 		Calendar cal = Calendar.getInstance();
 		int hour = cal.get(Calendar.HOUR_OF_DAY);
-		if (hour >= 7 && hour < 8) {
+		if (hour == 7 || hour == 8) {
 			return MealType.BREAKFAST;
-		} else if (hour >= 11 && hour < 12) {
+		} else if (hour == 11 || hour == 12) {
 			return MealType.LUNCH;
-		} else if (hour >= 17 && hour < 21) {
+		} else if (hour == 18 || hour == 19) {
 			return MealType.DINNER;
 		}
 		return null;
