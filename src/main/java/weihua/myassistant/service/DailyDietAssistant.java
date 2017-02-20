@@ -61,9 +61,13 @@ public class DailyDietAssistant implements Assistant {
 
 	@Override
 	public Response getResponse(String request, RequestType requestType, Context context) throws Exception {
+		Response response = null;
 		AlarmData data = getCurrentDiet();
-		Response response = new CommonResponse(true);
-		response.setResponseData(GsonUtil.toJson(data));
+		if (data != null) {
+			response = new CommonResponse(true);
+			response.setResponseData(GsonUtil.toJson(data));
+		}
+
 		return response;
 	}
 
@@ -73,7 +77,7 @@ public class DailyDietAssistant implements Assistant {
 	}
 
 	private static AlarmData getCurrentDiet() throws Exception {
-		AlarmData data = new AlarmData();
+		AlarmData data = null;
 
 		List<DietData> dietDataList = null;
 		if (FileUtil.isFileExists(dietPath)) {
@@ -90,12 +94,15 @@ public class DailyDietAssistant implements Assistant {
 			if (dateMatching(dietData.dateType)) {
 				if (mealType == MealType.BREAKFAST) {
 					currentMealData = dietData.breakfast.get(0);
+					data = new AlarmData();
 					data.musicLink = MealType.BREAKFAST.getValue();
 				} else if (mealType == MealType.LUNCH) {
 					currentMealData = dietData.lunch.get(0);
+					data = new AlarmData();
 					data.musicLink = MealType.LUNCH.getValue();
 				} else if (mealType == MealType.DINNER) {
 					currentMealData = dietData.dinner.get(0);
+					data = new AlarmData();
 					data.musicLink = MealType.DINNER.getValue();
 				}
 				if (currentMealData != null) {

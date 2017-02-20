@@ -90,26 +90,28 @@ public class AlarmService extends Service {
 						try {
 							Assistant serviceAssistant = (Assistant) serviceClass.newInstance();
 							Response response = serviceAssistant.getResponse(null, null, null);
-							String content = response.getResponseData();
+							if (response != null) {
+								String content = response.getResponseData();
 
-							AlarmData data = GsonUtil.getEntityFromJson(content, new TypeToken<AlarmData>() {
-							});
+								AlarmData data = GsonUtil.getEntityFromJson(content, new TypeToken<AlarmData>() {
+								});
 
-							mediaPlayer = MediaUtil.playMusic(context, MusicPlaySource.LOCAL, data.musicLink, false,
-									new MediaPlayer.OnCompletionListener() {
-										@Override
-										public void onCompletion(MediaPlayer arg0) {
-											try {
-												excuteService(context);
-											} catch (Exception e) {
-												loger.info(ExceptionUtil.getStackTrace(e));
+								mediaPlayer = MediaUtil.playMusic(context, MusicPlaySource.LOCAL, data.musicLink, false,
+										new MediaPlayer.OnCompletionListener() {
+											@Override
+											public void onCompletion(MediaPlayer arg0) {
+												try {
+													excuteService(context);
+												} catch (Exception e) {
+													loger.info(ExceptionUtil.getStackTrace(e));
+												}
 											}
-										}
-									});
+										});
 
-							NotificationUtil.showNotification(context, data.ticker, data.title, data.text, data.subText,
-									DateUtil.getCurrentTimeString(), data.iconLink, Integer.parseInt(serviceId), null);
-
+								NotificationUtil.showNotification(context, data.ticker, data.title, data.text,
+										data.subText, DateUtil.getCurrentTimeString(), data.iconLink,
+										Integer.parseInt(serviceId), null);
+							}
 						} catch (Exception e) {
 							loger.error("ExcuteService ShowNotification failed:" + ExceptionUtil.getStackTrace(e));
 						}
