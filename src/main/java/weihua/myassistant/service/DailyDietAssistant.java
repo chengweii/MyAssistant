@@ -18,6 +18,7 @@ import weihua.myassistant.request.RequestType;
 import weihua.myassistant.response.CommonResponse;
 import weihua.myassistant.response.Response;
 import weihua.myassistant.service.DailyDietAssistant.DietData.MealData;
+import weihua.myassistant.service.SpecialDateAssistant.SpecialDate;
 import weihua.myassistant.util.DateUtil;
 import weihua.myassistant.util.DateUtil.TimePeriod;
 import weihua.myassistant.util.FileUtil;
@@ -197,12 +198,6 @@ public class DailyDietAssistant implements Assistant {
 			index++;
 		}
 		return result;
-	}
-
-	static class SpecialDate {
-		public String date;
-		public boolean isHoliday;
-		public List<String> specialTags;
 	}
 
 	static class DietData {
