@@ -2,6 +2,7 @@ package weihua.myassistant.ui.alarm;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
@@ -93,11 +94,12 @@ public class AlarmService extends Service {
 							if (response != null) {
 								String content = response.getResponseData();
 
-								AlarmData data = GsonUtil.getEntityFromJson(content, new TypeToken<AlarmData>() {
-								});
+								List<AlarmData> dataList = GsonUtil.getEntityFromJson(content,
+										new TypeToken<List<AlarmData>>() {
+										});
 
-								mediaPlayer = MediaUtil.playMusic(context, MusicPlaySource.LOCAL, data.musicLink, false,
-										new MediaPlayer.OnCompletionListener() {
+								mediaPlayer = MediaUtil.playMusic(context, MusicPlaySource.LOCAL,
+										dataList.get(0).musicLink, false, new MediaPlayer.OnCompletionListener() {
 											@Override
 											public void onCompletion(MediaPlayer arg0) {
 												try {
@@ -108,9 +110,12 @@ public class AlarmService extends Service {
 											}
 										});
 
-								NotificationUtil.showNotification(context, data.ticker, data.title, data.text,
-										data.subText, DateUtil.getCurrentTimeString(), data.iconLink,
-										Integer.parseInt(serviceId), null);
+								for (AlarmData data : dataList) {
+									NotificationUtil.showNotification(context, data.ticker, data.title, data.text,
+											data.subText, DateUtil.getCurrentTimeString(), data.iconLink,
+											Integer.parseInt(serviceId), null);
+								}
+
 							}
 						} catch (Exception e) {
 							loger.error("ExcuteService ShowNotification failed:" + ExceptionUtil.getStackTrace(e));

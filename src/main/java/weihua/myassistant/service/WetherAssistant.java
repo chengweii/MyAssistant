@@ -1,6 +1,8 @@
 package weihua.myassistant.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
@@ -26,8 +28,10 @@ public class WetherAssistant implements Assistant {
 		Response response = null;
 		AlarmData data = getCurrentWether();
 		if (data != null) {
+			List<AlarmData> dataList = new ArrayList<AlarmData>();
+			dataList.add(data);
 			response = new CommonResponse(true);
-			response.setResponseData(GsonUtil.toJson(data));
+			response.setResponseData(GsonUtil.toJson(dataList));
 		}
 
 		return response;

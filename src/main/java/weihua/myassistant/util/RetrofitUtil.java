@@ -1,10 +1,6 @@
 package weihua.myassistant.util;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-
-import com.google.gson.reflect.TypeToken;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -18,7 +14,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Url;
-import weihua.myassistant.service.ScheduleAssistant.Task;
 
 public class RetrofitUtil {
 
@@ -67,13 +62,7 @@ public class RetrofitUtil {
 
 		Response<ResponseBody> taskResponse = taskResult.execute();
 		String taskContent = taskResponse.body().string();
-		List<Task> taskList = GsonUtil.<ArrayList<Task>> getEntityFromJson(taskContent,
-				new TypeToken<ArrayList<Task>>() {
-				});
-
-		for (Task t : taskList) {
-			System.out.println(t.title);
-		}
+		System.out.println(taskContent);
 	}
 
 	public static void enqueue() throws Exception {
@@ -122,7 +111,7 @@ public class RetrofitUtil {
 		});
 	}
 
-	public static class LoginInfo {
+	static class LoginInfo {
 		public String username;
 		public String password;
 	}

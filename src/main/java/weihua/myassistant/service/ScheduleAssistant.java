@@ -9,7 +9,9 @@ import com.google.gson.reflect.TypeToken;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import weihua.myassistant.context.Context;
+import weihua.myassistant.data.AlarmData;
 import weihua.myassistant.request.RequestType;
+import weihua.myassistant.response.CommonResponse;
 import weihua.myassistant.response.Response;
 import weihua.myassistant.util.GsonUtil;
 import weihua.myassistant.util.RetrofitUtil;
@@ -18,15 +20,27 @@ public class ScheduleAssistant implements Assistant {
 
 	@Override
 	public Response getResponse(String request, RequestType requestType, Context context) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Response response = null;
+		AlarmData data = getCurrentTask();
+		if (data != null) {
+			List<AlarmData> dataList = new ArrayList<AlarmData>();
+			dataList.add(data);
+			response = new CommonResponse(true);
+			response.setResponseData(GsonUtil.toJson(dataList));
+		}
+
+		return response;
 	}
 
 	public static void main(String[] args) throws Exception {
 		getTaskListFromDida365("222@qq.com", "222");
 	}
 
-	public static List<Task> getTaskListFromDida365(String username, String password) throws Exception {
+	private static AlarmData getCurrentTask() {
+		return null;
+	}
+
+	private static List<Task> getTaskListFromDida365(String username, String password) throws Exception {
 		LoginInfo loginInfo = new LoginInfo();
 		loginInfo.username = username;
 		loginInfo.password = password;
@@ -54,12 +68,12 @@ public class ScheduleAssistant implements Assistant {
 		return taskList;
 	}
 
-	public static class LoginInfo {
+	static class LoginInfo {
 		public String username;
 		public String password;
 	}
 
-	public static class Task {
+	static class Task {
 		public String id;
 		public String deleted;
 		public String startDate;

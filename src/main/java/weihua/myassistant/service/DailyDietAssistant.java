@@ -12,8 +12,6 @@ import org.jsoup.select.Elements;
 
 import com.google.gson.reflect.TypeToken;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
 import weihua.myassistant.context.Context;
 import weihua.myassistant.data.AlarmData;
 import weihua.myassistant.request.RequestType;
@@ -22,10 +20,8 @@ import weihua.myassistant.response.Response;
 import weihua.myassistant.service.DailyDietAssistant.DietData.MealData;
 import weihua.myassistant.util.DateUtil;
 import weihua.myassistant.util.DateUtil.TimePeriod;
-import weihua.myassistant.util.ExceptionUtil;
 import weihua.myassistant.util.FileUtil;
 import weihua.myassistant.util.GsonUtil;
-import weihua.myassistant.util.RetrofitUtil;
 
 public class DailyDietAssistant implements Assistant {
 
@@ -35,40 +31,15 @@ public class DailyDietAssistant implements Assistant {
 
 	private static final String dietWebPath = "http://www.jianshu.com/p/7fb9dfe42c53";
 
-	private static final String specialDatePath = FileUtil.getInnerAssistantFileSDCardPath()
-			+ "specialdate/specialdate.json";
-
-	private static final String specialDateWebPath = "https://raw.githubusercontent.com/chengweii/myassistant/develop/src/main/source/assistant/specialdate/specialdate.json";
-
-	private static List<SpecialDate> specialDateList = null;
-
-	static {
-		try {
-			if (FileUtil.isFileExists(specialDatePath)) {
-				String json = FileUtil.getFileContent(specialDatePath);
-				specialDateList = GsonUtil.getEntityFromJson(json, new TypeToken<List<SpecialDate>>() {
-				});
-			} else {
-				Call<ResponseBody> result = RetrofitUtil.retrofitService.get(specialDateWebPath, "");
-
-				retrofit2.Response<ResponseBody> response = result.execute();
-				String json = response.body().string();
-				specialDateList = GsonUtil.getEntityFromJson(json, new TypeToken<List<SpecialDate>>() {
-				});
-				FileUtil.writeFileContent(json, specialDatePath);
-			}
-		} catch (Exception e) {
-			loger.info(ExceptionUtil.getStackTrace(e));
-		}
-	}
-
 	@Override
 	public Response getResponse(String request, RequestType requestType, Context context) throws Exception {
 		Response response = null;
 		AlarmData data = getCurrentDiet();
 		if (data != null) {
+			List<AlarmData> dataList = new ArrayList<AlarmData>();
+			dataList.add(data);
 			response = new CommonResponse(true);
-			response.setResponseData(GsonUtil.toJson(data));
+			response.setResponseData(GsonUtil.toJson(dataList));
 		}
 
 		return response;
@@ -132,7 +103,7 @@ public class DailyDietAssistant implements Assistant {
 		}
 
 		String currentDate = DateUtil.getCurrentDateString();
-		for (SpecialDate specialDate : specialDateList) {
+		for (SpecialDate specialDate : SpecialDateAssistant.specialDateList) {
 			if (currentDate.equals(specialDate.date) && !specialDate.isHoliday) {
 				isWorkDate = true;
 				break;
