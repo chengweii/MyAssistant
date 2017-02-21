@@ -21,6 +21,7 @@ import weihua.myassistant.response.CommonResponse;
 import weihua.myassistant.response.Response;
 import weihua.myassistant.service.DailyDietAssistant.DietData.MealData;
 import weihua.myassistant.util.DateUtil;
+import weihua.myassistant.util.DateUtil.TimePeriod;
 import weihua.myassistant.util.ExceptionUtil;
 import weihua.myassistant.util.FileUtil;
 import weihua.myassistant.util.GsonUtil;
@@ -32,8 +33,12 @@ public class DailyDietAssistant implements Assistant {
 
 	private static final String dietPath = FileUtil.getInnerAssistantFileSDCardPath() + "dailydiet/dailydiet.json";
 
+	private static final String dietWebPath = "http://www.jianshu.com/p/7fb9dfe42c53";
+
 	private static final String specialDatePath = FileUtil.getInnerAssistantFileSDCardPath()
 			+ "specialdate/specialdate.json";
+
+	private static final String specialDateWebPath = "https://raw.githubusercontent.com/chengweii/myassistant/develop/src/main/source/assistant/specialdate/specialdate.json";
 
 	private static List<SpecialDate> specialDateList = null;
 
@@ -44,9 +49,7 @@ public class DailyDietAssistant implements Assistant {
 				specialDateList = GsonUtil.getEntityFromJson(json, new TypeToken<List<SpecialDate>>() {
 				});
 			} else {
-				Call<ResponseBody> result = RetrofitUtil.retrofitService.get(
-						"https://raw.githubusercontent.com/chengweii/myassistant/develop/src/main/source/assistant/specialdate/specialdate.json",
-						"");
+				Call<ResponseBody> result = RetrofitUtil.retrofitService.get(specialDateWebPath, "");
 
 				retrofit2.Response<ResponseBody> response = result.execute();
 				String json = response.body().string();
@@ -152,13 +155,12 @@ public class DailyDietAssistant implements Assistant {
 	}
 
 	private static MealType timeMatching() {
-		Calendar cal = Calendar.getInstance();
-		int hour = cal.get(Calendar.HOUR_OF_DAY);
-		if (hour == 7 || hour == 8) {
+		TimePeriod timePeriod = DateUtil.getCurrentTimePeriod();
+		if (timePeriod == TimePeriod.MORNING) {
 			return MealType.BREAKFAST;
-		} else if (hour == 11 || hour == 12) {
+		} else if (timePeriod == TimePeriod.NOON) {
 			return MealType.LUNCH;
-		} else if (hour == 18 || hour == 19) {
+		} else if (timePeriod == TimePeriod.DUSK) {
 			return MealType.DINNER;
 		}
 		return null;
@@ -167,7 +169,7 @@ public class DailyDietAssistant implements Assistant {
 	private static List<DietData> getDietDataFromJianshu() throws Exception {
 		List<DietData> dietDataList = new ArrayList<DietData>();
 
-		Document doc = Jsoup.connect("http://www.jianshu.com/p/7fb9dfe42c53").get();
+		Document doc = Jsoup.connect(dietWebPath).get();
 		Elements showContent = doc.getElementsByAttributeValue("class", "show-content");
 		Element rootUl = showContent.get(0).getElementsByTag("ul").get(0);
 		Elements liList = rootUl.children();

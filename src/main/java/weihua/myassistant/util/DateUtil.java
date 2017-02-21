@@ -64,7 +64,7 @@ public class DateUtil {
 		return null;
 	}
 
-	static enum TimePeriod {
+	public static enum TimePeriod {
 
 		/**
 		 * 早晨
