@@ -3,6 +3,7 @@ package weihua.myassistant.service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
@@ -10,27 +11,27 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import weihua.myassistant.context.Context;
 import weihua.myassistant.data.AlarmData;
-import weihua.myassistant.request.RequestType;
-import weihua.myassistant.response.CommonResponse;
+import weihua.myassistant.data.Data;
+import weihua.myassistant.data.ServiceConfig;
 import weihua.myassistant.response.Response;
+import weihua.myassistant.response.TextResponse;
 import weihua.myassistant.util.GsonUtil;
 
-public class WetherAssistant implements Assistant {
+public class WetherAssistant implements AssistantService {
 
 	private static Logger loger = Logger.getLogger(DailyDietAssistant.class);
 
 	private static final String wetherInfoUrl = "https://tianqi.moji.com/weather/china/beijing/tongzhou-district";
 
 	@Override
-	public Response getResponse(String request, RequestType requestType, Context context) throws Exception {
+	public Response getResponse(String request, Map<String,Data> serviceData,ServiceConfig serviceConfig) throws Exception {
 		Response response = null;
 		AlarmData data = getCurrentWether();
 		if (data != null) {
 			List<AlarmData> dataList = new ArrayList<AlarmData>();
 			dataList.add(data);
-			response = new CommonResponse(true);
+			response = new TextResponse();
 			response.setResponseData(GsonUtil.toJson(dataList));
 		}
 

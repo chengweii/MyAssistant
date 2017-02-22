@@ -1,6 +1,7 @@
 package weihua.myassistant;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -149,12 +150,10 @@ public class MainActivity extends Activity {
 		try {
 			switch (menuItem.getItemId()) {
 			case R.id.action_loadresponse:
-				alarmShow();
-				showMsg("service started");
+				alarmBind();
 				break;
 			case R.id.action_edittopic:
 				alarmCancel();
-				showMsg("service canceled");
 				break;
 			case R.id.action_aboutme:
 				TopicDataLoadUtil.loadAllTopicDataFromWeb();
@@ -169,14 +168,19 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-	private void alarmShow() {
-		AlarmUtil.startAlarmRepeating(this, Constans.DAILYDIET_ALARM_ID, DateUtil.getTimeFromCurrent(10), 40000,
-				String.valueOf(Constans.DAILYDIET_ALARM_ID), String.valueOf(Constans.DAILYDIET_ALARM_ID));
+	private void alarmBind() {
+		AlarmUtil.startAlarmRepeating(this, Constans.ALARM_SERVICE_ID, DateUtil.getTimeFromCurrent(1),
+				AlarmManager.INTERVAL_FIFTEEN_MINUTES, "", "");
+		showMsg("service started");
 	}
 
 	private void alarmCancel() {
-		AlarmUtil.stopAlarm(this, Constans.DAILYDIET_ALARM_ID);
+		AlarmUtil.stopAlarm(this, Constans.ALARM_SERVICE_ID);
 		ServiceUtil.stopService(this, AlarmService.class);
+		showMsg("service canceled");
+		finish();
+		System.exit(0);
+		android.os.Process.killProcess(android.os.Process.myPid());
 	}
 
 	@Override
@@ -209,6 +213,8 @@ public class MainActivity extends Activity {
 		}
 
 		initView();
+
+		alarmBind();
 
 	}
 

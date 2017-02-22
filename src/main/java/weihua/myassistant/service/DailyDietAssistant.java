@@ -3,6 +3,7 @@ package weihua.myassistant.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
@@ -12,11 +13,11 @@ import org.jsoup.select.Elements;
 
 import com.google.gson.reflect.TypeToken;
 
-import weihua.myassistant.context.Context;
 import weihua.myassistant.data.AlarmData;
-import weihua.myassistant.request.RequestType;
-import weihua.myassistant.response.CommonResponse;
+import weihua.myassistant.data.Data;
+import weihua.myassistant.data.ServiceConfig;
 import weihua.myassistant.response.Response;
+import weihua.myassistant.response.TextResponse;
 import weihua.myassistant.service.DailyDietAssistant.DietData.MealData;
 import weihua.myassistant.service.SpecialDateAssistant.SpecialDate;
 import weihua.myassistant.util.DateUtil;
@@ -24,7 +25,7 @@ import weihua.myassistant.util.DateUtil.TimePeriod;
 import weihua.myassistant.util.FileUtil;
 import weihua.myassistant.util.GsonUtil;
 
-public class DailyDietAssistant implements Assistant {
+public class DailyDietAssistant implements AssistantService {
 
 	private static Logger loger = Logger.getLogger(DailyDietAssistant.class);
 
@@ -33,13 +34,13 @@ public class DailyDietAssistant implements Assistant {
 	private static final String dietWebPath = "http://www.jianshu.com/p/7fb9dfe42c53";
 
 	@Override
-	public Response getResponse(String request, RequestType requestType, Context context) throws Exception {
+	public Response getResponse(String request, Map<String,Data> serviceData,ServiceConfig serviceConfig) throws Exception {
 		Response response = null;
 		AlarmData data = getCurrentDiet();
 		if (data != null) {
 			List<AlarmData> dataList = new ArrayList<AlarmData>();
 			dataList.add(data);
-			response = new CommonResponse(true);
+			response = new TextResponse();
 			response.setResponseData(GsonUtil.toJson(dataList));
 		}
 

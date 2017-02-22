@@ -11,18 +11,18 @@ import com.google.gson.reflect.TypeToken;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import weihua.myassistant.context.Context;
 import weihua.myassistant.data.AlarmData;
-import weihua.myassistant.request.RequestType;
-import weihua.myassistant.response.CommonResponse;
+import weihua.myassistant.data.Data;
+import weihua.myassistant.data.ServiceConfig;
 import weihua.myassistant.response.Response;
+import weihua.myassistant.response.TextResponse;
 import weihua.myassistant.util.DateUtil;
 import weihua.myassistant.util.ExceptionUtil;
 import weihua.myassistant.util.FileUtil;
 import weihua.myassistant.util.GsonUtil;
 import weihua.myassistant.util.RetrofitUtil;
 
-public class SpecialDateAssistant implements Assistant {
+public class SpecialDateAssistant implements AssistantService {
 
 	private static Logger loger = Logger.getLogger(SpecialDateAssistant.class);
 
@@ -45,11 +45,11 @@ public class SpecialDateAssistant implements Assistant {
 	}
 
 	@Override
-	public Response getResponse(String request, RequestType requestType, Context context) throws Exception {
+	public Response getResponse(String request, Map<String,Data> serviceData,ServiceConfig serviceConfig) throws Exception {
 		Response response = null;
 		List<AlarmData> dataList = getCurrentSpecialDate();
 		if (dataList != null && dataList.size() > 0) {
-			response = new CommonResponse(true);
+			response = new TextResponse();
 			response.setResponseData(GsonUtil.toJson(dataList));
 		}
 

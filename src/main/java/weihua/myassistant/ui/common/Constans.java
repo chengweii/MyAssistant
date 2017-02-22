@@ -10,8 +10,12 @@ public class Constans {
 
 	public static final int WETHER_ALARM_ID = 201;
 
-	public static final int HOLIDAY_ALARM_ID = 202;
-	
+	public static final int SPECIALDATE_ALARM_ID = 202;
+
 	public static final int DAILYDIET_ALARM_ID = 203;
-	
+
+	public static final int SCHEDULE_ALARM_ID = 204;
+
+	public static final int TRAFFIC_ALARM_ID = 205;
+
 }

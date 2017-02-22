@@ -8,24 +8,24 @@ import com.google.gson.reflect.TypeToken;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import weihua.myassistant.context.Context;
 import weihua.myassistant.data.AlarmData;
-import weihua.myassistant.request.RequestType;
-import weihua.myassistant.response.CommonResponse;
+import weihua.myassistant.data.Data;
+import weihua.myassistant.data.ServiceConfig;
 import weihua.myassistant.response.Response;
+import weihua.myassistant.response.TextResponse;
 import weihua.myassistant.util.GsonUtil;
 import weihua.myassistant.util.RetrofitUtil;
 
-public class ScheduleAssistant implements Assistant {
+public class ScheduleAssistant implements AssistantService {
 
 	@Override
-	public Response getResponse(String request, RequestType requestType, Context context) throws Exception {
+	public Response getResponse(String request, Map<String,Data> serviceData,ServiceConfig serviceConfig) throws Exception {
 		Response response = null;
 		AlarmData data = getCurrentTask();
 		if (data != null) {
 			List<AlarmData> dataList = new ArrayList<AlarmData>();
 			dataList.add(data);
-			response = new CommonResponse(true);
+			response = new TextResponse();
 			response.setResponseData(GsonUtil.toJson(dataList));
 		}
 

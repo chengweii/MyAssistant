@@ -1,29 +1,25 @@
 package weihua.myassistant.service;
 
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 
-import com.google.gson.reflect.TypeToken;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import weihua.myassistant.context.Context;
 import weihua.myassistant.data.AlarmData;
-import weihua.myassistant.request.RequestType;
+import weihua.myassistant.data.Data;
+import weihua.myassistant.data.ServiceConfig;
 import weihua.myassistant.response.Response;
 import weihua.myassistant.util.AmapUtil;
-import weihua.myassistant.util.GsonUtil;
-import weihua.myassistant.util.RetrofitUtil;
 import weihua.myassistant.util.AmapUtil.Param;
 import weihua.myassistant.util.AmapUtil.TrafficDirection;
 import weihua.myassistant.util.AmapUtil.WalkParam;
 
-public class TrafficAssistant implements Assistant {
+public class TrafficAssistant implements AssistantService {
 
 	private static Logger loger = Logger.getLogger(TrafficAssistant.class);
 
 
 	@Override
-	public Response getResponse(String request, RequestType requestType, Context context) throws Exception {
+	public Response getResponse(String request, Map<String,Data> serviceData,ServiceConfig serviceConfig) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -44,9 +40,5 @@ public class TrafficAssistant implements Assistant {
 		alarmData.ticker = trafficDirection.route.paths.get(0).duration;
 		return alarmData;
 	}
-
-
-
-
 
 }

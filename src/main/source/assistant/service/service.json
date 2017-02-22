@@ -1,0 +1,21 @@
+[ {
+	"serviceId" : 201,
+	"enable" : true,
+	"excuteTimePeriod" : "MORNING,NOON,DUSK"
+}, {
+	"serviceId" : 202,
+	"enable" : true,
+	"excuteTimePeriod" : "MORNING,BEFORENOON,NOON,AFTERNOON,DUSK,NIGHT"
+}, {
+	"serviceId" : 203,
+	"enable" : true,
+	"excuteTimePeriod" : "MORNING,NOON,DUSK"
+}, {
+	"serviceId" : 204,
+	"enable" : true,
+	"excuteTimePeriod" : "MORNING,BEFORENOON,NOON,AFTERNOON,DUSK,NIGHT"
+}, {
+	"serviceId" : 205,
+	"enable" : true,
+	"excuteTimePeriod" : "MORNING,DUSK"
+} ]

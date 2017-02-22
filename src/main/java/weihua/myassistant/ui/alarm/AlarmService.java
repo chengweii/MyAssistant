@@ -17,10 +17,14 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Environment;
 import android.os.IBinder;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 import weihua.myassistant.data.AlarmData;
-import weihua.myassistant.data.TopicType;
+import weihua.myassistant.data.Data;
+import weihua.myassistant.data.ServiceConfig;
+import weihua.myassistant.data.ServiceType;
 import weihua.myassistant.response.Response;
-import weihua.myassistant.service.Assistant;
+import weihua.myassistant.service.AssistantService;
 import weihua.myassistant.ui.common.Constans;
 import weihua.myassistant.ui.util.Log4JUtil;
 import weihua.myassistant.ui.util.MediaUtil;
@@ -30,10 +34,19 @@ import weihua.myassistant.util.DateUtil;
 import weihua.myassistant.util.ExceptionUtil;
 import weihua.myassistant.util.FileUtil;
 import weihua.myassistant.util.GsonUtil;
+import weihua.myassistant.util.RetrofitUtil;
 
 public class AlarmService extends Service {
 
 	private static Logger loger = Logger.getLogger(AlarmService.class);
+
+	private static final String serviceConfigPath = FileUtil.getInnerAssistantFileSDCardPath() + "service/service.json";
+
+	private static final String serviceConfigWebPath = "https://raw.githubusercontent.com/chengweii/myassistant/develop/src/main/source/assistant/service/service.json";
+
+	private static List<ServiceConfig> serviceConfigList;
+
+	private static Map<String, Class<?>> servicesMap;
 
 	private MediaPlayer mediaPlayer;
 
@@ -41,13 +54,12 @@ public class AlarmService extends Service {
 
 	private Queue<String> serviceQueue = new LinkedList<String>();
 
-	private static Map<String, Class<?>> servicesMap = new HashMap<String, Class<?>>();
+	private Map<String, Data> serviceData = new HashMap<String, Data>();
 
 	static {
-		FileUtil.assistantRootPath = Environment.getExternalStorageDirectory().getPath() + "/"
-				+ Constans.ASSISTANT_ROOT_PATH_NAME + "/";
-		Log4JUtil.configure();
-		servicesMap.put(String.valueOf(Constans.DAILYDIET_ALARM_ID), TopicType.DAILYDIET.getClz());
+		initLog();
+		initServiceConfigList();
+		initServicesMap();
 	}
 
 	@Override
@@ -57,9 +69,7 @@ public class AlarmService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		String extraInfo = intent.getStringExtra(Constans.ALARM_EXTRA_INFO);
-		serviceQueue.offer(extraInfo);
-		loger.info("Current serviceId:" + intent.getExtras());
+		offerAllService();
 		try {
 			if (!isRunning) {
 				isRunning = true;
@@ -67,7 +77,7 @@ public class AlarmService extends Service {
 						"Please keep me here with you.⊙﹏⊙ ");
 			}
 
-			if (extraInfo != null && !"".equals(extraInfo)) {
+			if (serviceQueue.size() > 0) {
 				if (mediaPlayer == null || !mediaPlayer.isPlaying()) {
 					excuteService(this);
 				}
@@ -82,6 +92,8 @@ public class AlarmService extends Service {
 		if (serviceQueue.size() > 0) {
 			final String serviceId = serviceQueue.poll();
 
+			loger.info("The service currently running is:" + serviceId);
+
 			final Class<?> serviceClass = servicesMap.get(serviceId);
 			if (serviceClass != null) {
 
@@ -89,8 +101,9 @@ public class AlarmService extends Service {
 					@Override
 					public void run() {
 						try {
-							Assistant serviceAssistant = (Assistant) serviceClass.newInstance();
-							Response response = serviceAssistant.getResponse(null, null, null);
+							AssistantService serviceAssistant = (AssistantService) serviceClass.newInstance();
+							Response response = serviceAssistant.getResponse(null, serviceData,
+									getServiceConfig(serviceId));
 							if (response != null) {
 								String content = response.getResponseData();
 
@@ -128,6 +141,23 @@ public class AlarmService extends Service {
 		}
 	}
 
+	private void offerAllService() {
+		for (ServiceType serviceType : ServiceType.values()) {
+			serviceQueue.offer(String.valueOf(serviceType.getCode()));
+		}
+	}
+
+	private ServiceConfig getServiceConfig(String serviceId) {
+		ServiceConfig serviceConfig = null;
+		for (ServiceConfig entity : serviceConfigList) {
+			if (entity.serviceId.equals(serviceId)) {
+				serviceConfig = entity;
+				break;
+			}
+		}
+		return serviceConfig;
+	}
+
 	private void setForegroundService(String ticker, String title, String text) throws Exception {
 		Notification notification = NotificationUtil.showNotification(this, ticker, title, text, null, null, null,
 				Constans.ALARM_SERVICE_ID, null);
@@ -137,6 +167,39 @@ public class AlarmService extends Service {
 	@Override
 	public IBinder onBind(Intent intent) {
 		throw new UnsupportedOperationException("Not yet implemented");
+	}
+
+	private static void initServicesMap() {
+		servicesMap = new HashMap<String, Class<?>>();
+		for (ServiceType serviceType : ServiceType.values()) {
+			servicesMap.put(String.valueOf(serviceType.getCode()), serviceType.getClz());
+		}
+	}
+
+	private static void initServiceConfigList() {
+		try {
+			if (FileUtil.isFileExists(serviceConfigPath)) {
+				String json = FileUtil.getFileContent(serviceConfigPath);
+				serviceConfigList = GsonUtil.getEntityFromJson(json, new TypeToken<List<ServiceConfig>>() {
+				});
+			} else {
+				Call<ResponseBody> result = RetrofitUtil.retrofitService.get(serviceConfigWebPath, "");
+
+				retrofit2.Response<ResponseBody> response = result.execute();
+				String json = response.body().string();
+				serviceConfigList = GsonUtil.getEntityFromJson(json, new TypeToken<List<ServiceConfig>>() {
+				});
+				FileUtil.writeFileContent(json, serviceConfigPath);
+			}
+		} catch (Exception e) {
+			loger.info(ExceptionUtil.getStackTrace(e));
+		}
+	}
+
+	private static void initLog() {
+		FileUtil.assistantRootPath = Environment.getExternalStorageDirectory().getPath() + "/"
+				+ Constans.ASSISTANT_ROOT_PATH_NAME + "/";
+		Log4JUtil.configure();
 	}
 
 }

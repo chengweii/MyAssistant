@@ -8,30 +8,11 @@ import weihua.myassistant.service.WikiAssistant;
 
 public enum TopicType {
 
-	/**
-	 * 帮助、咨询助手
-	 */
 	HELP("Help", HelpAssistant.class),
 
-	/**
-	 * 介绍助手
-	 */
 	INTRODUCE("Introduce", IntroduceAssistant.class),
-	
-	/**
-	 * 知识助手
-	 */
-	WIKI("Wiki", WikiAssistant.class),
-	
-	/**
-	 * 日常饮食助手
-	 */
-	DAILYDIET("DailyDiet", DailyDietAssistant.class),
 
-	/**
-	 * 日程助手
-	 */
-	SCHEDULE("Schedule", ScheduleAssistant.class);
+	WIKI("Wiki", WikiAssistant.class);
 
 	private TopicType(String code, Class<?> clz) {
 		this.code = code;
