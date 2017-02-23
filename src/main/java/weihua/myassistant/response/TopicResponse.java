@@ -69,7 +69,7 @@ public class TopicResponse implements Response {
 				}
 				sb.append("</p>");
 			} else {
-				sb.append(Constants.NOTOPICMSG.replace(Constants.KEYWORD_SPACE, topicName));
+				sb.append(Constants.NOTOPIC_MSG.replace(Constants.KEYWORD_SPACE, topicName));
 			}
 		} else {
 			Date date = new Date();
@@ -88,10 +88,10 @@ public class TopicResponse implements Response {
 					sb.append(" choiceValue='");
 					sb.append(child.topicId);
 					sb.append("' style='");
-					if (i < Constants.COLORSARRAY.length) {
-						sb.append(Constants.MAINTOPICSTYLE.replace(Constants.KEYWORD_SPACE, Constants.COLORSARRAY[i]));
+					if (i < Constants.COLORS_ARRAY.length) {
+						sb.append(Constants.MAIN_TOPIC_STYLE.replace(Constants.KEYWORD_SPACE, Constants.COLORS_ARRAY[i]));
 					} else {
-						sb.append(Constants.MAINTOPICSTYLE.replace(Constants.KEYWORD_SPACE, Constants.COLORSARRAY[0]));
+						sb.append(Constants.MAIN_TOPIC_STYLE.replace(Constants.KEYWORD_SPACE, Constants.COLORS_ARRAY[0]));
 					}
 					sb.append("'>");
 					sb.append(child.topicText);
@@ -100,7 +100,7 @@ public class TopicResponse implements Response {
 				}
 				sb.append("</p>");
 			} else {
-				sb.append(Constants.NOTOPICMSG.replace(Constants.KEYWORD_SPACE, topicName));
+				sb.append(Constants.NOTOPIC_MSG.replace(Constants.KEYWORD_SPACE, topicName));
 			}
 		}
 

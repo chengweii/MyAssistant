@@ -8,10 +8,12 @@ public class AlarmData implements Data {
 	public String iconLink;
 	public String musicLink;
 	public String intentAction;
+	public String extraInfo;
 
 	@Override
 	public String toString() {
 		return "[title:" + title + ",text:" + text + ",subText:" + subText + ",ticker:" + ticker + ",iconLink:"
-				+ iconLink + ",musicLink:" + musicLink + ",intentAction:" + intentAction + "]";
+				+ iconLink + ",musicLink:" + musicLink + ",intentAction:" + intentAction + ",extraInfo:" + extraInfo
+				+ "]";
 	}
 }

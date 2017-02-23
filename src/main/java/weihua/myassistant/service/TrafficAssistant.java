@@ -1,5 +1,7 @@
 package weihua.myassistant.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -8,10 +10,12 @@ import com.google.gson.reflect.TypeToken;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import weihua.myassistant.common.Constants;
 import weihua.myassistant.data.AlarmData;
 import weihua.myassistant.data.Data;
 import weihua.myassistant.data.ServiceConfig;
 import weihua.myassistant.response.Response;
+import weihua.myassistant.response.TextResponse;
 import weihua.myassistant.util.AmapUtil;
 import weihua.myassistant.util.AmapUtil.IntegratedParam;
 import weihua.myassistant.util.AmapUtil.TrafficTransits;
@@ -32,8 +36,7 @@ public class TrafficAssistant implements AssistantService {
 	private static Location location = null;
 
 	private static final String trafficPath = FileUtil.getInnerAssistantFileSDCardPath() + "traffic/traffic.json";
-
-	private static final String trafficWebPath = "https://raw.githubusercontent.com/chengweii/myassistant/develop/src/main/source/assistant/traffic/traffic.json";
+	private static final String trafficWebPath = Constants.WEB_SOURCE_ROOT_PATH + "traffic/traffic.json";
 
 	static {
 		initLocation();
@@ -42,8 +45,15 @@ public class TrafficAssistant implements AssistantService {
 	@Override
 	public Response getResponse(String request, Map<String, Data> serviceData, ServiceConfig serviceConfig)
 			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Response response = null;
+		AlarmData data = getCurrentTraffic(serviceConfig);
+		if (data != null) {
+			List<AlarmData> dataList = new ArrayList<AlarmData>();
+			dataList.add(data);
+			response = new TextResponse();
+			response.setResponseData(GsonUtil.toJson(dataList));
+		}
+		return response;
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -92,6 +102,10 @@ public class TrafficAssistant implements AssistantService {
 			alarmData.ticker = fastestLine;
 			alarmData.title = fastestLine;
 			alarmData.text = otherLineInfo.toString();
+			alarmData.iconLink = "traffic/images/bus.png";
+			alarmData.intentAction = Constants.PACKAGE_NAME;
+			alarmData.extraInfo = GsonUtil.toJson(trafficTransits);
+			alarmData.musicLink="test1.mp3";
 		}
 
 		return alarmData;

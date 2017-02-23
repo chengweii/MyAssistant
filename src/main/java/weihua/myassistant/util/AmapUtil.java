@@ -197,8 +197,6 @@ public class AmapUtil {
 							public String duration;
 							public String distance;
 							public String polyline;
-							public String start_time;
-							public String end_time;
 							public String via_num;
 							public Station departure_stop;
 							public Station arrival_stop;

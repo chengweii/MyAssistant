@@ -11,6 +11,7 @@ import com.google.gson.reflect.TypeToken;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import weihua.myassistant.common.Constants;
 import weihua.myassistant.data.AlarmData;
 import weihua.myassistant.data.Data;
 import weihua.myassistant.data.ServiceConfig;
@@ -32,10 +33,10 @@ public class SpecialDateAssistant implements AssistantService {
 
 	private static final String specialDatePath = FileUtil.getInnerAssistantFileSDCardPath()
 			+ "specialdate/specialdate.json";
-	private static final String specialDateWebPath = "https://raw.githubusercontent.com/chengweii/myassistant/develop/src/main/source/assistant/specialdate/specialdate.json";
+	private static final String specialDateWebPath = Constants.WEB_SOURCE_ROOT_PATH + "specialdate/specialdate.json";
 	private static final String dateTagsPath = FileUtil.getInnerAssistantFileSDCardPath() + "specialdate/datetags.json";
-	private static final String dateTagsWebPath = "https://raw.githubusercontent.com/chengweii/myassistant/develop/src/main/source/assistant/specialdate/datetags.json";
-	
+	private static final String dateTagsWebPath = Constants.WEB_SOURCE_ROOT_PATH + "specialdate/datetags.json";
+
 	static {
 		initSpecialDateList();
 		initDateTags();
