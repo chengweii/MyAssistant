@@ -18,18 +18,15 @@ public class FileUtil {
 	 * 
 	 * @param content
 	 * @param filePath
+	 * @throws Exception
 	 */
-	public static void writeFileContent(String content, String filePath) {
-		try {
-			File file = new File(filePath);
-			if (!file.exists())
-				file.createNewFile();
-			FileOutputStream out = new FileOutputStream(file, false);
-			out.write(content.getBytes("utf-8"));
-			out.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public static void writeFileContent(String content, String filePath) throws Exception {
+		File file = new File(filePath);
+		if (!file.exists())
+			file.createNewFile();
+		FileOutputStream out = new FileOutputStream(file, false);
+		out.write(content.getBytes("utf-8"));
+		out.close();
 	}
 
 	/**
@@ -37,20 +34,17 @@ public class FileUtil {
 	 * 
 	 * @param filePath
 	 * @return
+	 * @throws Exception
 	 */
-	public static String getFileContent(String filePath) {
+	public static String getFileContent(String filePath) throws Exception {
 		String line;
 		StringBuilder stringBuilder = new StringBuilder();
-		try {
-			InputStreamReader streamReader = new InputStreamReader(new FileInputStream(new File(filePath)), "UTF-8");
-			BufferedReader reader = new BufferedReader(streamReader);
-			while ((line = reader.readLine()) != null) {
-				stringBuilder.append(line);
-			}
-			reader.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		InputStreamReader streamReader = new InputStreamReader(new FileInputStream(new File(filePath)), "UTF-8");
+		BufferedReader reader = new BufferedReader(streamReader);
+		while ((line = reader.readLine()) != null) {
+			stringBuilder.append(line);
 		}
+		reader.close();
 		return stringBuilder.toString();
 	}
 

@@ -156,7 +156,7 @@ public class TrafficAssistant implements AssistantService {
 				String json = response.body().string();
 				location = GsonUtil.getEntityFromJson(json, new TypeToken<Location>() {
 				});
-				FileUtil.writeFileContent(json, trafficWebPath);
+				FileUtil.writeFileContent(json, trafficPath);
 			}
 		} catch (Exception e) {
 			loger.info("Init location failed:" + ExceptionUtil.getStackTrace(e));

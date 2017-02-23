@@ -9,29 +9,29 @@ import weihua.myassistant.ui.common.Constans;
 
 public enum ServiceType {
 
-	DAILYDIET(Constans.DAILYDIET_ALARM_ID, DailyDietAssistant.class),
+	DAILYDIET(Constans.DAILYDIET_ALARM_ID, DailyDietAssistant.class.getName()),
 
-	SCHEDULE(Constans.SCHEDULE_ALARM_ID, ScheduleAssistant.class),
+	SCHEDULE(Constans.SCHEDULE_ALARM_ID, ScheduleAssistant.class.getName()),
 
-	SPECIALDATE(Constans.SPECIALDATE_ALARM_ID, SpecialDateAssistant.class),
+	SPECIALDATE(Constans.SPECIALDATE_ALARM_ID, SpecialDateAssistant.class.getName()),
 
-	TRAFFIC(Constans.TRAFFIC_ALARM_ID, TrafficAssistant.class),
+	TRAFFIC(Constans.TRAFFIC_ALARM_ID, TrafficAssistant.class.getName()),
 
-	WETHER(Constans.WETHER_ALARM_ID, WetherAssistant.class);
+	WETHER(Constans.WETHER_ALARM_ID, WetherAssistant.class.getName());
 
-	private ServiceType(int code, Class<?> clz) {
+	private ServiceType(int code, String clz) {
 		this.code = code;
 		this.clz = clz;
 	}
 
 	private int code;
-	private Class<?> clz;
+	private String clz;
 
 	public int getCode() {
 		return code;
 	}
 
-	public Class<?> getClz() {
+	public String getClz() {
 		return clz;
 	}
 

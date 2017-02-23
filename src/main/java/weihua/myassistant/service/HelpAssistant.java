@@ -85,7 +85,7 @@ public class HelpAssistant implements Assistant {
 		return response;
 	}
 
-	private List<ResponseData> loadTopicData(String topicName) {
+	private List<ResponseData> loadTopicData(String topicName) throws Exception {
 		List<ResponseData> responseDataList = new ArrayList<ResponseData>();
 		String responsePath = FileUtil.getInnerAssistantFileSDCardPath() + "response/" + topicName + ".json";
 		String responseJsonData = FileUtil.getFileContent(responsePath);
@@ -146,14 +146,14 @@ public class HelpAssistant implements Assistant {
 		return list;
 	}
 
-	public static String generateResponse(String topicName) {
+	public static String generateResponse(String topicName) throws Exception {
 		String responseMmPath = FileUtil.getInnerAssistantFileSDCardPath() + "response/" + topicName + ".mm";
 		String responseJsonPath = FileUtil.getInnerAssistantFileSDCardPath() + "response/" + topicName + ".json";
 		generateResponse(responseMmPath, responseJsonPath, topicName);
 		return "Load success,please restart your app.";
 	}
 
-	private static String generateResponse(String mmPath, String jsonPath, String topicName) {
+	private static String generateResponse(String mmPath, String jsonPath, String topicName) throws Exception {
 		String responseJsonString = "{}";
 		String responseJsonData = FileUtil.getFileContent(mmPath);
 		responseJsonData = responseJsonData.replaceAll(

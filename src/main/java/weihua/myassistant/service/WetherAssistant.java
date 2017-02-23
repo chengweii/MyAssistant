@@ -40,8 +40,8 @@ public class WetherAssistant implements AssistantService {
 	}
 
 	public static void main(String[] args) throws Exception {
-		AlarmData data = getCurrentWether();
-		loger.info("WetherInfo:" + data);
+		WetherInfo wetherInfo = getWetherInfoFromMoji();
+		loger.info("WetherInfo:" + wetherInfo);
 	}
 
 	private static AlarmData getCurrentWether() {
