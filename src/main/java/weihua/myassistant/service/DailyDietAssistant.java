@@ -21,6 +21,7 @@ import weihua.myassistant.response.TextResponse;
 import weihua.myassistant.service.DailyDietAssistant.DietData.MealData;
 import weihua.myassistant.service.SpecialDateAssistant.SpecialDate;
 import weihua.myassistant.util.DateUtil;
+import weihua.myassistant.util.ExceptionUtil;
 import weihua.myassistant.util.DateUtil.TimePeriod;
 import weihua.myassistant.util.FileUtil;
 import weihua.myassistant.util.GsonUtil;
@@ -29,12 +30,19 @@ public class DailyDietAssistant implements AssistantService {
 
 	private static Logger loger = Logger.getLogger(DailyDietAssistant.class);
 
+	private static List<DietData> dietDataList = null;
+
 	private static final String dietPath = FileUtil.getInnerAssistantFileSDCardPath() + "dailydiet/dailydiet.json";
 
 	private static final String dietWebPath = "http://www.jianshu.com/p/7fb9dfe42c53";
 
+	static {
+		initDietDataList();
+	}
+
 	@Override
-	public Response getResponse(String request, Map<String,Data> serviceData,ServiceConfig serviceConfig) throws Exception {
+	public Response getResponse(String request, Map<String, Data> serviceData, ServiceConfig serviceConfig)
+			throws Exception {
 		Response response = null;
 		AlarmData data = getCurrentDiet();
 		if (data != null) {
@@ -44,7 +52,7 @@ public class DailyDietAssistant implements AssistantService {
 			response.setResponseData(GsonUtil.toJson(dataList));
 		}
 
-		return response;
+		return null;
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -54,15 +62,6 @@ public class DailyDietAssistant implements AssistantService {
 
 	private static AlarmData getCurrentDiet() throws Exception {
 		AlarmData data = null;
-
-		List<DietData> dietDataList = null;
-		if (FileUtil.isFileExists(dietPath)) {
-			String json = FileUtil.getFileContent(dietPath);
-			dietDataList = GsonUtil.getEntityFromJson(json, new TypeToken<List<DietData>>() {
-			});
-		} else {
-			dietDataList = getDietDataFromJianshu();
-		}
 
 		MealData currentMealData = null;
 		MealType mealType = timeMatching();
@@ -137,6 +136,20 @@ public class DailyDietAssistant implements AssistantService {
 			return MealType.DINNER;
 		}
 		return null;
+	}
+
+	private static void initDietDataList() {
+		try {
+			if (FileUtil.isFileExists(dietPath)) {
+				String json = FileUtil.getFileContent(dietPath);
+				dietDataList = GsonUtil.getEntityFromJson(json, new TypeToken<List<DietData>>() {
+				});
+			} else {
+				dietDataList = getDietDataFromJianshu();
+			}
+		} catch (Exception e) {
+			loger.info("Init dietDataList failed:" + ExceptionUtil.getStackTrace(e));
+		}
 	}
 
 	private static List<DietData> getDietDataFromJianshu() throws Exception {

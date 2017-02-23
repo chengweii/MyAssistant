@@ -25,7 +25,8 @@ public class WetherAssistant implements AssistantService {
 	private static final String wetherInfoUrl = "https://tianqi.moji.com/weather/china/beijing/tongzhou-district";
 
 	@Override
-	public Response getResponse(String request, Map<String,Data> serviceData,ServiceConfig serviceConfig) throws Exception {
+	public Response getResponse(String request, Map<String, Data> serviceData, ServiceConfig serviceConfig)
+			throws Exception {
 		Response response = null;
 		AlarmData data = getCurrentWether();
 		if (data != null) {
@@ -35,7 +36,7 @@ public class WetherAssistant implements AssistantService {
 			response.setResponseData(GsonUtil.toJson(dataList));
 		}
 
-		return response;
+		return null;
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -114,7 +115,7 @@ public class WetherAssistant implements AssistantService {
 		return wetherInfo;
 	}
 
-	static class WetherInfo {
+	public static class WetherInfo {
 		public String areaName;
 		public String realTimeTemperature;
 		public String realTimeWeather;

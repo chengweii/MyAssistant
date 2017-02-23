@@ -10,7 +10,7 @@ public class DateUtil {
 	public static void main(String[] args) throws Exception {
 		System.out.println(getCurrentTimePeriod().getValue());
 	}
-	
+
 	public static long getTimeFromCurrent(int seconds) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());
@@ -35,7 +35,7 @@ public class DateUtil {
 
 	public static String getCurrentDateString() {
 		Date date = new Date(System.currentTimeMillis());
-		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		return dateFormat.format(date);
 	}
 
@@ -69,61 +69,67 @@ public class DateUtil {
 		/**
 		 * 早晨
 		 */
-		MORNING("早晨"),
+		MORNING("MORNING", "早晨"),
 
 		/**
 		 * 上午
 		 */
-		BEFORENOON("上午"),
+		BEFORENOON("BEFORENOON", "上午"),
 
 		/**
 		 * 中午
 		 */
-		NOON("中午"),
+		NOON("NOON", "中午"),
 
 		/**
 		 * 下午
 		 */
-		AFTERNOON("下午"),
+		AFTERNOON("AFTERNOON", "下午"),
 
 		/**
 		 * 傍晚
 		 */
-		DUSK("傍晚"),
+		DUSK("DUSK", "傍晚"),
 
 		/**
 		 * 晚上
 		 */
-		NIGHT("晚上"),
+		NIGHT("NIGHT", "晚上"),
 
 		/**
 		 * 深夜
 		 */
-		DEEPNIGHT("深夜"),
+		DEEPNIGHT("DEEPNIGHT", "深夜"),
 
 		/**
 		 * 午夜
 		 */
-		MIDNIGHT("午夜"),
+		MIDNIGHT("MIDNIGHT", "午夜"),
 
 		/**
 		 * 凌晨
 		 */
-		EARLYMORNING("凌晨");
+		EARLYMORNING("EARLYMORNING", "凌晨");
 
-		private TimePeriod(String value) {
+		private TimePeriod(String code, String value) {
+			this.code = code;
 			this.value = value;
 		}
 
+		private String code;
 		private String value;
+
+		public String getCode() {
+			return code;
+		}
 
 		public String getValue() {
 			return value;
 		}
 
-		public static TimePeriod fromValue(String value) {
+		public static TimePeriod fromCode(String code) {
 			for (TimePeriod entity : TimePeriod.values()) {
-				if (entity.getValue().equals(value)) {
+				if (entity.getCode().equals(code)) {
 					return entity;
 				}
 			}

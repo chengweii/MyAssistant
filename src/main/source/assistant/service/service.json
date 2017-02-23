@@ -17,5 +17,5 @@
 }, {
 	"serviceId" : 205,
 	"enable" : true,
-	"excuteTimePeriod" : "MORNING,DUSK"
+	"excuteTimePeriod" : "MORNING,DUSK,NIGHT"
 } ]

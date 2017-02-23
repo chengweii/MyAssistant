@@ -29,7 +29,7 @@ public class ScheduleAssistant implements AssistantService {
 			response.setResponseData(GsonUtil.toJson(dataList));
 		}
 
-		return response;
+		return null;
 	}
 
 	public static void main(String[] args) throws Exception {

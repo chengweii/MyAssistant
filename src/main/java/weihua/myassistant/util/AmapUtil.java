@@ -41,6 +41,15 @@ public class AmapUtil {
 		param3.waypoints = "116.572236,39.768194";
 		TrafficDirection trafficDirection3 = AmapUtil.<TrafficDirection, DrivingParam> getTrafficInfo(param3);
 		loger.info(trafficDirection3);
+
+		IntegratedParam param4 = new IntegratedParam();
+		param4.origin = "116.546101,39.755967";
+		param4.destination = "116.448545,39.834228";
+		param4.city = "北京";
+		param4.date = DateUtil.getCurrentDateString();
+		param4.time = DateUtil.getCurrentTimeString();
+		TrafficTransits trafficTransits = AmapUtil.<TrafficTransits, IntegratedParam> getTrafficInfo(param4);
+		loger.info(trafficTransits);
 	}
 
 	public static <R extends Result, P extends Param> R getTrafficInfo(P param) throws Exception {
@@ -62,6 +71,13 @@ public class AmapUtil {
 			response = result.execute();
 			json = response.body().string();
 			trafficResult = GsonUtil.getEntityFromJson(json, new TypeToken<TrafficDirection>() {
+			});
+		} else if (param instanceof IntegratedParam) {
+			apiUrl = getApiIntegratedUrl((IntegratedParam) param);
+			result = RetrofitUtil.retrofitService.get(apiUrl, "");
+			response = result.execute();
+			json = response.body().string();
+			trafficResult = GsonUtil.getEntityFromJson(json, new TypeToken<TrafficTransits>() {
 			});
 		} else if (param instanceof CircleParam) {
 			apiUrl = getApiCircleUrl((CircleParam) param);
@@ -90,6 +106,13 @@ public class AmapUtil {
 				+ param.destination;
 	}
 
+	private static String getApiIntegratedUrl(IntegratedParam param) {
+		return "http://restapi.amap.com/v3/direction/transit/integrated?key=" + key + "&origin=" + param.origin
+				+ "&destination=" + param.destination + "&city=" + param.city + "&strategy=" + param.strategy
+				+ "&nightflag=" + param.nightflag + "&date=" + param.date + "&time=" + param.time + "&cityd="
+				+ param.cityd;
+	}
+
 	private static String getApiDrivingUrl(DrivingParam param) {
 		return "http://restapi.amap.com/v3/direction/driving?key=" + key + "&origin=" + param.origin + "&destination="
 				+ param.destination + "&extensions=" + param.extensions + "&strategy=" + param.strategy + "&waypoints="
@@ -101,6 +124,17 @@ public class AmapUtil {
 		public String destination;
 	}
 
+	public static class IntegratedParam implements Param {
+		public String origin;
+		public String destination;
+		public String city;
+		public String cityd = "";
+		public String strategy = "0";
+		public String nightflag = "0";
+		public String date;
+		public String time;
+	}
+
 	public static class DrivingParam implements Param {
 		public String origin;
 		public String destination;
@@ -108,6 +142,78 @@ public class AmapUtil {
 		public String strategy = "0";
 		public String waypoints;
 		public String avoidpolygons;
+	}
+
+	public static class TrafficTransits implements Result {
+		public String status;
+		public String info;
+		public String infocode;
+		public String count;
+		public Route route;
+
+		public static class Route {
+			public String origin;
+			public String destination;
+			public String distance;
+			public String taxi_cost;
+			public List<Transit> transits;
+
+			public static class Transit {
+				public String cost;
+				public String duration;
+				public String nightflag;
+				public String walking_distance;
+				public String distance;
+				public String missed;
+				public List<Segment> segments;
+
+				public static class Segment {
+					public Walking walking;
+					public Bus bus;
+					public String nightflag;
+					public String walking_distance;
+
+					public static class Walking {
+						public String origin;
+						public String destination;
+						public String distance;
+						public String duration;
+						public List<Step> steps;
+
+						public static class Step {
+							public String instruction;
+							public String distance;
+							public String polyline;
+						}
+					}
+
+					public static class Bus {
+						public List<Busline> buslines;
+
+						public static class Busline {
+							public String id;
+							public String name;
+							public String type;
+							public String duration;
+							public String distance;
+							public String polyline;
+							public String start_time;
+							public String end_time;
+							public String via_num;
+							public Station departure_stop;
+							public Station arrival_stop;
+							public List<Station> via_stops;
+
+							public static class Station {
+								public String id;
+								public String name;
+								public String location;
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	public static class TrafficDirection implements Result {
@@ -128,9 +234,7 @@ public class AmapUtil {
 
 				public static class Step {
 					public String instruction;
-					public String road;
 					public String distance;
-					public String duration;
 					public String polyline;
 				}
 			}

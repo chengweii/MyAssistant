@@ -26,26 +26,24 @@ public class SpecialDateAssistant implements AssistantService {
 
 	private static Logger loger = Logger.getLogger(SpecialDateAssistant.class);
 
-	private static final String specialDatePath = FileUtil.getInnerAssistantFileSDCardPath()
-			+ "specialdate/specialdate.json";
-
-	private static final String specialDateWebPath = "https://raw.githubusercontent.com/chengweii/myassistant/develop/src/main/source/assistant/specialdate/specialdate.json";
-
 	public static List<SpecialDate> specialDateList = null;
-
-	private static final String dateTagsPath = FileUtil.getInnerAssistantFileSDCardPath() + "specialdate/datetags.json";
-
-	private static final String dateTagsWebPath = "https://raw.githubusercontent.com/chengweii/myassistant/develop/src/main/source/assistant/specialdate/datetags.json";
 
 	public static Map<String, DateTag> dateTags = new HashMap<String, DateTag>();
 
+	private static final String specialDatePath = FileUtil.getInnerAssistantFileSDCardPath()
+			+ "specialdate/specialdate.json";
+	private static final String specialDateWebPath = "https://raw.githubusercontent.com/chengweii/myassistant/develop/src/main/source/assistant/specialdate/specialdate.json";
+	private static final String dateTagsPath = FileUtil.getInnerAssistantFileSDCardPath() + "specialdate/datetags.json";
+	private static final String dateTagsWebPath = "https://raw.githubusercontent.com/chengweii/myassistant/develop/src/main/source/assistant/specialdate/datetags.json";
+	
 	static {
 		initSpecialDateList();
 		initDateTags();
 	}
 
 	@Override
-	public Response getResponse(String request, Map<String,Data> serviceData,ServiceConfig serviceConfig) throws Exception {
+	public Response getResponse(String request, Map<String, Data> serviceData, ServiceConfig serviceConfig)
+			throws Exception {
 		Response response = null;
 		List<AlarmData> dataList = getCurrentSpecialDate();
 		if (dataList != null && dataList.size() > 0) {
@@ -53,7 +51,7 @@ public class SpecialDateAssistant implements AssistantService {
 			response.setResponseData(GsonUtil.toJson(dataList));
 		}
 
-		return response;
+		return null;
 	}
 
 	private static List<AlarmData> getCurrentSpecialDate() {
@@ -98,7 +96,7 @@ public class SpecialDateAssistant implements AssistantService {
 				FileUtil.writeFileContent(json, specialDatePath);
 			}
 		} catch (Exception e) {
-			loger.info(ExceptionUtil.getStackTrace(e));
+			loger.info("Init specialDateList failed:" + ExceptionUtil.getStackTrace(e));
 		}
 	}
 
@@ -118,7 +116,7 @@ public class SpecialDateAssistant implements AssistantService {
 				FileUtil.writeFileContent(json, dateTagsPath);
 			}
 		} catch (Exception e) {
-			loger.info(ExceptionUtil.getStackTrace(e));
+			loger.info("Init dateTags failed:" + ExceptionUtil.getStackTrace(e));
 		}
 	}
 
