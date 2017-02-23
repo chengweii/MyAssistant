@@ -54,6 +54,11 @@ public class SpecialDateAssistant implements AssistantService {
 
 		return null;
 	}
+	
+	public static void main(String[] args) throws Exception {
+		List<AlarmData> data = getCurrentSpecialDate();
+		loger.info("SpecialDate:" + data);
+	}
 
 	private static List<AlarmData> getCurrentSpecialDate() {
 		List<AlarmData> dataList = new ArrayList<AlarmData>();

@@ -20,7 +20,7 @@ import weihua.myassistant.util.GsonUtil;
 
 public class WetherAssistant implements AssistantService {
 
-	private static Logger loger = Logger.getLogger(DailyDietAssistant.class);
+	private static Logger loger = Logger.getLogger(WetherAssistant.class);
 
 	private static final String wetherInfoUrl = "https://tianqi.moji.com/weather/china/beijing/tongzhou-district";
 
@@ -40,8 +40,8 @@ public class WetherAssistant implements AssistantService {
 	}
 
 	public static void main(String[] args) throws Exception {
-		WetherInfo wetherInfo = getWetherInfoFromMoji();
-		loger.info("WetherInfo:" + wetherInfo);
+		AlarmData data = getCurrentWether();
+		loger.info("WetherInfo:" + data);
 	}
 
 	private static AlarmData getCurrentWether() {
