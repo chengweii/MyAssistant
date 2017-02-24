@@ -36,6 +36,7 @@ import weihua.myassistant.util.DateUtil;
 import weihua.myassistant.util.ExceptionUtil;
 import weihua.myassistant.util.FileUtil;
 import weihua.myassistant.util.GsonUtil;
+import weihua.myassistant.util.HttpUtil;
 import weihua.myassistant.util.RetrofitUtil;
 
 public class AlarmService extends Service {
@@ -195,10 +196,7 @@ public class AlarmService extends Service {
 				@Override
 				public void run() {
 					try {
-						Call<ResponseBody> result = RetrofitUtil.retrofitService.get(serviceConfigWebPath, "");
-
-						retrofit2.Response<ResponseBody> response = result.execute();
-						String json = response.body().string();
+						String json = HttpUtil.get(serviceConfigWebPath, null, null);
 						FileUtil.writeFileContent(json, serviceConfigPath);
 					} catch (Exception e) {
 						loger.error("AlarmService config failed:" + ExceptionUtil.getStackTrace(e));

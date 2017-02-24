@@ -45,7 +45,7 @@ public class ImageUtil {
 			saveBitmap(bitmap, originPath);
 			return bitmap;
 		} else {
-			loger.info("图片加载失败：" + path);
+			loger.info("Bitmap load failed:" + path);
 		}
 
 		return null;
