@@ -169,9 +169,8 @@ public class MainActivity extends Activity {
 	}
 
 	private void alarmBind() {
-		AlarmUtil.startAlarmRepeating(this, Constans.ALARM_SERVICE_ID, DateUtil.getTimeFromCurrent(1),
-				AlarmManager.INTERVAL_FIFTEEN_MINUTES, "", "");
 		AlarmService.config();
+		ServiceUtil.startService(this, AlarmService.class, null);
 		showMsg("service started");
 	}
 

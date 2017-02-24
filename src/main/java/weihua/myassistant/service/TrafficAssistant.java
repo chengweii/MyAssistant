@@ -82,33 +82,61 @@ public class TrafficAssistant implements AssistantService {
 			}
 			param.city = location.cityName;
 			param.date = DateUtil.getCurrentDateString();
-			param.time = DateUtil.getCurrentTimeString();
+			param.time = "22:34";
 			TrafficTransits trafficTransits = AmapUtil.<TrafficTransits, IntegratedParam> getTrafficInfo(param);
 
-			String fastestLine = "";
+			String fastestLine = "❤ ";
 			StringBuilder otherLineInfo = new StringBuilder();
 
 			int i = 0;
 			for (Transit transit : trafficTransits.route.transits) {
 				if (i == 0) {
-					fastestLine = getLineInfo(transit);
+					fastestLine += getSimpleLineInfo(transit);
 				} else {
-					otherLineInfo.append(getLineInfo(transit));
+					otherLineInfo.append(getSimpleLineInfo(transit));
 				}
 				i++;
 			}
 
 			alarmData = new AlarmData();
 			alarmData.ticker = fastestLine;
-			alarmData.title = fastestLine;
-			alarmData.text = otherLineInfo.toString();
+			alarmData.title = timePeriod == TimePeriod.MORNING ? "上班乘车提醒" : "下班乘车提醒";
+			alarmData.text = fastestLine;
+			alarmData.subText = "☞ 点击查看其他乘车路线详细信息...";
 			alarmData.iconLink = "traffic/images/bus.png";
 			alarmData.intentAction = Constants.PACKAGE_NAME;
 			alarmData.extraInfo = GsonUtil.toJson(trafficTransits);
-			alarmData.musicLink="test1.mp3";
+			alarmData.musicLink = "test1.mp3";
 		}
 
 		return alarmData;
+	}
+
+	private static String getSimpleLineInfo(Transit transit) {
+		StringBuilder lineInfo = new StringBuilder();
+		int l = 0;
+		for (Segment segment : transit.segments) {
+			int i = 0;
+			for (Busline busline : segment.bus.buslines) {
+				lineInfo.append(busline.name.replaceAll("\\(.*?\\)", ""));
+				if (i != segment.bus.buslines.size() - 1) {
+					lineInfo.append("/");
+				}
+				i++;
+			}
+			if (l + 1 <= transit.segments.size() - 1) {
+				Segment next = transit.segments.get(l + 1);
+				if (l != transit.segments.size() - 1 && next.bus.buslines.size() > 0) {
+					lineInfo.append(" >> ");
+				}
+			}
+
+			l++;
+		}
+		lineInfo.append("≈");
+		lineInfo.append((int) Integer.parseInt(transit.duration) / 60);
+		lineInfo.append("分。");
+		return lineInfo.toString();
 	}
 
 	private static String getLineInfo(Transit transit) {
@@ -124,7 +152,7 @@ public class TrafficAssistant implements AssistantService {
 				lineInfo.append(busline.arrival_stop.name);
 				lineInfo.append("]");
 				if (i != segment.bus.buslines.size() - 1) {
-					lineInfo.append(" 或 ");
+					lineInfo.append("/");
 				}
 				i++;
 			}
@@ -137,7 +165,7 @@ public class TrafficAssistant implements AssistantService {
 
 			l++;
 		}
-		lineInfo.append(" 预计耗时：");
+		lineInfo.append(" ≈");
 		lineInfo.append((int) Integer.parseInt(transit.duration) / 60);
 		lineInfo.append("分。");
 		return lineInfo.toString();

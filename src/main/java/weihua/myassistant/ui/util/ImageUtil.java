@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.apache.log4j.Logger;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -20,10 +22,13 @@ import weihua.myassistant.util.FileUtil;
 
 public class ImageUtil {
 
+	private static Logger loger = Logger.getLogger(ImageUtil.class);
+
 	public static Bitmap getBitmap(String path) throws Exception {
+		String originPath = path;
 		if (path != null && !path.startsWith("http")) {
 			if (FileUtil.isFileExists(FileUtil.getInnerAssistantFileSDCardPath() + path)) {
-				Bitmap bitmap = BitmapFactory.decodeFile(path);
+				Bitmap bitmap = BitmapFactory.decodeFile(FileUtil.getInnerAssistantFileSDCardPath() + path);
 				return bitmap;
 			} else {
 				path = Constants.WEB_SOURCE_ROOT_PATH + path;
@@ -37,8 +42,10 @@ public class ImageUtil {
 		if (conn.getResponseCode() == 200) {
 			InputStream inputStream = conn.getInputStream();
 			Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-			saveBitmap(bitmap, path);
+			saveBitmap(bitmap, originPath);
 			return bitmap;
+		} else {
+			loger.info("图片加载失败：" + path);
 		}
 
 		return null;

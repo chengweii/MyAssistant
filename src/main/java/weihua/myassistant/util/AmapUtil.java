@@ -6,9 +6,6 @@ import org.apache.log4j.Logger;
 
 import com.google.gson.reflect.TypeToken;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-
 public class AmapUtil {
 
 	private static Logger loger = Logger.getLogger(AmapUtil.class);
@@ -56,43 +53,36 @@ public class AmapUtil {
 		R trafficResult = null;
 		String apiUrl = null;
 		String json = null;
-		Call<ResponseBody> result = null;
-		retrofit2.Response<ResponseBody> response = null;
-		if (param instanceof WalkParam) {
-			apiUrl = getApiWalkUrl((WalkParam) param);
-			result = RetrofitUtil.retrofitService.get(apiUrl, "");
-			response = result.execute();
-			json = response.body().string();
-			trafficResult = GsonUtil.getEntityFromJson(json, new TypeToken<TrafficDirection>() {
-			});
-		} else if (param instanceof DrivingParam) {
-			apiUrl = getApiDrivingUrl((DrivingParam) param);
-			result = RetrofitUtil.retrofitService.get(apiUrl, "");
-			response = result.execute();
-			json = response.body().string();
-			trafficResult = GsonUtil.getEntityFromJson(json, new TypeToken<TrafficDirection>() {
-			});
-		} else if (param instanceof IntegratedParam) {
-			apiUrl = getApiIntegratedUrl((IntegratedParam) param);
-			result = RetrofitUtil.retrofitService.get(apiUrl, "");
-			response = result.execute();
-			json = response.body().string();
-			trafficResult = GsonUtil.getEntityFromJson(json, new TypeToken<TrafficTransits>() {
-			});
-		} else if (param instanceof CircleParam) {
-			apiUrl = getApiCircleUrl((CircleParam) param);
-			result = RetrofitUtil.retrofitService.get(apiUrl, "");
-			response = result.execute();
-			json = response.body().string();
-			trafficResult = GsonUtil.getEntityFromJson(json, new TypeToken<Trafficstatus>() {
-			});
-		} else if (param instanceof RectangleParam) {
-			apiUrl = getApiRectangleUrl((RectangleParam) param);
-			result = RetrofitUtil.retrofitService.get(apiUrl, "");
-			response = result.execute();
-			json = response.body().string();
-			trafficResult = GsonUtil.getEntityFromJson(json, new TypeToken<Trafficstatus>() {
-			});
+		loger.info("TrafficInfo param:" + param);
+		try {
+			if (param instanceof WalkParam) {
+				apiUrl = getApiWalkUrl((WalkParam) param);
+				json = HttpUtil.get(apiUrl, null, null);
+				trafficResult = GsonUtil.getEntityFromJson(json, new TypeToken<TrafficDirection>() {
+				});
+			} else if (param instanceof DrivingParam) {
+				apiUrl = getApiDrivingUrl((DrivingParam) param);
+				json = HttpUtil.get(apiUrl, null, null);
+				trafficResult = GsonUtil.getEntityFromJson(json, new TypeToken<TrafficDirection>() {
+				});
+			} else if (param instanceof IntegratedParam) {
+				apiUrl = getApiIntegratedUrl((IntegratedParam) param);
+				json = HttpUtil.get(apiUrl, null, null);
+				trafficResult = GsonUtil.getEntityFromJson(json, new TypeToken<TrafficTransits>() {
+				});
+			} else if (param instanceof CircleParam) {
+				apiUrl = getApiCircleUrl((CircleParam) param);
+				json = HttpUtil.get(apiUrl, null, null);
+				trafficResult = GsonUtil.getEntityFromJson(json, new TypeToken<Trafficstatus>() {
+				});
+			} else if (param instanceof RectangleParam) {
+				apiUrl = getApiRectangleUrl((RectangleParam) param);
+				json = HttpUtil.get(apiUrl, null, null);
+				trafficResult = GsonUtil.getEntityFromJson(json, new TypeToken<Trafficstatus>() {
+				});
+			}
+		} catch (Exception e) {
+			throw new Exception(ExceptionUtil.getStackTrace(e) + "\n" + "Json data:" + json);
 		}
 
 		return trafficResult;
@@ -122,6 +112,11 @@ public class AmapUtil {
 	public static class WalkParam implements Param {
 		public String origin;
 		public String destination;
+
+		@Override
+		public String toString() {
+			return "[origin:" + origin + ",destination:" + destination + "]";
+		}
 	}
 
 	public static class IntegratedParam implements Param {
@@ -133,6 +128,12 @@ public class AmapUtil {
 		public String nightflag = "0";
 		public String date;
 		public String time;
+
+		@Override
+		public String toString() {
+			return "[origin:" + origin + ",destination:" + destination + ",city:" + city + ",cityd:" + cityd
+					+ ",strategy:" + strategy + ",nightflag:" + nightflag + ",date:" + date + ",time:" + time + "]";
+		}
 	}
 
 	public static class DrivingParam implements Param {
@@ -142,6 +143,12 @@ public class AmapUtil {
 		public String strategy = "0";
 		public String waypoints;
 		public String avoidpolygons;
+
+		@Override
+		public String toString() {
+			return "[origin:" + origin + ",destination:" + destination + ",extensions:" + extensions + ",strategy:"
+					+ strategy + ",waypoints:" + waypoints + ",avoidpolygons:" + avoidpolygons + "]";
+		}
 	}
 
 	public static class TrafficTransits implements Result {
@@ -193,13 +200,15 @@ public class AmapUtil {
 						public static class Busline {
 							public String id;
 							public String name;
-							public String type;
+							public Object type;
 							public String duration;
 							public String distance;
 							public String polyline;
 							public String via_num;
 							public Station departure_stop;
 							public Station arrival_stop;
+							public Object start_time;
+							public Object end_time;
 							public List<Station> via_stops;
 
 							public static class Station {
@@ -256,11 +265,21 @@ public class AmapUtil {
 	public static class RectangleParam implements Param {
 		public String lowerLeftCorner;
 		public String upperRightCorner;
+
+		@Override
+		public String toString() {
+			return "[lowerLeftCorner:" + lowerLeftCorner + ",upperRightCorner:" + upperRightCorner + "]";
+		}
 	}
 
 	public static class CircleParam implements Param {
 		public String location;
 		public String radius;
+
+		@Override
+		public String toString() {
+			return "[location:" + location + ",radius:" + radius + "]";
+		}
 	}
 
 	public static class Trafficstatus implements Result {

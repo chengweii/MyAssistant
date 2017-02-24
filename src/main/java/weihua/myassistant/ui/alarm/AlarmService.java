@@ -111,10 +111,10 @@ public class AlarmService extends Service {
 
 								for (AlarmData data : dataList) {
 									NotificationUtil.showNotification(context, data.ticker, data.title, data.text,
-											data.subText, DateUtil.getCurrentTimeString(), data.iconLink,
-											Integer.parseInt(serviceId), null);
+											data.subText, data.contentInfo, data.iconLink, Integer.parseInt(serviceId),
+											null);
 								}
-								
+
 								mediaPlayer = MediaUtil.playMusic(context, MusicPlaySource.LOCAL,
 										dataList.get(0).musicLink, false, new MediaPlayer.OnCompletionListener() {
 											@Override
@@ -126,7 +126,7 @@ public class AlarmService extends Service {
 												}
 											}
 										});
-							}else{
+							} else {
 								excuteService(context);
 							}
 						} catch (Exception e) {
