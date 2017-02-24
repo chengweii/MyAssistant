@@ -104,10 +104,12 @@ public class DailyDietAssistant implements AssistantService {
 		}
 
 		String currentDate = DateUtil.getCurrentDateString();
-		for (SpecialDate specialDate : SpecialDateAssistant.specialDateList) {
-			if (currentDate.equals(specialDate.date) && !specialDate.isHoliday) {
-				isWorkDate = true;
-				break;
+		if (SpecialDateAssistant.specialDateList != null) {
+			for (SpecialDate specialDate : SpecialDateAssistant.specialDateList) {
+				if (currentDate.equals(specialDate.date) && !specialDate.isHoliday) {
+					isWorkDate = true;
+					break;
+				}
 			}
 		}
 

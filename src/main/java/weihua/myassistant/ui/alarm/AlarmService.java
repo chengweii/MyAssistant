@@ -1,6 +1,7 @@
 package weihua.myassistant.ui.alarm;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -125,7 +126,8 @@ public class AlarmService extends Service {
 												}
 											}
 										});
-
+							}else{
+								excuteService(context);
 							}
 						} catch (Exception e) {
 							loger.error("ExcuteService ShowNotification failed:" + ExceptionUtil.getStackTrace(e));
@@ -178,7 +180,7 @@ public class AlarmService extends Service {
 	}
 
 	private static void initServicesMap() {
-		servicesMap = new HashMap<String, String>();
+		servicesMap = new LinkedHashMap<String, String>();
 		for (ServiceConfig serviceConfig : serviceConfigList) {
 			if (serviceConfig.enable) {
 				servicesMap.put(serviceConfig.serviceId,
