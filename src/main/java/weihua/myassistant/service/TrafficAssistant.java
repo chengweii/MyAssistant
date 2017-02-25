@@ -1,6 +1,7 @@
 package weihua.myassistant.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import weihua.myassistant.common.Constants;
 import weihua.myassistant.data.AlarmData;
 import weihua.myassistant.data.Data;
 import weihua.myassistant.data.ServiceConfig;
+import weihua.myassistant.data.TrafficData;
 import weihua.myassistant.response.Response;
 import weihua.myassistant.response.TextResponse;
 import weihua.myassistant.util.AmapUtil;
@@ -46,7 +48,7 @@ public class TrafficAssistant implements AssistantService {
 	public Response getResponse(String request, Map<String, Data> serviceData, ServiceConfig serviceConfig)
 			throws Exception {
 		Response response = null;
-		AlarmData data = getCurrentTraffic(serviceConfig);
+		AlarmData data = getCurrentTraffic(serviceData, serviceConfig);
 		if (data != null) {
 			List<AlarmData> dataList = new ArrayList<AlarmData>();
 			dataList.add(data);
@@ -61,16 +63,19 @@ public class TrafficAssistant implements AssistantService {
 		serviceConfig.enable = true;
 		serviceConfig.serviceId = "205";
 		serviceConfig.excuteTimePeriod = "MORNING,AFTERNOON,DUSK,NIGHT";
-		AlarmData alarmData = getCurrentTraffic(serviceConfig);
+		Map<String, Data> serviceData = new HashMap<String, Data>();
+		AlarmData alarmData = getCurrentTraffic(serviceData, serviceConfig);
 		loger.info(alarmData);
 	}
 
-	private static AlarmData getCurrentTraffic(ServiceConfig serviceConfig) throws Exception {
+	private static AlarmData getCurrentTraffic(Map<String, Data> serviceData, ServiceConfig serviceConfig)
+			throws Exception {
 		AlarmData alarmData = null;
 
 		TimePeriod timePeriod = DateUtil.getCurrentTimePeriod();
 		loger.info("Current timePeriod is:" + timePeriod.getValue());
-		if (ServiceConfig.matchTimePeriod(serviceConfig.excuteTimePeriod, timePeriod.getCode())) {
+		if (ServiceConfig.matchTimePeriod(serviceConfig.excuteTimePeriod, timePeriod.getCode())
+				&& checkIsTiped(timePeriod, serviceData, serviceConfig)) {
 			loger.info("Finding reasonable routes...");
 			IntegratedParam param = new IntegratedParam();
 			if (timePeriod == TimePeriod.MORNING) {
@@ -110,6 +115,27 @@ public class TrafficAssistant implements AssistantService {
 		}
 
 		return alarmData;
+	}
+
+	private static boolean checkIsTiped(TimePeriod timePeriod, Map<String, Data> serviceData,
+			ServiceConfig serviceConfig) {
+		boolean isTiped = false;
+		if (serviceData != null) {
+			if (!serviceData.containsKey(serviceConfig.serviceId)) {
+				TrafficData trafficData = new TrafficData();
+				trafficData.lastExcuteTimePeriod = timePeriod.getCode();
+				serviceData.put(serviceConfig.serviceId, trafficData);
+			} else {
+				TrafficData trafficData = (TrafficData) serviceData.get(serviceConfig.serviceId);
+				if (timePeriod.getCode().equals(trafficData.lastExcuteTimePeriod)) {
+					isTiped = true;
+					loger.info(timePeriod.getValue()+"的提醒已经提示过了。");
+				} else {
+					trafficData.lastExcuteTimePeriod = timePeriod.getCode();
+				}
+			}
+		}
+		return isTiped;
 	}
 
 	private static String getSimpleLineInfo(Transit transit) {
