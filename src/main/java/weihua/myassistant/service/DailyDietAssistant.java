@@ -2,6 +2,7 @@ package weihua.myassistant.service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ import com.google.gson.reflect.TypeToken;
 import weihua.myassistant.data.AlarmData;
 import weihua.myassistant.data.Data;
 import weihua.myassistant.data.ServiceConfig;
+import weihua.myassistant.data.DailyDietData;
 import weihua.myassistant.response.Response;
 import weihua.myassistant.response.TextResponse;
 import weihua.myassistant.service.DailyDietAssistant.DietData.MealData;
@@ -44,7 +46,7 @@ public class DailyDietAssistant implements AssistantService {
 	public Response getResponse(String request, Map<String, Data> serviceData, ServiceConfig serviceConfig)
 			throws Exception {
 		Response response = null;
-		AlarmData data = getCurrentDiet();
+		AlarmData data = getCurrentDiet(serviceData, serviceConfig);
 		if (data != null) {
 			List<AlarmData> dataList = new ArrayList<AlarmData>();
 			dataList.add(data);
@@ -52,45 +54,78 @@ public class DailyDietAssistant implements AssistantService {
 			response.setResponseData(GsonUtil.toJson(dataList));
 		}
 
-		return null;
+		return response;
 	}
 
 	public static void main(String[] args) throws Exception {
-		AlarmData alarmData = getCurrentDiet();
+		ServiceConfig serviceConfig = new ServiceConfig();
+		serviceConfig.enable = true;
+		serviceConfig.serviceId = "203";
+		serviceConfig.excuteTimePeriod = "MORNING,NOON,DUSK";
+		Map<String, Data> serviceData = new HashMap<String, Data>();
+		AlarmData alarmData = getCurrentDiet(serviceData, serviceConfig);
 		loger.info(alarmData);
 	}
 
-	private static AlarmData getCurrentDiet() throws Exception {
+	private static AlarmData getCurrentDiet(Map<String, Data> serviceData, ServiceConfig serviceConfig)
+			throws Exception {
 		AlarmData data = null;
 
-		MealData currentMealData = null;
-		MealType mealType = timeMatching();
-		for (DietData dietData : dietDataList) {
-			if (dateMatching(dietData.dateType)) {
-				if (mealType == MealType.BREAKFAST) {
-					currentMealData = dietData.breakfast.get(0);
-					data = new AlarmData();
-					data.musicLink = MealType.BREAKFAST.getValue();
-				} else if (mealType == MealType.LUNCH) {
-					currentMealData = dietData.lunch.get(0);
-					data = new AlarmData();
-					data.musicLink = MealType.LUNCH.getValue();
-				} else if (mealType == MealType.DINNER) {
-					currentMealData = dietData.dinner.get(0);
-					data = new AlarmData();
-					data.musicLink = MealType.DINNER.getValue();
-				}
-				if (currentMealData != null) {
-					data.ticker = currentMealData.mealName;
-					data.title = currentMealData.mealName;
-					data.text = currentMealData.features;
-					data.subText = currentMealData.tips;
-					data.iconLink = currentMealData.imageLink;
-					data.intentAction = currentMealData.tutorialLink;
+		TimePeriod timePeriod = DateUtil.getCurrentTimePeriod();
+		loger.info("Current timePeriod is:" + timePeriod.getValue());
+
+		if (ServiceConfig.matchTimePeriod(serviceConfig.excuteTimePeriod, timePeriod.getCode())
+				&& checkIsTiped(timePeriod, serviceData, serviceConfig)) {
+			MealData currentMealData = null;
+			MealType mealType = timeMatching();
+			for (DietData dietData : dietDataList) {
+				if (dateMatching(dietData.dateType)) {
+					if (mealType == MealType.BREAKFAST) {
+						currentMealData = dietData.breakfast.get(0);
+						data = new AlarmData();
+						data.musicLink = MealType.BREAKFAST.getValue();
+					} else if (mealType == MealType.LUNCH) {
+						currentMealData = dietData.lunch.get(0);
+						data = new AlarmData();
+						data.musicLink = MealType.LUNCH.getValue();
+					} else if (mealType == MealType.DINNER) {
+						currentMealData = dietData.dinner.get(0);
+						data = new AlarmData();
+						data.musicLink = MealType.DINNER.getValue();
+					}
+					if (currentMealData != null) {
+						data.ticker = currentMealData.mealName;
+						data.title = currentMealData.mealName;
+						data.text = currentMealData.features;
+						data.subText = currentMealData.tips;
+						data.iconLink = currentMealData.imageLink;
+						data.intentAction = currentMealData.tutorialLink;
+					}
 				}
 			}
 		}
 		return data;
+	}
+
+	private static boolean checkIsTiped(TimePeriod timePeriod, Map<String, Data> serviceData,
+			ServiceConfig serviceConfig) {
+		boolean isTiped = false;
+		if (serviceData != null) {
+			if (!serviceData.containsKey(serviceConfig.serviceId)) {
+				DailyDietData data = new DailyDietData();
+				data.lastExcuteTimePeriod = timePeriod.getCode();
+				serviceData.put(serviceConfig.serviceId, data);
+			} else {
+				DailyDietData data = (DailyDietData) serviceData.get(serviceConfig.serviceId);
+				if (timePeriod.getCode().equals(data.lastExcuteTimePeriod)) {
+					isTiped = true;
+					loger.info(timePeriod.getValue() + "的提醒已经提示过了。");
+				} else {
+					data.lastExcuteTimePeriod = timePeriod.getCode();
+				}
+			}
+		}
+		return isTiped;
 	}
 
 	private static boolean dateMatching(String dateType) throws Exception {

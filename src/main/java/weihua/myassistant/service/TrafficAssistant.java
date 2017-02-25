@@ -122,16 +122,16 @@ public class TrafficAssistant implements AssistantService {
 		boolean isTiped = false;
 		if (serviceData != null) {
 			if (!serviceData.containsKey(serviceConfig.serviceId)) {
-				TrafficData trafficData = new TrafficData();
-				trafficData.lastExcuteTimePeriod = timePeriod.getCode();
-				serviceData.put(serviceConfig.serviceId, trafficData);
+				TrafficData data = new TrafficData();
+				data.lastExcuteTimePeriod = timePeriod.getCode();
+				serviceData.put(serviceConfig.serviceId, data);
 			} else {
-				TrafficData trafficData = (TrafficData) serviceData.get(serviceConfig.serviceId);
-				if (timePeriod.getCode().equals(trafficData.lastExcuteTimePeriod)) {
+				TrafficData data = (TrafficData) serviceData.get(serviceConfig.serviceId);
+				if (timePeriod.getCode().equals(data.lastExcuteTimePeriod)) {
 					isTiped = true;
 					loger.info(timePeriod.getValue()+"的提醒已经提示过了。");
 				} else {
-					trafficData.lastExcuteTimePeriod = timePeriod.getCode();
+					data.lastExcuteTimePeriod = timePeriod.getCode();
 				}
 			}
 		}
