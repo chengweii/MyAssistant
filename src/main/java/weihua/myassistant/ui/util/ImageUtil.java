@@ -26,12 +26,14 @@ public class ImageUtil {
 
 	public static Bitmap getBitmap(String path) throws Exception {
 		String originPath = path;
+		boolean isCanSave = false;
 		if (path != null && !path.startsWith("http")) {
 			if (FileUtil.isFileExists(FileUtil.getInnerAssistantFileSDCardPath() + path)) {
 				Bitmap bitmap = BitmapFactory.decodeFile(FileUtil.getInnerAssistantFileSDCardPath() + path);
 				return bitmap;
 			} else {
 				path = Constants.WEB_SOURCE_ROOT_PATH + path;
+				isCanSave = true;
 			}
 		}
 
@@ -42,7 +44,9 @@ public class ImageUtil {
 		if (conn.getResponseCode() == 200) {
 			InputStream inputStream = conn.getInputStream();
 			Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-			saveBitmap(bitmap, originPath);
+			if (isCanSave) {
+				saveBitmap(bitmap, originPath);
+			}
 			return bitmap;
 		} else {
 			loger.info("Bitmap load failed:" + path);

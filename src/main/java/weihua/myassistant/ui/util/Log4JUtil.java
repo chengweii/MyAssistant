@@ -2,7 +2,9 @@ package weihua.myassistant.ui.util;
 
 import org.apache.log4j.Level;
 
+import android.os.Environment;
 import de.mindpipe.android.logging.log4j.LogConfigurator;
+import weihua.myassistant.ui.common.Constans;
 import weihua.myassistant.util.FileUtil;
 
 public class Log4JUtil {
@@ -11,6 +13,9 @@ public class Log4JUtil {
 	// "yyyy-MM-dd");// 日志的输出格式
 
 	public static void configure() {
+		FileUtil.assistantRootPath = Environment.getExternalStorageDirectory().getPath() + "/"
+				+ Constans.ASSISTANT_ROOT_PATH_NAME + "/";
+		
 		final LogConfigurator logConfigurator = new LogConfigurator();
 		// Date nowtime = new Date();
 		// String needWriteMessage = myLogSdf.format(nowtime);

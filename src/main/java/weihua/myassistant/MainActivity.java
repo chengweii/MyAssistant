@@ -1,11 +1,9 @@
 package weihua.myassistant;
 
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
@@ -28,7 +26,6 @@ import weihua.myassistant.ui.util.MediaUtil.MusicPlaySource;
 import weihua.myassistant.ui.util.ServiceUtil;
 import weihua.myassistant.util.DateUtil;
 import weihua.myassistant.util.ExceptionUtil;
-import weihua.myassistant.util.FileUtil;
 
 public class MainActivity extends Activity {
 	private WebView webView;
@@ -170,7 +167,8 @@ public class MainActivity extends Activity {
 
 	private void alarmBind() {
 		AlarmService.config();
-		ServiceUtil.startService(this, AlarmService.class, null);
+		AlarmUtil.startAlarmOnce(this.getApplicationContext(), Constans.ALARM_SERVICE_ID,
+				DateUtil.getTimeFromCurrent(0), String.valueOf(Constans.ALARM_SERVICE_ID), false);
 		showMsg("service started");
 	}
 
@@ -200,9 +198,6 @@ public class MainActivity extends Activity {
 				| WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 		setContentView(R.layout.main);
-
-		FileUtil.assistantRootPath = Environment.getExternalStorageDirectory().getPath() + "/"
-				+ Constans.ASSISTANT_ROOT_PATH_NAME + "/";
 
 		Log4JUtil.configure();
 

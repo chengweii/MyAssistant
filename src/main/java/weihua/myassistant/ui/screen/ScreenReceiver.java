@@ -7,11 +7,16 @@ import android.content.Context;
 import android.content.Intent;
 import weihua.myassistant.ui.alarm.AlarmService;
 import weihua.myassistant.ui.common.Constans;
+import weihua.myassistant.ui.util.Log4JUtil;
 import weihua.myassistant.ui.util.ServiceUtil;
 
 public class ScreenReceiver extends BroadcastReceiver {
 
 	private static Logger loger = Logger.getLogger(ScreenReceiver.class);
+	
+	static{
+		Log4JUtil.configure();
+	}
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
