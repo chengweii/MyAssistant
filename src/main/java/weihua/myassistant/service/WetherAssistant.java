@@ -36,7 +36,7 @@ public class WetherAssistant implements AssistantService {
 			response.setResponseData(GsonUtil.toJson(dataList));
 		}
 
-		return null;
+		return response;
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -44,9 +44,91 @@ public class WetherAssistant implements AssistantService {
 		loger.info("WetherInfo:" + wetherInfo);
 	}
 
-	private static AlarmData getCurrentWether() {
+	private static AlarmData getCurrentWether() throws Exception {
 		AlarmData alarmData = null;
+		WetherInfo wetherInfo = getWetherInfoFromMoji();
+		if(wetherInfo!=null){
+			alarmData=new AlarmData();
+			alarmData.ticker="今天"+getSituation(wetherInfo);
+			alarmData.title="今天"+getSituation(wetherInfo);
+			alarmData.text="今天"+getDressingTips(wetherInfo);
+		}
 		return alarmData;
+	}
+
+	private static String getSituation(WetherInfo wetherInfo) {
+		StringBuilder situation = new StringBuilder();
+		if (Double.parseDouble(wetherInfo.daytimeTemperature) < 4) {
+			if (Double.parseDouble(wetherInfo.daytimeTemperature) > 0) {
+				situation.append("冷");
+			} else {
+				situation.append("特别冷");
+			}
+		} else if (Double.parseDouble(wetherInfo.daytimeTemperature) < 16) {
+			if (Double.parseDouble(wetherInfo.windLevel) > 4) {
+				situation.append("有风，较冷");
+			} else {
+				situation.append("凉爽");
+			}
+		} else if (Double.parseDouble(wetherInfo.daytimeTemperature) < 25) {
+			if (Double.parseDouble(wetherInfo.windLevel) > 4) {
+				situation.append("有风，凉爽");
+			} else {
+				situation.append("暖和");
+			}
+		} else if (Double.parseDouble(wetherInfo.daytimeTemperature) < 35) {
+			if (Double.parseDouble(wetherInfo.windLevel) > 4) {
+				situation.append("有风，暖和");
+			} else {
+				situation.append("较热");
+			}
+		} else if (Double.parseDouble(wetherInfo.daytimeTemperature) < 50) {
+			if (Double.parseDouble(wetherInfo.windLevel) > 4) {
+				situation.append("有风，很热");
+			} else {
+				situation.append("非常热");
+			}
+		}
+		return situation.toString();
+	}
+
+	private static String getDressingTips(WetherInfo wetherInfo) {
+		StringBuilder tips = new StringBuilder();
+		if (Double.parseDouble(wetherInfo.daytimeTemperature) < 4) {
+			if (Double.parseDouble(wetherInfo.daytimeTemperature) > 0) {
+				tips.append("请穿羽绒服和保暖内衣;");
+			} else {
+				tips.append("请务必穿羽绒服和保暖内衣;");
+			}
+		} else if (Double.parseDouble(wetherInfo.daytimeTemperature) < 16) {
+			if (Double.parseDouble(wetherInfo.windLevel) > 4) {
+				tips.append("请穿大衣和毛衫;");
+			} else {
+				tips.append("可以穿单褂;");
+			}
+		} else if (Double.parseDouble(wetherInfo.daytimeTemperature) < 25) {
+			if (Double.parseDouble(wetherInfo.windLevel) > 4) {
+				tips.append("可以穿单褂;");
+			} else {
+				tips.append("可以穿短袖或薄衫;");
+			}
+		} else if (Double.parseDouble(wetherInfo.daytimeTemperature) < 35) {
+			if (Double.parseDouble(wetherInfo.windLevel) > 4) {
+				tips.append("可以穿短袖或薄衫;");
+			} else {
+				tips.append("可以穿短袖或薄衫，注意防暑;");
+			}
+		} else if (Double.parseDouble(wetherInfo.daytimeTemperature) < 50) {
+			if (Double.parseDouble(wetherInfo.windLevel) > 4) {
+				tips.append("可以穿短袖或薄衫，注意防暑;");
+			} else {
+				tips.append("可以穿短袖或薄衫，注意防暑;");
+			}
+		}
+		if (Double.parseDouble(wetherInfo.airPoint) >150) {
+			tips.append("请务必戴上口罩;");
+		}
+		return tips.toString();
 	}
 
 	private static WetherInfo getWetherInfoFromMoji() throws IOException {
