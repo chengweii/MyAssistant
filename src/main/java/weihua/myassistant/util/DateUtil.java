@@ -41,25 +41,33 @@ public class DateUtil {
 
 	public static TimePeriod getCurrentTimePeriod() {
 		Calendar cal = Calendar.getInstance();
-		int hour = cal.get(Calendar.HOUR_OF_DAY);
-		if (hour >= 7 && hour < 9) {
+		double hour = cal.getTimeInMillis() / 1000 / 60 / 60;
+		if (hour >= 6.5 && hour < 7.5) {
+			return TimePeriod.EARLIERMORNING;
+		} else if (hour >= 7.5 && hour < 8) {
 			return TimePeriod.MORNING;
+		} else if (hour >= 8 && hour < 9) {
+			return TimePeriod.LATERMORNING;
 		} else if (hour >= 9 && hour < 11) {
 			return TimePeriod.BEFORENOON;
 		} else if (hour >= 11 && hour < 13) {
 			return TimePeriod.NOON;
-		} else if (hour >= 13 && hour < 17) {
+		} else if (hour >= 13 && hour < 17.5) {
 			return TimePeriod.AFTERNOON;
-		} else if (hour >= 17 && hour < 19) {
+		} else if (hour >= 17.5 && hour < 18) {
+			return TimePeriod.EARLIERDUSK;
+		} else if (hour >= 18 && hour < 19) {
 			return TimePeriod.DUSK;
-		} else if (hour >= 19 && hour < 21) {
+		} else if (hour >= 19 && hour < 20) {
+			return TimePeriod.LATERDUSK;
+		} else if (hour >= 20 && hour < 21) {
 			return TimePeriod.NIGHT;
 		} else if (hour >= 21) {
 			return TimePeriod.DEEPNIGHT;
 		} else if (hour >= 0 && hour < 1) {
 			return TimePeriod.MIDNIGHT;
-		} else if (hour >= 1 && hour < 7) {
-			return TimePeriod.EARLYMORNING;
+		} else if (hour >= 1 && hour < 6) {
+			return TimePeriod.BEFOREDAWN;
 		}
 		return null;
 	}
@@ -67,9 +75,19 @@ public class DateUtil {
 	public static enum TimePeriod {
 
 		/**
+		 * 早晨稍早
+		 */
+		EARLIERMORNING("EARLIERMORNING", "早晨稍早"),
+
+		/**
 		 * 早晨
 		 */
 		MORNING("MORNING", "早晨"),
+
+		/**
+		 * 早晨稍晚
+		 */
+		LATERMORNING("LATERMORNING", "早晨稍晚"),
 
 		/**
 		 * 上午
@@ -87,9 +105,19 @@ public class DateUtil {
 		AFTERNOON("AFTERNOON", "下午"),
 
 		/**
+		 * 傍晚稍早
+		 */
+		EARLIERDUSK("EARLIERDUSK", "傍晚稍早"),
+
+		/**
 		 * 傍晚
 		 */
 		DUSK("DUSK", "傍晚"),
+
+		/**
+		 * 傍晚稍晚
+		 */
+		LATERDUSK("LATERDUSK", "傍晚稍晚"),
 
 		/**
 		 * 晚上
@@ -109,7 +137,7 @@ public class DateUtil {
 		/**
 		 * 凌晨
 		 */
-		EARLYMORNING("EARLYMORNING", "凌晨");
+		BEFOREDAWN("BEFOREDAWN", "凌晨");
 
 		private TimePeriod(String code, String value) {
 			this.code = code;

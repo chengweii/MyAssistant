@@ -87,7 +87,7 @@ public class TrafficAssistant implements AssistantService {
 			}
 			param.city = location.cityName;
 			param.date = DateUtil.getCurrentDateString();
-			param.time = "22:34";
+			param.time = DateUtil.getCurrentTimeString();
 			TrafficTransits trafficTransits = AmapUtil.<TrafficTransits, IntegratedParam> getTrafficInfo(param);
 
 			String fastestLine = "❤ ";
