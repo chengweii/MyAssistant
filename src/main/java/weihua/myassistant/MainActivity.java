@@ -1,11 +1,24 @@
 package weihua.myassistant;
 
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.weihua.assistant.constant.AssistantType;
+import com.weihua.assistant.constant.OriginType;
+import com.weihua.assistant.entity.request.BaseRequest;
+import com.weihua.ui.userinterface.AssistantInterface;
+import com.weihua.util.GsonUtil;
+import com.weihua.util.TemplateUtil;
+import com.weihua.util.TemplateUtil.TemplateReader;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
@@ -59,10 +72,49 @@ public class MainActivity extends Activity {
 		String msg = "";
 		try {
 			msg = assistantContext.backHome();
+
+			AssistantInterface assistantInterface = new AssistantInterface();
+			BaseRequest.RequestData requestData = new BaseRequest.RequestData();
+			requestData.originType = OriginType.MOBILE.getCode();
+			requestData.assistantType = AssistantType.MAIN_ASSISTANT.getCode();
+			requestData.requestContent = "小王";
+			String request = GsonUtil.toJson(requestData);
+			String response = assistantInterface.getResponse(request);
+
+			msg = response;
 		} catch (Exception e) {
 			msg = ExceptionUtil.getStackTrace(e);
 		}
+
 		return msg;
+	}
+
+	public static class MobileReader implements TemplateReader {
+
+		private android.content.Context context;
+
+		public MobileReader(android.content.Context context) {
+			this.context = context;
+		}
+
+		@Override
+		public String getTemplateContent(String templateName) {
+			String text = "";
+			try {
+				InputStream input = this.context.getAssets().open(templateName);
+				int size = input.available();
+
+				byte[] buffer = new byte[size];
+				input.read(buffer);
+				input.close();
+				text = new String(buffer, "UTF-8");
+			} catch (Exception e) {
+				text = ExceptionUtil.getStackTrace(e);
+			}
+
+			return text;
+		}
+
 	}
 
 	@JavascriptInterface
@@ -194,12 +246,17 @@ public class MainActivity extends Activity {
 
 		String serviceName = getIntent().getStringExtra("serviceName");
 
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
 				| WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 		setContentView(R.layout.main);
 
 		Log4JUtil.configure();
+
+		MobileReader mobileReader = new MobileReader(this);
+		com.weihua.util.TemplateUtil.initTemplateReader(mobileReader);
 
 		try {
 			assistantContext = new Context();

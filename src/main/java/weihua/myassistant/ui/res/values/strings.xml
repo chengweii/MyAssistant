@@ -2,5 +2,6 @@
 <resources>
 
     <string name="app_name">MyAssistant</string>
+    <string name="main_label">Have a nice day.^_^</string>
 
 </resources>

@@ -35,7 +35,7 @@ public class ServiceUtil {
 	public static Set getAllRunningService(Context context) {
 		ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 		List<RunningServiceInfo> infos = activityManager.getRunningServices(0x7FFFFFFF);
-		Set<String> names = new HashSet<>();
+		Set<String> names = new HashSet<String>();
 		if (infos == null || infos.size() == 0)
 			return null;
 		for (RunningServiceInfo info : infos) {
