@@ -61,5 +61,10 @@
 		</dependency>
 		<!-- jsoup end -->
 
+		<dependency>
+			<groupId>com.weihua</groupId>
+			<artifactId>assistant-sdk</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 </project>

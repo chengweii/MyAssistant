@@ -1,15 +1,12 @@
 package weihua.myassistant;
 
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.weihua.assistant.constant.AssistantType;
 import com.weihua.assistant.constant.OriginType;
 import com.weihua.assistant.entity.request.BaseRequest;
 import com.weihua.ui.userinterface.AssistantInterface;
 import com.weihua.util.GsonUtil;
-import com.weihua.util.TemplateUtil;
 import com.weihua.util.TemplateUtil.TemplateReader;
 
 import android.app.Activity;
@@ -39,6 +36,8 @@ import weihua.myassistant.ui.util.MediaUtil.MusicPlaySource;
 import weihua.myassistant.ui.util.ServiceUtil;
 import weihua.myassistant.util.DateUtil;
 import weihua.myassistant.util.ExceptionUtil;
+import weihua.myassistant.util.FileUtil;
+import weihua.myassistant.util.dbhelper.MobileDBHelper;
 
 public class MainActivity extends Activity {
 	private WebView webView;
@@ -78,8 +77,8 @@ public class MainActivity extends Activity {
 			requestData.originType = OriginType.MOBILE.getCode();
 			requestData.assistantType = AssistantType.MAIN_ASSISTANT.getCode();
 			requestData.requestContent = "小王";
-			String request = GsonUtil.toJson(requestData);
-			String response = assistantInterface.getResponse(request);
+			String req = GsonUtil.toJson(requestData);
+			String response = assistantInterface.getResponse(req);
 
 			msg = response;
 		} catch (Exception e) {
@@ -247,7 +246,7 @@ public class MainActivity extends Activity {
 		String serviceName = getIntent().getStringExtra("serviceName");
 
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		
+
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
 				| WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -257,6 +256,8 @@ public class MainActivity extends Activity {
 
 		MobileReader mobileReader = new MobileReader(this);
 		com.weihua.util.TemplateUtil.initTemplateReader(mobileReader);
+		MobileDBHelper mobileDBHelper = new MobileDBHelper(this, FileUtil.assistantRootPath + "assistant.db", 1);
+		com.weihua.util.DBUtil.initDBHelper(mobileDBHelper);
 
 		try {
 			assistantContext = new Context();
