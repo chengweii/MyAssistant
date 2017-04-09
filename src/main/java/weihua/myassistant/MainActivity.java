@@ -2,6 +2,8 @@ package weihua.myassistant;
 
 import java.io.InputStream;
 
+import org.apache.log4j.Logger;
+
 import com.weihua.assistant.constant.AssistantType;
 import com.weihua.assistant.constant.OriginType;
 import com.weihua.assistant.entity.request.BaseRequest;
@@ -40,6 +42,7 @@ import weihua.myassistant.util.FileUtil;
 import weihua.myassistant.util.dbhelper.MobileDBHelper;
 
 public class MainActivity extends Activity {
+	private static Logger loger = Logger.getLogger(MainActivity.class);
 	private WebView webView;
 	private static String viewFilePath = "index.html";
 	private Context assistantContext;
@@ -254,15 +257,14 @@ public class MainActivity extends Activity {
 
 		Log4JUtil.configure();
 
-		MobileReader mobileReader = new MobileReader(this);
-		com.weihua.util.TemplateUtil.initTemplateReader(mobileReader);
-		MobileDBHelper mobileDBHelper = new MobileDBHelper(this, FileUtil.assistantRootPath + "assistant.db", 1);
-		com.weihua.util.DBUtil.initDBHelper(mobileDBHelper);
-
 		try {
+			MobileReader mobileReader = new MobileReader(this);
+			com.weihua.util.TemplateUtil.initTemplateReader(mobileReader);
+			MobileDBHelper mobileDBHelper = new MobileDBHelper(this, FileUtil.assistantRootPath + "assistant.db", 1);
+			com.weihua.util.DBUtil.initDBHelper(mobileDBHelper);
 			assistantContext = new Context();
 		} catch (Exception e) {
-			showMsg(ExceptionUtil.getStackTrace(e));
+			loger.info(ExceptionUtil.getStackTrace(e));
 		}
 
 		initView();
